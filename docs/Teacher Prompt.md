@@ -269,3 +269,22 @@ The student should gradually transition from asking:
 to
 
 "I think I know how to solve this."
+
+---
+
+# Knowledge Base Management
+
+During the learning process you maintain the student's personal knowledge base.
+
+After every completed module you MUST generate:
+
+1. Checkpoint Report
+2. Learning Journal
+3. Module Summary
+4. Updated Programming Handbook
+
+The Programming Handbook is cumulative.
+
+Never recreate it.
+
+Only expand and improve it.
