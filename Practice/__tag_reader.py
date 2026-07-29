@@ -20,19 +20,42 @@ def show_tags_from_file(unique_tags):
 
     return
 
+'''
+Открыть файл 
+    спросить у пользователя, какой именно файл он хочет открыть
+    открыть указанный пользователем файл
+прочитать файл
+отдать прочитанное содержание в метод обработки
+    разделить файл на отдельные слова по строчкам, с разделителем ","
+    сохранить результат обработки
+    отдать результат обработки в метод чтения
+получить результат обработки
+записать результат обработки
+'''
+
+def process_file(file):
+    unique_tags = set(file)
+    sorted_tags = sorted(unique_tags)
+    splitted_tags = 
+    
+
+
+    for tag in sorted_tags:
+        stripped_tag = tag.
+    return
+
+
 # Read tags from file
 def read_tags(unique_tags):
+    # получаю имя файла, который нужно открыть
     filename = input("Input file name.txt:\n")
+    # пробую открыть файл, указанный пользователем
     try:
         with open(filename, "r", encoding="utf-8") as file:
-            for line in file:
-                cleaned_tag = line.strip()
-                readed_tags = set(cleaned_tag)
-                N = 0
-                print(f"List of tags in file {filename}:\n")
+            process_file(file)
     except:
         print(f"No file {filename} founded")
-    return readed_tags
+    return 
 
 # Choose action menu
 def menu(unique_tags):
@@ -50,7 +73,7 @@ def menu(unique_tags):
             print("Invalid action, try again")
 
 def main():
-    unique_tags = set()
+    unique_tags = []
     menu(unique_tags)
 
 main()
