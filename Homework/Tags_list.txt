@@ -1,0 +1,26 @@
+# Character traits
+1girl, solo, young woman
+
+# Hair
+long straight light blue hair, hair down
+
+# Eyes
+brown eyes, round eyes
+
+# Outfit
+white shirt, black skirt, white ankle socks
+
+# Location
+library, bookshelf
+
+# Action
+reading book, sitting
+
+# Duplicate tags (программа должна их убрать)
+white shirt, solo, 1girl
+
+# Empty lines (программа должна их пропустить)
+
+
+# More tags
+gentle smile, thoughtful

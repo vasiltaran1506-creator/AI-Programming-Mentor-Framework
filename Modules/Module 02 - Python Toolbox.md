@@ -1643,3 +1643,1269 @@ dictionaries,
 Path objects,
 
 and eventually classes.
+
+# Chapter 5
+
+# List Methods
+
+In the previous chapters we learned something important.
+
+Strings have abilities.
+
+They know how to transform themselves.
+
+Lists are exactly the same.
+
+A list is not just "a box with values."
+
+A list is an object that knows how to manage its own contents.
+
+Understanding this idea is much more important than memorizing method names.
+
+---
+
+# Mental Model
+
+Imagine a bookshelf.
+
+The bookshelf is not passive.
+
+It knows how to:
+
+- add a new book;
+- remove a book;
+- move books into order;
+- clear itself;
+- turn itself around.
+
+The bookshelf remains the same bookshelf.
+
+Only its contents change.
+
+That is exactly how list methods work.
+
+---
+
+# append()
+
+## Purpose
+
+Add one new element to the end of the list.
+
+```python
+animals = ["Cat", "Dog"]
+
+animals.append("Fox")
+
+print(animals)
+```
+
+Output
+
+```text
+["Cat", "Dog", "Fox"]
+```
+
+---
+
+## Mental Model
+
+Imagine putting another book onto the last free place on a shelf.
+
+You don't create a new shelf.
+
+You simply place one more book.
+
+---
+
+## Common Beginner Mistake
+
+Many beginners expect
+
+```python
+new_list = animals.append("Fox")
+```
+
+to create a new list.
+
+It doesn't.
+
+`append()` returns nothing.
+
+It modifies the existing list.
+
+After running
+
+```python
+animals.append("Fox")
+```
+
+the variable
+
+```python
+animals
+```
+
+already contains the new element.
+
+---
+
+# extend()
+
+Sometimes you want to add not one element,
+
+but an entire collection.
+
+```python
+numbers = [1, 2]
+
+numbers.extend([3, 4, 5])
+
+print(numbers)
+```
+
+Output
+
+```text
+[1, 2, 3, 4, 5]
+```
+
+---
+
+## Mental Model
+
+`append()` adds one box.
+
+`extend()` opens the box and pours everything inside.
+
+---
+
+Compare carefully.
+
+```python
+numbers = [1, 2]
+
+numbers.append([3, 4])
+```
+
+Result
+
+```text
+[1, 2, [3, 4]]
+```
+
+One new element.
+
+That element happens to be another list.
+
+---
+
+Now compare
+
+```python
+numbers = [1, 2]
+
+numbers.extend([3, 4])
+```
+
+Result
+
+```text
+[1, 2, 3, 4]
+```
+
+Completely different.
+
+---
+
+# insert()
+
+Adds an element at a specific position.
+
+```python
+colors = ["Red", "Blue"]
+
+colors.insert(1, "Green")
+```
+
+Result
+
+```text
+["Red", "Green", "Blue"]
+```
+
+---
+
+Think of inserting a page into the middle of a notebook.
+
+Everything after that page shifts one position.
+
+---
+
+# remove()
+
+Removes an element by its value.
+
+```python
+fruits = ["Apple", "Banana", "Orange"]
+
+fruits.remove("Banana")
+```
+
+Result
+
+```text
+["Apple", "Orange"]
+```
+
+---
+
+Notice something important.
+
+You remove
+
+the value.
+
+Not the position.
+
+---
+
+# pop()
+
+This method removes an element
+
+and gives it back to you.
+
+```python
+tasks = ["A", "B", "C"]
+
+last = tasks.pop()
+```
+
+Now
+
+```python
+tasks
+```
+
+contains
+
+```text
+["A", "B"]
+```
+
+while
+
+```python
+last
+```
+
+contains
+
+```text
+"C"
+```
+
+---
+
+## Mental Model
+
+Imagine taking the last book from a shelf.
+
+The shelf loses the book.
+
+You receive the book.
+
+Both things happen simultaneously.
+
+---
+
+You can also remove by index.
+
+```python
+tasks.pop(0)
+```
+
+removes the first element.
+
+---
+
+# clear()
+
+Removes everything.
+
+```python
+errors.clear()
+```
+
+The list still exists.
+
+It simply becomes empty.
+
+```text
+[]
+```
+
+---
+
+This is different from
+
+```python
+errors = []
+```
+
+Later, when we study object references,
+
+you will understand why.
+
+---
+
+# sort()
+
+Earlier we learned
+
+```python
+sorted(...)
+```
+
+Now we meet
+
+```python
+sort()
+```
+
+These are related,
+
+but they are NOT the same.
+
+---
+
+```python
+numbers = [8, 2, 5]
+
+numbers.sort()
+```
+
+Now
+
+```python
+numbers
+```
+
+became
+
+```text
+[2, 5, 8]
+```
+
+No new list was created.
+
+The original one changed.
+
+---
+
+## Mental Model
+
+Imagine sorting books already standing on a shelf.
+
+You don't build another shelf.
+
+You rearrange the existing one.
+
+That is `sort()`.
+
+---
+
+Compare carefully.
+
+```python
+sorted(numbers)
+```
+
+↓
+
+Creates a new sorted copy.
+
+---
+
+```python
+numbers.sort()
+```
+
+↓
+
+Changes the original list.
+
+---
+
+# reverse()
+
+Turns the order around.
+
+```python
+letters = ["A", "B", "C"]
+
+letters.reverse()
+```
+
+Result
+
+```text
+["C", "B", "A"]
+```
+
+Again,
+
+the original list changes.
+
+---
+
+# Toolbox Rule №4
+
+Whenever you see
+
+```python
+something.method(...)
+```
+
+ask yourself
+
+> "Does this method modify the object?"
+
+or
+
+> "Does it create a new object?"
+
+This question will become one of the most important habits in Python.
+
+---
+
+# Reflection
+
+Notice a pattern.
+
+Almost every list method modifies the existing object.
+
+This is not an accident.
+
+Lists are mutable.
+
+Python expects them to change.
+
+Strings, however,
+
+are immutable.
+
+Therefore most string methods return a new string.
+
+This explains one of the biggest conceptual differences in Python.
+
+You no longer need to memorize it.
+
+You understand *why* it exists.
+
+---
+
+# Chapter 6
+
+# Reading Documentation
+
+Sooner or later,
+
+every programmer faces the same situation.
+
+You remember that Python has a useful function.
+
+You remember approximately what it does.
+
+But you don't remember its exact arguments.
+
+Many beginners panic.
+
+Professionals open the documentation.
+
+Reading documentation is not a sign that you forgot something.
+
+It is a sign that you know where reliable information lives.
+
+---
+
+# Mental Model
+
+Imagine being a pilot.
+
+Would you trust your memory for every emergency procedure?
+
+Of course not.
+
+Pilots have checklists.
+
+Engineers have documentation.
+
+Using documentation is professionalism,
+
+not weakness.
+
+---
+
+# Learning to Read Small Pieces
+
+Never begin with the entire Python documentation.
+
+It is enormous.
+
+Instead,
+
+learn to read one page.
+
+For example,
+
+open the documentation for
+
+```python
+str.replace()
+```
+
+Ask yourself only four questions.
+
+---
+
+## Question 1
+
+What problem does this solve?
+
+---
+
+## Question 2
+
+What arguments does it expect?
+
+---
+
+## Question 3
+
+What does it return?
+
+---
+
+## Question 4
+
+Does it modify the object,
+
+or return a new one?
+
+---
+
+If you can answer those four questions,
+
+you already know enough to use the method correctly.
+
+---
+
+# VS Code Tool Tip
+
+Hover your mouse over
+
+```python
+replace
+```
+
+or
+
+```python
+append
+```
+
+Very often,
+
+VS Code already shows
+
+- parameters;
+
+- return value;
+
+- documentation;
+
+- examples.
+
+You don't always need to leave your editor.
+
+Professional IDEs are designed to reduce context switching.
+
+Use them.
+
+# Chapter 7
+
+# VS Code Is More Than a Text Editor
+
+Many beginners think VS Code is simply a place to type Python code.
+
+Professional developers think differently.
+
+VS Code is not a text editor.
+
+It is an engineering environment.
+
+The editor is only one small part of it.
+
+The real goal of VS Code is to reduce the amount of information you must keep in your head.
+
+Every feature exists because human memory is limited.
+
+Learning to use these features is just as important as learning Python itself.
+
+---
+
+# Mental Model
+
+Imagine building a house.
+
+You could carry every screw, hammer and measuring tape in your pockets.
+
+Or...
+
+you could build a workshop.
+
+Professional programmers build workshops.
+
+VS Code is your workshop.
+
+---
+
+# IntelliSense
+
+One of the most powerful features of VS Code is IntelliSense.
+
+Instead of remembering every method,
+
+you begin typing
+
+```python
+text.
+```
+
+Immediately VS Code offers
+
+```
+lower()
+
+upper()
+
+replace()
+
+startswith()
+
+split()
+
+...
+```
+
+This is not cheating.
+
+Professional developers use this every day.
+
+Your goal is not to memorize every method.
+
+Your goal is to recognize the correct one.
+
+---
+
+# Hover Information
+
+Move the mouse over
+
+```python
+append
+```
+
+or
+
+```python
+replace
+```
+
+VS Code usually shows
+
+- documentation;
+
+- expected parameters;
+
+- return type;
+
+- examples.
+
+Always check the tooltip before opening a browser.
+
+---
+
+# Go To Definition
+
+Sometimes you want to know
+
+"Where does this function come from?"
+
+Press
+
+```
+Ctrl + Click
+```
+
+or
+
+```
+F12
+```
+
+VS Code jumps directly to the definition.
+
+For your own projects this becomes one of the fastest navigation tools.
+
+---
+
+# Rename Symbol
+
+Never rename variables manually.
+
+Instead use
+
+```
+F2
+```
+
+Rename the variable once.
+
+VS Code updates every usage automatically.
+
+This is much safer than using Find & Replace.
+
+---
+
+# Problems Panel
+
+Errors are information.
+
+Not punishment.
+
+The Problems panel collects
+
+- syntax errors;
+
+- warnings;
+
+- missing imports;
+
+- type issues.
+
+Professional developers constantly watch this panel.
+
+Do the same.
+
+---
+
+# Formatting
+
+Readable code is easier to debug.
+
+Later you will install automatic formatters.
+
+For now,
+
+remember one principle.
+
+Code should be read far more often than it is written.
+
+Optimize for the reader.
+
+---
+
+# Toolbox Rule №5
+
+Never fight your IDE.
+
+Learn it.
+
+Every hour invested into VS Code saves dozens of hours during future projects.
+
+---
+
+# Chapter 8
+
+# Mini Project
+
+# Dataset Folder Analyzer Lite
+
+This project intentionally resembles real engineering work.
+
+The goal is not to write many lines of code.
+
+The goal is to combine every concept learned in this module.
+
+---
+
+# Project Goal
+
+Create a console application that analyzes a dataset folder.
+
+The program should answer questions such as
+
+- How many images exist?
+
+- Which file extensions are present?
+
+- Are duplicate filenames present?
+
+- Which filenames violate naming conventions?
+
+- What is the average filename length?
+
+---
+
+Do not worry about recursion yet.
+
+Only analyze one folder.
+
+---
+
+# Functional Requirements
+
+The program should:
+
+1.
+
+Ask the user for a folder path.
+
+---
+
+2.
+
+Read all filenames.
+
+---
+
+3.
+
+Ignore subfolders.
+
+---
+
+4.
+
+Separate filename from extension.
+
+---
+
+5.
+
+Count each extension.
+
+Example
+
+```
+png : 532
+
+jpg : 41
+
+webp : 3
+```
+
+---
+
+6.
+
+Detect duplicate filenames.
+
+(Hint: think about sets.)
+
+---
+
+7.
+
+Report
+
+- total files;
+
+- unique files;
+
+- duplicates;
+
+- longest filename;
+
+- shortest filename.
+
+---
+
+8.
+
+Sort the report alphabetically.
+
+---
+
+9.
+
+Save the report into
+
+```
+report.txt
+```
+
+using
+
+```
+with open(...)
+```
+
+---
+
+# Suggested Architecture
+
+The program should gradually evolve into several functions.
+
+For example
+
+```text
+main()
+
+↓
+
+read_folder()
+
+↓
+
+analyze_extensions()
+
+↓
+
+find_duplicates()
+
+↓
+
+generate_report()
+
+↓
+
+save_report()
+```
+
+Notice something.
+
+Each function solves exactly one problem.
+
+This is intentional.
+
+---
+
+# Engineering Rules
+
+During this project,
+
+follow these rules.
+
+## Rule 1
+
+No global variables.
+
+---
+
+## Rule 2
+
+Every function should have one responsibility.
+
+---
+
+## Rule 3
+
+Functions should receive data through parameters.
+
+---
+
+## Rule 4
+
+Functions should return results.
+
+Avoid printing inside business logic.
+
+Printing belongs near `main()`.
+
+---
+
+## Rule 5
+
+If two functions perform almost identical work,
+
+consider extracting a third function.
+
+---
+
+# Optional Challenge
+
+After finishing,
+
+improve the project.
+
+Ideas
+
+- show file sizes;
+
+- detect empty files;
+
+- sort by extension frequency;
+
+- display top five longest filenames;
+
+- export JSON instead of TXT.
+
+Do not ask for permission.
+
+Design improvements yourself.
+
+Real engineers continuously improve software.
+
+---
+
+# Self Review Checklist
+
+Before considering the project finished,
+
+ask yourself:
+
+□ Are variable names descriptive?
+
+□ Does every function have one responsibility?
+
+□ Did I accidentally duplicate code?
+
+□ Could another programmer understand this in six months?
+
+□ Am I using Python tools instead of reinventing them?
+
+---
+
+# Module Summary
+
+Congratulations.
+
+This module was not primarily about syntax.
+
+It was about building your first professional toolbox.
+
+You learned that Python already contains many solutions.
+
+You learned when to use built-in functions.
+
+You learned how methods differ from functions.
+
+You learned to think in terms of mutable and immutable objects.
+
+You learned how to read documentation.
+
+You learned how to use VS Code as an engineering tool.
+
+Most importantly,
+
+you began to recognize patterns instead of memorizing syntax.
+
+This is how professional programmers grow.
+
+---
+
+# Knowledge Base Update
+
+After completing this module,
+
+the mentor must update the following documents.
+
+## Programming Handbook
+
+Add explanations and examples for
+
+- len()
+
+- sum()
+
+- min()
+
+- max()
+
+- sorted()
+
+- range()
+
+- enumerate()
+
+- zip()
+
+- append()
+
+- extend()
+
+- insert()
+
+- remove()
+
+- pop()
+
+- clear()
+
+- sort()
+
+- reverse()
+
+- lower()
+
+- upper()
+
+- strip()
+
+- replace()
+
+- split()
+
+- join()
+
+- startswith()
+
+- endswith()
+
+Also document
+
+- mutable vs immutable objects;
+
+- functions vs methods;
+
+- reading Python documentation;
+
+- VS Code engineering workflow.
+
+---
+
+## Mental Models
+
+Add
+
+- Python Toolbox
+
+- Shelf (List)
+
+- Librarian (len)
+
+- Accountant (sum)
+
+- Judge (min/max)
+
+- Photocopy vs Rearranging Shelf (sorted vs sort)
+
+- Scissors and Glue (split / join)
+
+- Workshop (VS Code)
+
+- Object Abilities vs External Tools
+
+---
+
+## Learning Journal
+
+Document
+
+- the biggest conceptual breakthrough;
+
+- mistakes corrected during the project;
+
+- engineering habits acquired;
+
+- one thing the student would now explain differently than before starting the module.
+
+---
+
+## Questions.md
+
+Record
+
+- questions answered;
+
+- questions that remain open;
+
+- recurring misconceptions;
+
+- concepts requiring reinforcement in Module 03.
+
+---
+
+# Module 02 Checkpoint
+
+The student is considered ready for Module 03 if they can confidently answer the following without assistance.
+
+1.
+
+When should you choose a built-in function instead of writing your own loop?
+
+2.
+
+What is the conceptual difference between a function and a method?
+
+3.
+
+Why does `append()` not return a new list?
+
+4.
+
+Why does `sorted()` behave differently from `sort()`?
+
+5.
+
+When would you choose a dictionary instead of several parallel lists?
+
+6.
+
+When would you choose a set?
+
+7.
+
+Why is `with open(...)` safer than manually opening and closing files?
+
+8.
+
+Why should business logic be separated from user interaction?
+
+9.
+
+What makes one function "well designed"?
+
+10.
+
+Looking back at Module 01,
+
+which parts of your old code would you redesign today?
+
+---
+
+# Looking Ahead
+
+Module 03 will mark another important transition.
+
+Until now,
+
+you learned the language.
+
+Next,
+
+you will learn how real programs move data.
+
+The central question of Module 03 is not
+
+"How do I write this?"
+
+It is
+
+"Where is my data?
+
+Who owns it?
+
+Who changes it?
+
+Where does it go next?"
+
+Once you can answer those questions,
+
+large applications become dramatically easier to understand.
+
+Welcome to the next stage of software engineering.

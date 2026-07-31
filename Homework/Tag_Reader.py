@@ -1,48 +1,39 @@
-# Твоя задача:
-# Напиши скрипт, который:
-# Создает пустое множество unique_tags = set().
-# Открывает test_tags.txt с помощью with open(...).
-# Проходит по файлу циклом for line in file:.
-# Чистит строчку (.strip()).
-# Проверяет, что строчка не пустая (!= "") и не является комментарием (не начинается с # — подсказка: для этого есть строковый метод .startswith("#")).
-# Если строчка прошла фильтры, добавляет её в множество (unique_tags.add(...)).
-# В конце выводит отсортированный список уникальных тегов на экран.
-
-"""
-
-
-"""
-# ./Tag_Reader.py
-
-
-
-
-# Show all collected tags
+# Show all collected tags in all files
 def show_tags_collection(unique_tags):
-    
-    return
+    all_tags = set()
+    for filename in unique_tags:
+        tags_inside = unique_tags[filename]
+        all_tags.update(tags_inside)
+    print(f"Total files in collection: {len(unique_tags)}")
+    print(f"Total tags in collection: {len(all_tags)}\n")
+    for tag in sorted(all_tags):
+        print(f"- {tag}")
 
-
-def choose_file_from_collection(filebase):
-    for file in filebase:
-        print(f"List of files:\n{file}\n")
-    choosed_file = input("Enter from what file.txt show tags:\n")
-    if choosed_file in filebase:
+# Choose file from program memory
+def choose_file_from_collection(unique_tags):
+    print(f"\nAvailable files:\n")
+    for filename in unique_tags:
+        print(f"- {filename}")
+    choosed_file = input("\nEnter from what file.txt show tags:\n")
+    if choosed_file in unique_tags:
         return choosed_file
     else:
         print(f"No file {choosed_file} existed\n")
     return None
 
 # Show tags from file
-def show_tags_from_file(unique_tags, filebase, choodsed_file):
-    current_file = choose_file_from_collection(filebase)
+def show_tags_from_file(unique_tags):
+    if len(unique_tags) == 0:
+        print("\nTags library is empty, read a file first\n")
+        return
+    current_file = choose_file_from_collection(unique_tags)
     if current_file == None:
         return
     else:
-        '''
-        я получил текущий файл
-        теперь мне нужно достать из текущего файла список тегов, которые в нем лежат
-        '''
+        tags_from_file = unique_tags[current_file]
+        print(f"Tags in {current_file}:\n")
+        for tag in sorted(tags_from_file):
+            print(f"- {tag}")
     return
 
 # Process tags from .txt file
@@ -50,7 +41,7 @@ def process_file(file):
     unique_tags = set()
     for line in file:
         stripped_line = line.strip()
-        if stripped_line != "" and not stripped_line.startwith("#"):
+        if stripped_line != "" and not stripped_line.startswith("#"):
             tags = stripped_line.split(",")
             for tag in tags:
                 clean_tag = tag.strip()
@@ -61,28 +52,25 @@ def process_file(file):
 # Read tags from file
 def read_tags():
     # получаю имя файла, который нужно открыть
-    filename = input("Input file name.txt:\n")
+    filename = input("\nInput file name.txt:\n")
     # пробую открыть файл, указанный пользователем
     try:
         with open(filename, "r", encoding="utf-8") as file:
             processed_file = process_file(file)
-        print("File readed successfuly!")
+        print("File readed successfuly!\n")
         return processed_file, filename
-    except:
-        print(f"No file {filename} founded")
-        return set()
-
+    except FileNotFoundError:
+        print(f"No file {filename} found\n")
+        return set(), None
 
 # Choose action menu
 def menu(unique_tags):
-    filebase = set()
     while True:
         user_action = input("Enter '1' - read tags from file\nEnter '2' - show tags from file\nEnter '3' - show all available tags\nEnter '4' - exit\n")
         if user_action == "1":
             file_tags, filename = read_tags()
             if filename:
-                unique_tags.append(file_tags)
-                filebase.add(filename)
+                unique_tags[filename] = file_tags
         elif user_action == "2":
             show_tags_from_file(unique_tags)
         elif user_action == "3":
@@ -93,7 +81,7 @@ def menu(unique_tags):
             print("Invalid action, try again")
 
 def main():
-    unique_tags = set()
+    unique_tags = {}
     menu(unique_tags)
 
 main()

@@ -602,6 +602,160 @@ Mixing all responsibilities together makes programs difficult to maintain.
 
 ---
 
+## Built-in Functions
+
+Python already contains hundreds of useful tools.
+Good programmers write less code because they know what tools exist.
+
+### Toolbox Rule №1
+Never ask: "How do I write this myself?"
+First ask: "Does Python already have a tool for this?"
+
+### len()
+**Purpose:** Returns the number of elements inside a collection.
+**Mental Model:** A librarian counting books on a shelf.
+```python
+fruits = ["Apple", "Banana", "Orange"]
+print(len(fruits)) # 3
+```
+
+### sum()
+**Purpose:** Adds together all numeric values.
+**Mental Model:** An accountant adding invoices.
+**Important:** Only works with numbers. Cannot add text.
+
+### min() and max()
+**Purpose:** Find the smallest or largest value.
+**Mental Model:** A judge picking the winner of a race.
+Works with numbers and text (alphabetical order).
+
+### sorted()
+**Purpose:** Creates a new sorted copy of a collection.
+**Mental Model:** Making a photocopy of a document and sorting the copy. The original remains untouched.
+```python
+numbers = [8, 3, 6]
+new_numbers = sorted(numbers)
+```
+
+### range()
+**Purpose:** Produces a sequence of numbers.
+**Mental Model:** Climbing stairs, starting at stair zero.
+```python
+for i in range(5): # Produces 0, 1, 2, 3, 4
+for i in range(3, 8): # Produces 3, 4, 5, 6, 7
+for i in range(2, 12, 2): # Step of 2: 2, 4, 6, 8, 10
+```
+
+### enumerate()
+**Purpose:** Provides both the index and the value during iteration.
+**Mental Model:** A teacher reading an attendance list, calling out both the student's number and name.
+```python
+for index, fruit in enumerate(fruits):
+    print(index, fruit)
+```
+
+### zip()
+**Purpose:** Combines multiple collections into matching pairs.
+**Mental Model:** A zipper on a jacket connecting matching teeth from two sides.
+```python
+for student, score in zip(students, scores):
+    print(student, score)
+```
+
+## Functions vs Methods
+
+Python has two different ways of calling code.
+
+### Functions (External Tools)
+Operations that make sense for many different kinds of data.
+The object does not perform the action; Python performs it on the object.
+**Syntax:** `function(object)`
+**Examples:** `len(text)`, `max(numbers)`, `sorted(items)`
+
+### Methods (Object Abilities)
+Actions that belong naturally to the object itself.
+**Syntax:** `object.method()`
+**Examples:** `text.lower()`, `list.sort()`
+
+### Rule of Thumb
+Ask: "Does this action belong naturally to the object?"
+If yes, it is a method. If not, it is a function.
+
+## String Methods
+
+Strings are objects with built-in abilities to transform themselves.
+
+### lower() and upper()
+Convert all characters to lowercase or uppercase.
+Useful for safe comparisons: `if answer.lower() == "yes":`
+
+### strip()
+Removes accidental spaces from the beginning and end of a string.
+**Mental Model:** Cleaning dirty shoes before entering a house.
+
+### replace()
+Replaces a specific substring with another.
+```python
+number = "15,75".replace(",", ".") # "15.75"
+```
+
+### split()
+Cuts one string into a list of smaller strings based on a separator.
+**Mental Model:** Scissors cutting a loaf of bread into slices.
+```python
+fruits = "Apple,Banana,Orange".split(",")
+```
+
+### join()
+Combines a list of strings into one single string.
+**Mental Model:** Glue putting slices back together.
+```python
+sentence = " ".join(["Python", "is", "fun"])
+```
+
+### startswith() and endswith()
+Check how a string begins or ends. Returns True or False.
+```python
+filename.endswith(".png")
+```
+
+## Sets
+
+A collection of unique elements with no specific order.
+
+### Mental Model
+A VIP club with a strict bouncer.
+1. The bouncer checks the guest list instantly (Hash Table).
+2. Two identical guests cannot enter (Uniqueness).
+3. The order in which guests arrive does not matter (No indexes).
+
+### Creation and Syntax
+```python
+my_tags = set() # Empty set
+colors = {"red", "green", "blue"} # Set with elements
+```
+
+### Adding Elements
+Use `.add()` instead of `.append()`.
+If the element already exists, Python silently ignores it.
+
+### Checking Membership
+The `in` operator works instantly, even with millions of elements.
+```python
+if "beach" in my_tags:
+```
+
+### When to use Sets
+* Removing duplicates from a list: `unique_tags = set(raw_tags)`
+* Checking if an item exists in a massive collection.
+* Mathematical operations (intersections, unions).
+
+### When NOT to use Sets
+* When the order of elements matters.
+* When you need to store duplicates.
+* When you need to access elements by index (Sets do not support `my_set[0]`).
+
+
 # Common Beginner Mistakes
 
 Trying to memorize syntax instead of understanding concepts.

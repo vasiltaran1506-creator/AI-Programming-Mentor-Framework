@@ -145,32 +145,6 @@ Open
 
 ---
 
-## Q-0003
-
-Title
-
-Why do some functions return values while others only modify existing objects?
-
-Reason
-
-This question naturally follows the discussion about `print()`, `return()`, and methods such as `append()`.
-
-Related Topics
-
-- Functions
-- Lists
-- Mutable Objects
-
-Priority
-
-High
-
-Status
-
-Open
-
----
-
 # Discussing
 
 (No questions currently in this state.)
@@ -185,7 +159,14 @@ Open
 
 # Mastered
 
-(No questions yet.)
+> Q-0003
+Title
+Why do some functions return values while others only modify existing objects?
+Reason
+This question naturally follows the discussion about `print()`, `return()`, and methods such as `append()`.
+Resolution
+Студент глубоко усвоил разницу между неизменяемыми (immutable) и изменяемыми (mutable) типами данных. Он понял, что строки (камни) требуют `return`, потому что методы создают новые объекты. В то время как списки и словари (корзины) передаются в функции по ссылке, и их можно модифицировать на месте без `return`. Концепция закреплена на практике при написании парсера тегов.
+
 
 ---
 
