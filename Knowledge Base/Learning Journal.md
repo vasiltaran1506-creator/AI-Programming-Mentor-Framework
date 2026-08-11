@@ -169,6 +169,84 @@ Future modules should introduce language features explicitly before expecting in
 
 ---
 
+## Module 02 — Python Toolbox
+Date: 2026-08-10
+
+### Major Insight
+
+Programming is not about writing everything yourself.
+It is about assembling existing tools into a solution.
+
+The student discovered that Python already contains specialists for counting, sorting, searching, and transforming data.
+This shifted the mindset from
+"I must write a loop"
+to
+"Does Python already have a tool for this?"
+
+This single habit — checking the toolbox before reinventing — became the defining conceptual change of the module.
+
+### What Became Clear
+
+The fundamental difference between mutable and immutable objects became the key conceptual milestone of this module.
+
+The student understood why string methods return new strings while list methods modify the existing list in place.
+This was not memorized.
+It was understood through the mental models of "Stone" (immutable) and "Basket" (mutable).
+
+The student also gained a deep understanding of dictionaries as a natural way to express relationships between data.
+The transition from parallel lists to a dictionary of sets happened organically, driven by the student's own experience of losing data connections.
+
+File I/O with `with open()` became clear through the "Robot Assistant" mental model.
+The student understood why context managers are safer than manual open/close patterns.
+
+### Personal Breakthrough
+
+The student independently redesigned the data architecture of the Tag Library Manager from a list of strings to a dictionary of sets:
+
+{category: {tag1, tag2, ...}}
+
+This transition was not prompted by the mentor.
+It emerged naturally from the student's own experience of losing connections between categories and tags.
+This represents a significant shift from "using collections" to "designing data structures."
+
+A second breakthrough:
+The student used mock data — a text file simulating a folder of images — instead of creating real files.
+This is a standard engineering practice that the student discovered independently.
+It demonstrates growing engineering maturity.
+
+### Difficulties
+
+Type confusion when calling methods remained the most frequent issue.
+The student occasionally applied methods of one type to another:
+.append() on a set;
+.add() on a dictionary;
+.split() on a list.
+
+The student understood the concept but needed practice to build the habit of checking the object type before choosing a method.
+
+Indentation errors when creating data structures inside versus outside loops caused several bugs.
+The student sometimes created a dictionary outside a loop when it should have been inside, or vice versa.
+
+Missing parentheses on method calls appeared periodically:
+folder.exists instead of folder.exists().
+
+Inconsistent return values from functions caused unpacking errors:
+returning two values on success but one value on error.
+
+These issues decreased throughout the module but represent recurring patterns requiring continued practice.
+
+### Lessons Learned
+
+Ask "Does Python already have a tool for this?" before writing a loop.
+The type of the object determines which methods are available.
+Mutable objects are modified in place; immutable objects require creating new values.
+Dictionaries express relationships between data naturally.
+Clean data at the boundary of the system.
+Functions should have predictable contracts.
+Mock data is a legitimate engineering tool for testing.
+
+---
+
 # Future Entries
 
 New entries should be appended below.

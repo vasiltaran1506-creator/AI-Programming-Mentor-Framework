@@ -145,6 +145,40 @@ Open
 
 ---
 
+## Q-0004
+Title
+How does hashing work inside sets and dictionaries?
+Reason
+The student understands that sets provide instant lookup and that dictionaries use keys for fast access.
+However, the underlying mechanism — hashing — has not been explored.
+The student asked why `in` works instantly for sets but requires iteration for lists.
+Related Topics
+Sets
+Dictionaries
+Hash Tables
+Performance
+Priority
+Medium
+Status
+Open
+
+## Q-0005
+Title
+What is the difference between pathlib.Path and string paths?
+Reason
+The student used pathlib.Path during the Tag Library Manager project and encountered confusion between Path objects and string paths.
+The student understood the basic usage but wants a deeper understanding of when to use Path objects versus plain strings.
+Related Topics
+pathlib
+File I/O
+Object-Oriented Design
+Priority
+Medium
+Status
+Open
+
+---
+
 # Discussing
 
 (No questions currently in this state.)
@@ -159,7 +193,7 @@ Open
 
 # Mastered
 
-> Q-0003
+Q-0003
 Title
 Why do some functions return values while others only modify existing objects?
 Reason
