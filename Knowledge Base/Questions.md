@@ -163,19 +163,23 @@ Status
 Open
 
 ## Q-0005
-Title
+Title:
 What is the difference between pathlib.Path and string paths?
-Reason
+
+Reason:
 The student used pathlib.Path during the Tag Library Manager project and encountered confusion between Path objects and string paths.
 The student understood the basic usage but wants a deeper understanding of when to use Path objects versus plain strings.
-Related Topics
+
+Related Topics:
 pathlib
 File I/O
 Object-Oriented Design
-Priority
+
+Priority:
 Medium
-Status
-Open
+
+Status:
+Mastered
 
 ---
 

@@ -1,0 +1,19 @@
+{
+    "valid_datasets": [
+        "portraits_v1",
+        "landscapes_v2",
+        "cyberpunk_items"
+    ],
+    "invalid_datasets": [
+        "broken_dataset"
+    ],
+    "total_images_in_valid_datasets": 1600,
+    "average_images_per_dataset_in_valid_datasets": 533.3333333333334,
+    "largest_valid_dataset": [
+        "landscapes_v2",
+        1200
+    ],
+    "below_minimum_datasets": [
+        "portraits_v1"
+    ]
+}

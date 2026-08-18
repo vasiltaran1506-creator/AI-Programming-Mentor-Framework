@@ -1,0 +1,22 @@
+[
+    {
+        "name": "portraits_v1",
+        "images": 50,
+        "tags": ["face", "realistic", "studio"]
+    },
+    {
+        "name": "landscapes_v2",
+        "images": 1200,
+        "tags": ["nature", "scenery", "mountains"]
+    },
+    {
+        "name": "cyberpunk_items",
+        "images": 350,
+        "tags": ["sci-fi", "game_assets", "neon"]
+    },
+    {
+        "name": "broken_dataset",
+        "images": "eight hundred",
+        "tags": "fantasy"
+    }
+]

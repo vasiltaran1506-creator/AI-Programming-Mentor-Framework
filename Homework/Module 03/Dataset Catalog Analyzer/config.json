@@ -1,0 +1,5 @@
+{
+    "input_file_path": "D:/VASILY/Projects/AI-Programming-Mentor-Framework/Homework/Module 03/Dataset Catalog Analyzer/Datasets/datasets.json",
+    "output_file_path": "D:/VASILY/Projects/AI-Programming-Mentor-Framework/Homework/Module 03/Dataset Catalog Analyzer/Datasets/report.json",
+    "min_images_required": 100
+}
