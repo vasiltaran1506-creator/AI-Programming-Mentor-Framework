@@ -23,40 +23,43 @@ from estimate_system.models import Estimate, EstimateItem, Equipment
 
 
 def process_scan(catalog: dict, estimate: Estimate, scan: str):
-    _find_scan_in_catalog(catalog, scan)
-    EstimateItem(
-        sku=scan,
-        name=Equipment.name,
-        category=Equipment.category,
-        quantity=quantity,
-        price_per_unit=Equipment.price_per_unit,
-        total_price=total_price,
-        from_catalog=from_catalog
-    )
+    equipment = _find_scan_in_catalog(catalog, scan)
+    quantity = 1
 
-    if EstimateItem != None:
-        _add_position_to_estimate(EstimateItem, Estimate)
-    elif EstimateItem == None:
+    if equipment != None:
+        from_catalog = True
+        total_price = Equipment.price_per_unit * quantity
+        item = EstimateItem(
+                sku=scan,
+                name=Equipment.name,
+                category=Equipment.category,
+                quantity=quantity,
+                price_per_unit=Equipment.price_per_unit,
+                total_price=total_price,
+                from_catalog=from_catalog
+            )
+        _add_position_to_estimate(item, estimate)
+
+    else:
         _manual_add_position_to_estimate()
-    
-    pass
 
-def _find_scan_in_catalog(catalog: dict, scan:str -> Equipment):
+def _find_scan_in_catalog(catalog: dict, scan:str) -> Equipment | None:
     position = catalog.get(scan)
-    Equipment(
+    if not position:
+        return None
+    return Equipment(
         sku=scan,
         name=position["name"],
         price_per_unit=position["price_per_unit"],
         category=position["category"],
         in_stock=position["in_stock"]
     )
-    return Equipment
 
 def _check_in_stock():
     
     pass
 
-def _add_position_to_estimate(EstimateItem, Estimate):
+def _add_position_to_estimate(item, estimate):
     pass
 
 def _manual_add_position_to_estimate():
