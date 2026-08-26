@@ -37,3 +37,5 @@ def test_load_prices_text_missing_file_raises_error(tmp_path):
     missing_path = tmp_path / "missing.txt"
     with pytest.raises(FileNotFoundError):
         price_calculator.load_prices_text(missing_path)
+
+        
