@@ -39,12 +39,12 @@ def _validate_equipment_data(sku, data):
         raise ValueError("'in_stock' is missing from the catalog")
     if not isinstance(data["in_stock"], int):
         raise ValueError("in_stock is not int")
-    return
+
 
 def main():
     path = Path(input("Enter catalog path:\n"))
     load_catalog(path)
-    pass
+    
 
 if __name__ == "__main__":
     main()
