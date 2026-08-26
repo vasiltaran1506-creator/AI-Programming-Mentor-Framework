@@ -13,22 +13,11 @@ def _calculate_total_position_price() # position: dict -> total_position_price: 
 
 def _calculate_grand_total() # items: list[dict] -> grand_total: float
 
-
-
-
 """
-from dataclasses import dataclass
 
-@dataclass
-class Name:
-    param1: str
-    param2: str
-
-name = Name(
-    param1=input("Name 1"),
-    param2=input("Name 2")
-)
-
-
-print(name.param1)
-print(name.param2)
+ManualItem = {
+    "sku": str, 
+    "name": str, 
+    "price_per_unit": float,
+    "category": str
+}
