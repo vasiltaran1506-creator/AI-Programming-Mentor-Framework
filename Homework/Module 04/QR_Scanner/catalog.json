@@ -1,0 +1,20 @@
+{
+    "LIGHT-001": {
+        "name": "LED-панель Aputure 600d",
+        "price_per_unit": 3500,
+        "category": "lighting",
+        "in_stock": 10
+    },
+    "CAM-002": {
+        "name": "Sony FX6",
+        "price_per_unit": 8500,
+        "category": "camera",
+        "in_stock": 3
+    },
+    "CABLE-015": {
+        "name": "Кабель XLR 5м",
+        "price_per_unit": 200,
+        "category": "cables",
+        "in_stock": 50
+    }
+}
