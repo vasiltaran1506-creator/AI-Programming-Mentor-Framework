@@ -1,20 +1,116 @@
 {
     "LIGHT-001": {
-        "name": "LED-панель Aputure 600d",
+        "name": "Aputure 600D",
         "price_per_unit": 3500,
         "category": "lighting",
         "in_stock": 10
     },
-    "CAM-002": {
-        "name": "Sony FX6",
-        "price_per_unit": 8500,
-        "category": "camera",
-        "in_stock": 3
+    "LIGHT-002":{
+        "name": "Aputure 600X",
+        "price_per_unit": 2000,
+        "category": "lighting",
+        "in_stock": 10
     },
-    "CABLE-015": {
+    "LIGHT-003":{
+        "name": "Aputure 600C Pro II",
+        "price_per_unit": 5500,
+        "category": "lighting",
+        "in_stock": 5
+    },
+    "LIGHT-004":{
+        "name": "Amaran 22X",
+        "price_per_unit": 2800,
+        "category": "lighting",
+        "in_stock": 4
+    },
+    "LIGHT-005":{
+        "name": "Amaran 300C",
+        "price_per_unit": 2200,
+        "category": "lighting",
+        "in_stock": 2 
+    },
+    "STAND-001": {
+        "name": "Avenger C-Stand 40'' Kit",
+        "price_per_unit": 250,
+        "category": "stands",
+        "in_stock": 100
+    },
+    "STAND-002": {
+        "name": "Avenger Combo Stand",
+        "price_per_unit": 300,
+        "category": "stands",
+        "in_stock": 30
+    },
+    "STAND-003": {
+        "name": "Avenger Strato Safe 5.8m",
+        "price_per_unit": 1200,
+        "category": "stands",
+        "in_stock": 10
+    },
+    "STAND-004": {
+        "name": "Avenger Mega Boom",
+        "price_per_unit": 600,
+        "category": "stands",
+        "in_stock": 5
+    },
+    "STAND-005": {
+        "name": "Avenger Low Boy",
+        "price_per_unit": 250,
+        "category": "stands",
+        "in_stock": 10
+    },
+    "CABLE-001": {
         "name": "Кабель XLR 5м",
         "price_per_unit": 200,
         "category": "cables",
         "in_stock": 50
+    },
+    "CABLE-002": {
+        "name": "Schuko 16A 3x220V 10m",
+        "price_per_unit": 100,
+        "category": "cables",
+        "in_stock": 1000
+    },
+    "CABLE-003": {
+        "name": "Cable 16Ax220V",
+        "price_per_unit": 150,
+        "category": "cables",
+        "in_stock": 300
+    },
+    "CABLE-004": {
+        "name": "Cable 32Ax220V",
+        "price_per_unit": 200,
+        "category": "cables",
+        "in_stock": 100
+    },
+    "CABLE-005": {
+        "name": "Cable 32Ax380V",
+        "price_per_unit": 250,
+        "category": "cables",
+        "in_stock": 100
+    },
+    "CABLE-006": {
+        "name": "Cable 63Ax220V",
+        "price_per_unit": 300,
+        "category": "cables",
+        "in_stock": 40
+    },
+    "CABLE-007": {
+        "name": "Cable 32Ax380V",
+        "price_per_unit": 300,
+        "category": "cables",
+        "in_stock": 30
+    },
+    "CABLE-008": {
+        "name": "Cable 125Ax220V",
+        "price_per_unit": 400,
+        "category": "cables",
+        "in_stock": 20
+    },
+    "CABLE-009": {
+        "name": "Cable 125Ax380V",
+        "price_per_unit": 450,
+        "category": "cables",
+        "in_stock": 15
     }
 }

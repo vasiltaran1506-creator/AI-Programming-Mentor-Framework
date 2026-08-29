@@ -1,0 +1,20 @@
+Капитанская дочка
+
+Category: lighting
+    LIGHT-001 - Aputure 600D - 3 pcs - 10500.00
+    LIGHT-002 - Aputure 600X - 2 pcs - 4000.00
+    LIGHT-004 - Amaran 22X - 1 pcs - 2800.00
+    LIGHT-005 - Amaran 300C - 3 pcs - 6600.00
+
+Category: stands
+    STAND-001 - Avenger C-Stand 40'' Kit - 7 pcs - 1750.00
+    STAND-002 - Avenger Combo Stand - 3 pcs - 900.00
+    STAND-003 - Avenger Strato Safe 5.8m - 5 pcs - 6000.00
+    STAND-004 - Avenger Mega Boom - 5 pcs - 3000.00
+
+Category: cables
+    CABLE-002 - Schuko 16A 3x220V 10m - 10 pcs - 1000.00
+    CABLE-003 - Cable 16Ax220V - 6 pcs - 900.00
+    CABLE-005 - Cable 32Ax380V - 3 pcs - 750.00
+
+Grand total: 38200

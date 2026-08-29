@@ -1,12 +1,14 @@
 from estimate_system.models import Estimate, EstimateItem
 from catalog_loader import load_catalog
 from estimate_constructor import process_scan, add_position_to_estimate
+import exporter
 
 
 def main():
     project_name = input("Enter project name:\n")
-    path = r"D:\VASILY\Projects\AI-Programming-Mentor-Framework\Homework\Module 04\QR_Scanner\catalog.json"
-    catalog = load_catalog(path)
+    config_path = r"D:\VASILY\Projects\AI-Programming-Mentor-Framework\Homework\Module 04\QR_Scanner\catalog.json"
+    save_path = r"D:\VASILY\Projects\AI-Programming-Mentor-Framework\Homework\Module 04\QR_Scanner\estimates"
+    catalog = load_catalog(config_path)
     estimate = Estimate(
         project_name=project_name,
         items=[],
@@ -31,7 +33,7 @@ def main():
                 manual_item = EstimateItem(
                     sku=scan,
                     name=input("Enter equipment name: "),
-                    category=input("Enter equipment category: "),
+                    category="misc",
                     quantity=1,
                     price_per_unit=float(input("Enter equipment price per unit: ")),
                     total_price=0,
@@ -43,6 +45,13 @@ def main():
         print(f"Grand total: {estimate.grand_total}, Status: {status}")
     
     print(f"Total positions: {len(estimate.items)}, Grand total: {estimate.grand_total}")
+
+    formated_estimate = exporter.format_estimate(estimate)
+    exporter.save_estimate(save_path, formated_estimate, estimate.project_name)
+
+
+
+
 
 
 if __name__ == "__main__":
