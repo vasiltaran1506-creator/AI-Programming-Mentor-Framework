@@ -92,7 +92,7 @@ Possible errors: -
 Side effects: - 
 Responsibility:
     добавить EstimateItem в Estimate.
-    Если Equipment с таким sku уже есть в Estimate — увеличить quantity.
+    Если позиция с таким sku уже есть в Estimate — увеличить quantity.
     Если позиции ещё нет — добавить новую строку.
 
 - check_in_stock(catalog, position)
