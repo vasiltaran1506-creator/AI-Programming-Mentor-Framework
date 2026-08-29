@@ -1,22 +1,13 @@
+from estimate_system.models import Estimate
+from estimate_constructor import process_scan
 from catalog_loader import load_catalog
 
+path = r"D:\VASILY\Projects\AI-Programming-Mentor-Framework\Homework\Module 04\QR_Scanner\catalog.json"
+catalog = load_catalog(path)
+estimate = Estimate(project_name="Test", items=[], grand_total=0.0)
 
-def main():
-    catalog = load_catalog(r"D:\VASILY\Projects\AI-Programming-Mentor-Framework\Homework\Module 04\QR_Scanner\catalog.json")
+estimate, status1 = process_scan(catalog, estimate, "LIGHT-001")
+print(f"1-й скан: статус={status1}, позиций={len(estimate.items)}, grand_total={estimate.grand_total}")
 
-    print("Тип каталога:", type(catalog))
-    print("Количество позиций:", len(catalog))
-    print()
-
-    for sku, equipment in catalog.items():
-        print(f"sku: {sku}")
-        print(f"  Тип: {type(equipment)}")
-        print(f"  name: {equipment.name}")
-        print(f"  category: {equipment.category}")
-        print(f"  price_per_unit: {equipment.price_per_unit}")
-        print(f"  in_stock: {equipment.in_stock}")
-        print()
-
-
-if __name__ == "__main__":
-    main()
+estimate, status2 = process_scan(catalog, estimate, "LIGHT-001")
+print(f"2-й скан: статус={status2}, позиций={len(estimate.items)}, grand_total={estimate.grand_total}")
