@@ -1,6 +1,7 @@
 from pathlib import Path
 from estimate_system.models import Estimate
 
+
 def format_estimate(estimate: Estimate):
     lines = []
     lines.append(estimate.project_name)
