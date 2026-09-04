@@ -1,0 +1,31 @@
+{
+    "LIGHT-0001": {
+        "name": "Aputure LS600D",
+        "price_per_unit": 3500,
+        "category": "LIGHT",
+        "available": 1,
+        "total_stored": 1
+    },
+    "LIGHT-0002": {
+        "name": "Aputure LS600D",
+        "price_per_unit": 3500,
+        "category": "LIGHT",
+        "available": 1,
+        "total_stored": 1
+        },
+    "CABLE-0001": {
+        "name": "Schuko 3x16Ax220V",
+        "price_per_unit": 100,
+        "category": "CABLE",
+        "available": 46,
+        "total_stored": 80
+    },
+    "CABLE-0002": {
+        "name": "Cable 16Ax220V",
+        "price_per_unit": 120,
+        "category": "CABLE",
+        "available": 32,
+        "total_stored": 58
+    }
+
+}
