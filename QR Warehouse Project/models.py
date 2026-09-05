@@ -15,8 +15,8 @@ class EstimateItem:
     sku: str
     name: str
     category: str
-    quantity: int
     price_per_unit: float
+    quantity: int
     days_in_rent: int
     total_price: float
     from_catalog: bool

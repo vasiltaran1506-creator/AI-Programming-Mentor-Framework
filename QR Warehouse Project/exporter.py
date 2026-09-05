@@ -17,7 +17,7 @@ def format_estimate(estimate: Estimate):
     for category in categories:
         lines.append(f"Category: {category}")
         for item in categories[category]:
-            lines.append(f"    - {item.name} - {item.quantity} pcs - {item.total_price:.2f}")
+            lines.append(f"    - {item.sku}    - {item.name}    - {item.quantity} pcs    - {item.total_price:.2f}")
 
         lines.append("")
 

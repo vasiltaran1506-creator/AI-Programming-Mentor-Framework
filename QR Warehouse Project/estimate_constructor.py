@@ -21,6 +21,9 @@ class Inventory:
                 return "over_stock", self._catalog.get(sku)
         return "not_found", None
 
+    def release_equipment(self, sku: str, quantity: int):
+        self._stock[sku] += quantity
+
 
 class Estimate:
     def __init__(self, project_name, days_in_rent) -> None:
@@ -73,6 +76,30 @@ class Estimate:
         self.grand_total = self._recalculate_total()
 
         return status
+
+    def remove_one(self, scan: str) -> tuple[str, int]:
+        existing_item = None
+
+        for position in self.items:
+            if position.sku == scan:
+                existing_item = position
+                break
+
+        if existing_item is not None:
+            existing_item.quantity -= 1
+            if existing_item.quantity >= 1:
+                status = "decreased_by_1"
+                existing_item.update_total_price()
+                self.grand_total = self._recalculate_total()
+            else:
+                self.items.remove(existing_item)
+                status = "removed_from_estimate"
+                self.grand_total = self._recalculate_total()
+
+        if existing_item is None:
+            status = "not_in_estimate"
+
+        return status, 1
 
     def _recalculate_total(self):
         return sum(pos.price_per_unit * pos.quantity * pos.days_in_rent for pos in self.items)
