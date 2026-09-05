@@ -3,40 +3,51 @@ from models import Equipment, EstimateItem
 
 
 class Inventory:
-
     def __init__(self) -> None:
         self._catalog = {}
         self._stock = {}
 
-    def register_equipment(self, equipment: Equipment):
-        self._catalog[equipment.sku] = equipment
-        self._stock[equipment.sku] = equipment.available
+    def register_equipment(self, catalog):
+        for sku, equipment_data in catalog.items():
+            self._catalog[sku] = equipment_data
+            self._stock[sku] = equipment_data.available
+
+    def check_and_reserve(self, sku: str) -> tuple[str, Equipment | None]:
+        if sku in self._catalog:
+            if self._stock[sku] >= 1:
+                self._stock[sku] -= 1
+                return "reserved", self._catalog.get(sku)
+            else:
+                return "over_stock", self._catalog.get(sku)
+        return "not_found", None
+
 
 class Estimate:
-
-    def __init__(self, project_name) -> None:
+    def __init__(self, project_name, days_in_rent) -> None:
         self.project_name = project_name
+        self.days_in_rent = days_in_rent
+        
         self.items = []
         self.grand_total = 0.0
 
-    def __str__(self) -> str:
+    def __str__(self):
         return f"Project name: {self.project_name}, Items in estimate: {self.items}, Grand total: {self.grand_total}"
 
-    def process_scan(self, position, days):
-            from_catalog = True
-            item = EstimateItem(
-                sku=position.sku,
-                name=position.name,
-                category=position.category,
-                quantity=1,
-                price_per_unit=position.price_per_unit,
-                days_in_rent= days,
-                total_price=0,
-                from_catalog=from_catalog
-            )
-            
-            self.add_item(item)
+    def process_scan(self, scan: str, equipment: Equipment):
 
+        item = EstimateItem(
+            sku=scan,
+            name=equipment.name,
+            category=equipment.category,
+            price_per_unit=equipment.price_per_unit,
+            quantity=1,
+            days_in_rent= self.days_in_rent,
+            total_price=0,
+            from_catalog=True
+        )
+        status = self.add_item(item)
+
+        return status
 
     def add_item(self, item: EstimateItem):
 
@@ -46,40 +57,24 @@ class Estimate:
             if position.sku == item.sku:
                 existing_item = position
                 break
-
+        
         #Если позиция уже существует, увеличиваем ее количество в смете
         if existing_item is not None:
             existing_item.quantity += 1
             existing_item.update_total_price()
+            status = "quantity_updated"
 
         #Если позиция новая, добавляем ее в self.items
         if existing_item is None:
             item.update_total_price()
             self.items.append(item)
+            status = "added"
 
         self.grand_total = self._recalculate_total()
+
+        return status
 
     def _recalculate_total(self):
         return sum(pos.price_per_unit * pos.quantity * pos.days_in_rent for pos in self.items)
 
-
-def main():
-    inventory = Inventory()
-
-    pos1 = Equipment(
-        sku="LIGHT-0001",
-        name="Auture LS600D", 
-        price_per_unit=3500.0,
-        category="LIGHT",
-        available=1,
-        total_stored=1
-    )
-
-    inventory.register_equipment(pos1)
-
-    print(inventory._catalog)
-    print(inventory._stock)
-
-
-if __name__ == "__main__":
-    main()
+    
