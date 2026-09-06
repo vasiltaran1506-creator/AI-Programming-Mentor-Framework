@@ -1,0 +1,7 @@
+Test
+Days of rent: 20
+
+Category: LIGHT
+    - LIGHT-0001    - Aputure LS600D    - 1 pcs    - 70000.00
+
+Grand total: 70000
