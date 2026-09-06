@@ -98,7 +98,7 @@ class Estimate:
 
         if existing_item is None:
             status = "not_in_estimate"
-
+            return status, 0
         return status, 1
 
     def _recalculate_total(self):
