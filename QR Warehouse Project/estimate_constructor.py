@@ -1,11 +1,13 @@
 from dataclasses import dataclass
 from models import Equipment, EstimateItem
-
+from price_policy import PricePolicy
+from logger import Logger, FileLogger, ConsoleLogger
 
 class Inventory:
-    def __init__(self) -> None:
+    def __init__(self, logger: Logger) -> None:
         self._catalog = {}
         self._stock = {}
+        self.log = logger
 
     def register_equipment(self, catalog):
         for sku, equipment_data in catalog.items():
@@ -26,9 +28,12 @@ class Inventory:
 
 
 class Estimate:
-    def __init__(self, project_name, days_in_rent) -> None:
+    def __init__(self, project_name, days_in_rent, price_policy: PricePolicy, logger: Logger) -> None:
         self.project_name = project_name
         self.days_in_rent = days_in_rent
+        self.price_policy = price_policy
+
+        self.log = logger
         
         self.items = []
         self.grand_total = 0.0
@@ -64,12 +69,12 @@ class Estimate:
         #Если позиция уже существует, увеличиваем ее количество в смете
         if existing_item is not None:
             existing_item.quantity += 1
-            existing_item.update_total_price()
+            existing_item.update_total_price(self.price_policy.calculate_discount(existing_item.category))
             status = "quantity_updated"
 
         #Если позиция новая, добавляем ее в self.items
         if existing_item is None:
-            item.update_total_price()
+            item.update_total_price(self.price_policy.calculate_discount(item.category))
             self.items.append(item)
             status = "added"
 
@@ -89,7 +94,7 @@ class Estimate:
             existing_item.quantity -= 1
             if existing_item.quantity >= 1:
                 status = "decreased_by_1"
-                existing_item.update_total_price()
+                existing_item.update_total_price(self.price_policy.calculate_discount(existing_item.category))
                 self.grand_total = self._recalculate_total()
             else:
                 self.items.remove(existing_item)
@@ -102,6 +107,6 @@ class Estimate:
         return status, 1
 
     def _recalculate_total(self):
-        return sum(pos.price_per_unit * pos.quantity * pos.days_in_rent for pos in self.items)
+        return sum(pos.total_price for pos in self.items)
 
     

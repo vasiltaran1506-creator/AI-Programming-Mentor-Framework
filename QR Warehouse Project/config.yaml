@@ -1,0 +1,4 @@
+catalog_path: "catalog.yaml"
+save_path: "Estimate output"
+log_path: "logs"
+log_mode : "FileLogger" #FileLog or ConsoleLog

@@ -2,38 +2,53 @@
     "LIGHT-0001": {
         "name": "Aputure LS600D",
         "price_per_unit": 3500,
-        "category": "LIGHT",
+        "category": "LED_LIGHT",
         "available": 1,
         "total_stored": 1
     },
     "LIGHT-0002": {
         "name": "Aputure LS600D",
         "price_per_unit": 3500,
-        "category": "LIGHT",
+        "category": "LED_LIGHT",
         "available": 1,
         "total_stored": 1
         },
     "LIGHT-0003": {
         "name": "Amaran F22X",
         "price_per_unit": 2500,
-        "category": "LIGHT",
+        "category": "LED_LIGHT",
         "available": 1,
         "total_stored": 1
     },
     "LIGHT-0004": {
         "name": "Arri M90",
         "price_per_unit": 5000,
-        "category": "LIGHT",
+        "category": "HMI_LIGHT",
         "available": 1,
         "total_stored": 1
     },
     "LIGHT-0005": {
         "name": "ARRI M25",
         "price_per_unit": 3500,
-        "category": "LIGHT",
+        "category": "HMI_LIGHT",
         "available": 1,
         "total_stored": 1
     },
+    "LIGHT-0006": {
+        "name": "ARRI Junior 650 Plus",
+        "price_per_unit": 800,
+        "category": "THUNGSTEN_LIGHT",
+        "available": 10,
+        "total_stored": 14
+    },
+    "LIGHT-0007": {
+        "name": "ARRI Junior 300 Plus",
+        "price_per_unit": 500,
+        "category": "THUNGSTEN_LIGHT",
+        "available": 8,
+        "total_stored": 20
+    },
+
     "STAND-0001": {
         "name": "Avenger C-Stand 40' kit",
         "price_per_unit": 150 ,

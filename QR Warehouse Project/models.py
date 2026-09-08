@@ -21,5 +21,5 @@ class EstimateItem:
     total_price: float
     from_catalog: bool
 
-    def update_total_price(self):
-        self.total_price = (self.price_per_unit * self.quantity * self.days_in_rent)
+    def update_total_price(self, discount):
+        self.total_price = (self.price_per_unit * self.quantity * self.days_in_rent) * (1 - discount / 100)
