@@ -2,6 +2,7 @@ import pytest
 from models import Equipment, EstimateItem
 from estimate_constructor import Estimate
 from price_policy import Standart_Policy
+from logger import Logger, FileLogger, ConsoleLogger
 
 # Вспомогательная функция (фикстура) для создания тестовой позиции
 def make_test_item(sku="TEST-001", price=1000.0, days=3):
@@ -19,14 +20,14 @@ def make_test_item(sku="TEST-001", price=1000.0, days=3):
 
 def test_estimate_initial_state():
     """Тест 1: Новая смета пуста, grand_total равен 0"""
-    estimate = Estimate(project_name="Test Project", days_in_rent=3, price_policy=Standart_Policy())
+    estimate = Estimate(project_name="Test Project", days_in_rent=3, price_policy=Standart_Policy(), logger=ConsoleLogger())
     
     assert len(estimate.items) == 0, "List 'estimate.items' should be 0"
     assert estimate.grand_total == 0.0, "'estimate.grand_total' should be 0.0"
 
 def test_add_new_item():
     """Тест 2: Добавление новой позиции увеличивает количество позиций и grand_total"""
-    estimate = Estimate(project_name="Test Project", days_in_rent=3, price_policy=Standart_Policy())
+    estimate = Estimate(project_name="Test Project", days_in_rent=3, price_policy=Standart_Policy(), logger=ConsoleLogger())
     item = make_test_item(sku="A", price=1000.0, days=3)
     
     status = estimate.add_item(item)
@@ -39,7 +40,7 @@ def test_add_new_item():
 
 def test_add_duplicate_item():
     """Тест 3: Добавление того же SKU увеличивает quantity, а не создает новую позицию"""
-    estimate = Estimate(project_name="Test Project", days_in_rent=3, price_policy=Standart_Policy())
+    estimate = Estimate(project_name="Test Project", days_in_rent=3, price_policy=Standart_Policy(), logger=ConsoleLogger())
     
     # Добавляем первый раз
     item1 = make_test_item(sku="A", price=1000.0, days=3)

@@ -1,6 +1,7 @@
 import pytest
 from models import Equipment
 from estimate_constructor import Inventory
+from logger import ConsoleLogger
 
 # Вспомогательная функция (фикстура), чтобы не создавать оборудование вручную в каждом тесте
 def make_test_equipment(sku="TEST-001", available=5):
@@ -15,7 +16,7 @@ def make_test_equipment(sku="TEST-001", available=5):
 
 def test_inventory_registers_equipment():
     """Тест 1: Склад успешно принимает оборудование и записывает его в _stock"""
-    inventory = Inventory()
+    inventory = Inventory(logger=ConsoleLogger())
     eq = make_test_equipment(available=3)
     
     inventory.register_equipment({"TEST-001": eq})
@@ -25,7 +26,7 @@ def test_inventory_registers_equipment():
 
 def test_reserve_success():
     """Тест 2: Успешное бронирование уменьшает остаток и возвращает статус 'reserved'"""
-    inventory = Inventory()
+    inventory = Inventory(logger=ConsoleLogger())
     eq = make_test_equipment(available=2)
     inventory.register_equipment({"TEST-001": eq})
     
@@ -38,7 +39,7 @@ def test_reserve_success():
 
 def test_reserve_over_stock():
     """Тест 3: Попытка забронировать то, чего нет (available=0), возвращает 'over_stock' и НЕ меняет остаток"""
-    inventory = Inventory()
+    inventory = Inventory(logger=ConsoleLogger())
     eq = make_test_equipment(available=0) # На складе пусто!
     inventory.register_equipment({"TEST-001": eq})
     
@@ -50,7 +51,7 @@ def test_reserve_over_stock():
 
 def test_reserve_not_found():
     """Тест 4: Запрос несуществующего SKU возвращает 'not_found' и None"""
-    inventory = Inventory()
+    inventory = Inventory(logger=ConsoleLogger())
     # Склад пустой, мы ничего не регистрировали
     
     status, returned_eq = inventory.check_and_reserve("FAKE-999")

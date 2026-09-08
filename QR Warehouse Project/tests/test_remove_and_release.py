@@ -2,6 +2,7 @@ import pytest
 from models import Equipment, EstimateItem
 from estimate_constructor import Estimate, Inventory
 from price_policy import Standart_Policy
+from logger import ConsoleLogger
 
 def make_test_item(sku="TEST-001", price=1000.0, days=3):
     return EstimateItem(
@@ -17,7 +18,7 @@ def make_test_item(sku="TEST-001", price=1000.0, days=3):
 
 def test_remove_one_decreases_quantity():
     """Тест 1: Удаление одной штуки из позиции с quantity=3"""
-    estimate = Estimate(project_name="Test", days_in_rent=3, price_policy=Standart_Policy())
+    estimate = Estimate(project_name="Test", days_in_rent=3, price_policy=Standart_Policy(), logger=ConsoleLogger())
     
     # Добавляем позицию 3 раза (quantity станет 3)
     item1 = make_test_item(sku="A", price=1000.0, days=3)
@@ -37,7 +38,7 @@ def test_remove_one_decreases_quantity():
 
 def test_remove_one_removes_item_completely():
     """Тест 2: Удаление последней штуки полностью убирает позицию"""
-    estimate = Estimate(project_name="Test", days_in_rent=3, price_policy=Standart_Policy())
+    estimate = Estimate(project_name="Test", days_in_rent=3, price_policy=Standart_Policy(), logger=ConsoleLogger())
     item = make_test_item(sku="A", price=1000.0, days=3)
     estimate.add_item(item)
     
@@ -53,7 +54,7 @@ def test_remove_one_removes_item_completely():
 
 def test_remove_one_not_in_estimate():
     """Тест 3: Попытка удалить несуществующую позицию"""
-    estimate = Estimate(project_name="Test", days_in_rent=3, price_policy=Standart_Policy())
+    estimate = Estimate(project_name="Test", days_in_rent=3, price_policy=Standart_Policy(), logger=ConsoleLogger())
     
     status, qty_to_return = estimate.remove_one("FAKE-999")
     
@@ -64,7 +65,7 @@ def test_remove_one_not_in_estimate():
 
 def test_release_equipment_increases_stock():
     """Тест 4: Возврат оборудования на склад увеличивает available"""
-    inventory = Inventory()
+    inventory = Inventory(logger=ConsoleLogger())
     eq = Equipment(
         sku="TEST-001",
         name="Test Light",
