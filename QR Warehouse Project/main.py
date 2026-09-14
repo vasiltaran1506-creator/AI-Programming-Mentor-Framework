@@ -1,7 +1,7 @@
-from catalog_loader import load_catalog
 from estimate_constructor import Estimate, Inventory
 from price_policy import Standart_Policy, VGIK_Policy
 from logger import FileLogger, ConsoleLogger
+from repository import JsonEquipmentRepository
 import exporter
 import yaml
 import os
@@ -13,43 +13,25 @@ def main():
     BASE_DIR = Path(__file__).resolve().parent
     CONFIG_PATH = BASE_DIR / "config.yaml"
 
-    #ЧТЕНИЕ config.yaml
-    with open(CONFIG_PATH, "r", encoding="utf-8") as file:
-        config = yaml.safe_load(file)
-    catalog_path = str(BASE_DIR / config["catalog_path"])
-    save_path = str(BASE_DIR / config["save_path"])
-    log_path = str(BASE_DIR / config["log_path"])
-    log_mode = config["log_mode"]
+    #Чтение конфига
+    config = read_config(CONFIG_PATH, BASE_DIR)
 
-    # СОЗДАНИЕ ЛОГГЕРА
-    if log_mode == "FileLog":
-        logger = FileLogger(log_path)
-    elif log_mode == "ConsoleLog":
-        logger = ConsoleLogger()
+    #Создание Logger
+    logger = create_logger(config["log_mode"], config["log_path"])
 
-    #ЗАГРУЗКА catalog.json
-    catalog = load_catalog(catalog_path)
+    #Создание репозитория
+    repository = create_repository(config["catalog_path"])
 
-    #СОЗДАНИЕ Inventory и регистрация оборудоавия из catalog.json
-    inventory = Inventory(logger=logger)
-    inventory.register_equipment(catalog)
+    #Создание Inventory
+    inventory = Inventory(repository)
 
-    #ВВОД НАЗВАНИЯ И ПРОДОЛЖИТЕЛЬНОСТИ ПРОЕКТА
-    project_name = input("Enter project name: ")
-    logger.log_info(f"Entered project name: {project_name}")
-    days = int(input("Enter days of rent: "))
-    logger.log_info(f"Entered project duration: {days} days")
+    #Ввод названя и продолжительности проекта
+    project_name, days = input_info()
 
-    #ОПРЕДЕЛЕНИЕ ЦЕНОВОЙ ПОЛИТИКИ
-    price_policy_input = input("Enter price policy:\n1. Standart.\n2.VGIK Student")
-    if price_policy_input == "1":
-        price_policy = Standart_Policy()
-        logger.log_info(f"Entered Price Policy: Standart_Policy")
-    elif price_policy_input == "2":
-        price_policy = VGIK_Policy()
-        logger.log_info("Entered Price Policy: VGIK_Policy")
+    #Определение ценовой политики
+    price_policy = decide_price_policy()
 
-    #СОЗДАНИЕ Estimate
+    #Создание Estimate
     estimate = Estimate(
         project_name=project_name,
         days_in_rent=days,
@@ -58,51 +40,104 @@ def main():
     )
 
     while True:
-        scan = input("Enter SKU ('done' for save): ")
-        logger.log_info(f"Entered SKU: {scan}")
+        sku, action = enter_scan()
+        if action is None:
+            if sku == "done":
+                save_and_exit(config, estimate)
+                break
+            elif sku == "stop":
+                break
+            else:
+                status = add_item(sku, inventory, estimate)
+
+        if action is not None:
+            if action == "delete":
+                status = delete_item(sku, estimate, inventory)
+
         clear_console()
 
-        parts = scan.split()
-        if not parts:
-            continue 
-        if parts[0] == "delete" and len(parts) >= 2:
-            sku = parts[1]
-            status, quantity = estimate.remove_one(sku)
-
-            if status == "decreased_by_1":
-                inventory.release_equipment(sku, quantity)
-                logger.log_info("Equipment quantity decreased by 1")
-
-            elif status == "removed_from_estimate":
-                inventory.release_equipment(sku, quantity)
-                logger.log_info("Equipment deleted from the estimate")
-
-            elif status == "not_in_estimate":
-                logger.log_warning(f"Entered scan {sku} not in current estimate")
-            display_estimate(estimate)
-            continue
-            
-        elif scan == "done": 
-            text = exporter.format_estimate(estimate)
-            exporter.save_estimate(save_path, text, project_name)
-            break
-
-        elif scan == "stop":
-            break
-
-        status, equipment = inventory.check_and_reserve(scan)
-        if status == "reserved" and equipment is not None:
-            status = estimate.process_scan(scan, equipment)
-            if status == "added":
-                logger.log_info(f"{equipment.name} added to estimate")
-            elif status == "quantity_updated":
-                logger.log_info(f"Quantity of {equipment.name} updated successfully")
-        elif status == "over_stock" and equipment is not None:
-            logger.log_warning(f"Equipment {equipment.name} is out of stock")
-        elif status == "not_found":
-            logger.log_warning(f"No scan {scan} in catalog")
-
         display_estimate(estimate)
+
+def read_config(CONFIG_PATH, BASE_DIR):
+    with open(CONFIG_PATH, "r", encoding="utf-8") as file:
+        config = yaml.safe_load(file)
+    catalog_path = str(BASE_DIR / config["catalog_path"])
+    save_path = str(BASE_DIR / config["save_path"])
+    log_path = str(BASE_DIR / config["log_path"])
+    log_mode = config["log_mode"]
+
+    return {
+        "catalog_path": catalog_path,
+        "save_path": save_path,
+        "log_path": log_path,
+        "log_mode": log_mode
+    }
+
+def create_logger(log_mode, log_path):
+    if log_mode == "FileLog":
+        return FileLogger(log_path)
+    elif log_mode == "ConsoleLog":
+        return ConsoleLogger()
+    else:
+        raise ValueError(f"Invalid log mode: {log_mode}")
+
+def create_repository(catalog_path):
+    return JsonEquipmentRepository(catalog_path)
+
+def input_info():
+    project_name = input("Enter project name: ")
+    days = int(input("Enter days of rent: "))
+    return project_name, days
+
+def decide_price_policy():
+    price_policy_input = input("Enter price policy:\n1. Standart.\n2.VGIK Student")
+    if price_policy_input == "1":
+        return Standart_Policy()
+    elif price_policy_input == "2":
+        return VGIK_Policy()
+    raise ValueError("Invalid price policy")
+
+def enter_scan():
+    scan = input("Enter SKU (or 'delete' for delete; 'done' for save):\n")
+    if len(scan.split()) >= 2:
+        parts = _split_scan(scan)
+        action = parts[0]
+        sku = parts[1]
+        return sku, action
+    else:
+        sku = scan
+        return sku, None
+
+def _split_scan(scan):
+    parts = scan.split()
+    if len(parts) >= 2:
+        return parts
+    else:
+        return scan
+
+def add_item(sku, inventory: Inventory, estimate:Estimate):
+    status, equipment = inventory.reserve_equipment(sku)
+    if status == "reserved" and equipment is not None:
+        status = estimate.process_scan(sku, equipment)
+        return status
+    elif status == "over_stock" and equipment is not None:
+        return status
+    elif status == "not_found" and equipment is None:
+        return status
+
+def delete_item(sku: str, estimate: Estimate, inventory: Inventory):
+    status, quantity = estimate.remove_one(sku)
+    if status == "decreased_by_1":
+        inventory.release_equipment(sku, quantity)
+        return status
+    elif status == "removed_from_estimate":
+        inventory.release_equipment(sku, quantity)
+        return status
+    elif status == "not_in_estimate":
+        return status
+    
+def save_and_exit(config, estimate):
+    exporter.save_estimate(config["save_path"],exporter.format_estimate(estimate), estimate.project_name)
 
 
 #       =========================================

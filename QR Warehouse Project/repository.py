@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from models import Equipment
 import json
 
-
 class EquipmentRepository(ABC):
 
     @abstractmethod
@@ -39,9 +38,9 @@ class JsonEquipmentRepository(EquipmentRepository):
             total_stored=data["total_stored"]
         )
 
-    def update_available(self, sku: str, quantity_change: int, catalog_path: str):
+    def update_available(self, sku: str, quantity_change: int):
 
-        with open(catalog_path, "r", encoding="utf-8") as file:
+        with open(self.catalog_path, "r", encoding="utf-8") as file:
             catalog = json.load(file)
 
         if sku not in catalog:
@@ -70,6 +69,4 @@ class JsonEquipmentRepository(EquipmentRepository):
             raise ValueError("'total_stored' is missing from the catalog")
         if not isinstance(data["total_stored"], int):
             raise ValueError("'total_stored' is not int")
-    
-
-
+   

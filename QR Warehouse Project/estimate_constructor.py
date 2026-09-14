@@ -1,30 +1,26 @@
-from dataclasses import dataclass
 from models import Equipment, EstimateItem
 from price_policy import PricePolicy
-from logger import Logger, FileLogger, ConsoleLogger
+from logger import Logger
+from repository import EquipmentRepository
+
 
 class Inventory:
-    def __init__(self, logger: Logger) -> None:
-        self._catalog = {}
-        self._stock = {}
-        self.log = logger
+    def __init__(self, repository: EquipmentRepository) -> None:
+        self.repository = repository
 
-    def register_equipment(self, catalog):
-        for sku, equipment_data in catalog.items():
-            self._catalog[sku] = equipment_data
-            self._stock[sku] = equipment_data.available
-
-    def check_and_reserve(self, sku: str) -> tuple[str, Equipment | None]:
-        if sku in self._catalog:
-            if self._stock[sku] >= 1:
-                self._stock[sku] -= 1
-                return "reserved", self._catalog.get(sku)
+    def reserve_equipment(self, sku) -> tuple[str, Equipment | None]:
+        equipment = self.repository.find_by_sku(sku)
+        if equipment:
+            if equipment.available >= 1:
+                self.repository.update_available(equipment.sku, -1)
+                return "reserved", equipment
             else:
-                return "over_stock", self._catalog.get(sku)
-        return "not_found", None
+                return "over_stock", equipment
+        else:
+            return "not_found", None
 
     def release_equipment(self, sku: str, quantity: int):
-        self._stock[sku] += quantity
+        self.repository.update_available(sku, quantity)
 
 
 class Estimate:
