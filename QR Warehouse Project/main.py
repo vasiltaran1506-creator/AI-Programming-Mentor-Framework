@@ -1,11 +1,13 @@
 from estimate_constructor import Estimate, Inventory
 from price_policy import Standart_Policy, VGIK_Policy
 from logger import FileLogger, ConsoleLogger
-from repository import JsonEquipmentRepository
+from repository import SQLRepository
 import exporter
 import yaml
 import os
 from pathlib import Path
+
+from use_cases import AddItemToEstimate
 
 
 def main():
@@ -20,7 +22,8 @@ def main():
     logger = create_logger(config["log_mode"], config["log_path"])
 
     #Создание репозитория
-    repository = create_repository(config["catalog_path"])
+    #repository = create_repository(config["catalog_path"])
+    repository = create_repository(config["db_path"])
 
     #Создание Inventory
     inventory = Inventory(repository)
@@ -39,6 +42,12 @@ def main():
         logger=logger
     )
 
+    #Создание UseCases
+    add_item_use_case = AddItemToEstimate(
+        inventory=inventory,
+        estimate=estimate
+    )
+
     while True:
         sku, action = enter_scan()
         if action is None:
@@ -48,7 +57,7 @@ def main():
             elif sku == "stop":
                 break
             else:
-                status = add_item(sku, inventory, estimate)
+                status, equipment = add_item_use_case.execute(sku)
 
         if action is not None:
             if action == "delete":
@@ -58,6 +67,7 @@ def main():
 
         display_estimate(estimate)
 
+
 def read_config(CONFIG_PATH, BASE_DIR):
     with open(CONFIG_PATH, "r", encoding="utf-8") as file:
         config = yaml.safe_load(file)
@@ -65,12 +75,14 @@ def read_config(CONFIG_PATH, BASE_DIR):
     save_path = str(BASE_DIR / config["save_path"])
     log_path = str(BASE_DIR / config["log_path"])
     log_mode = config["log_mode"]
+    db_path = str(BASE_DIR / config["db_path"])
 
     return {
         "catalog_path": catalog_path,
         "save_path": save_path,
         "log_path": log_path,
-        "log_mode": log_mode
+        "log_mode": log_mode,
+        "db_path": db_path
     }
 
 def create_logger(log_mode, log_path):
@@ -81,8 +93,8 @@ def create_logger(log_mode, log_path):
     else:
         raise ValueError(f"Invalid log mode: {log_mode}")
 
-def create_repository(catalog_path):
-    return JsonEquipmentRepository(catalog_path)
+def create_repository(db_path):
+    return SQLRepository(db_path)
 
 def input_info():
     project_name = input("Enter project name: ")
@@ -115,16 +127,6 @@ def _split_scan(scan):
     else:
         return scan
 
-def add_item(sku, inventory: Inventory, estimate:Estimate):
-    status, equipment = inventory.reserve_equipment(sku)
-    if status == "reserved" and equipment is not None:
-        status = estimate.process_scan(sku, equipment)
-        return status
-    elif status == "over_stock" and equipment is not None:
-        return status
-    elif status == "not_found" and equipment is None:
-        return status
-
 def delete_item(sku: str, estimate: Estimate, inventory: Inventory):
     status, quantity = estimate.remove_one(sku)
     if status == "decreased_by_1":
@@ -143,6 +145,7 @@ def save_and_exit(config, estimate):
 #       =========================================
 #       =           Service functions           =
 #       =========================================
+
 
 def display_estimate(estimate: Estimate):
     text = exporter.format_estimate(estimate)

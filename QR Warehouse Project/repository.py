@@ -1,6 +1,10 @@
+import sqlite3
 from abc import ABC, abstractmethod
 from models import Equipment
 import json
+
+
+
 
 class EquipmentRepository(ABC):
 
@@ -69,4 +73,59 @@ class JsonEquipmentRepository(EquipmentRepository):
             raise ValueError("'total_stored' is missing from the catalog")
         if not isinstance(data["total_stored"], int):
             raise ValueError("'total_stored' is not int")
-   
+
+
+class SQLRepository(EquipmentRepository):
+    def __init__(self, db_path) -> None:
+        self.db_path = db_path
+        self._initialize_database()
+
+    def _initialize_database(self):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+
+        sql_query = """
+        CREATE TABLE IF NOT EXISTS equipment (
+            sku TEXT PRIMARY KEY,
+            name TEXT,
+            price_per_unit REAL,
+            category TEXT,
+            available INTEGER,
+            total_stored INTEGER
+        )
+        """
+        cursor.execute(sql_query)
+        conn.commit()
+        conn.close()
+
+    def find_by_sku(self, scan: str) -> Equipment | None:
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+
+        sql_query = """
+        SELECT * FROM equipment WHERE sku = ?
+        """
+        cursor.execute(sql_query, (scan,))
+
+        line = cursor.fetchone()
+        conn.close()
+
+        if line is None: 
+            return None
+        else:
+           sku, name, price_per_unit, category, available, total_stored = line
+           return Equipment(
+               sku=sku, name=name, price_per_unit=price_per_unit, category=category, available=available, total_stored=total_stored
+           )
+
+    def update_available(self, scan: str, quantity_change: int) -> None:
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+
+        sql_query = """
+        UPDATE equipment SET available = available + ? WHERE sku = ?
+        """
+        cursor.execute(sql_query, (quantity_change, scan))
+
+        conn.commit()
+        conn.close()
