@@ -1,3 +1,4 @@
+```markdown
 # Questions
 
 **Version:** 1.0  
@@ -184,6 +185,68 @@ Medium
 **Status**  
 Open
 
+**Module 07 Progress Note:**  
+The student has now practically demonstrated understanding of Dependency Inversion (Repository pattern, business logic depending on abstractions rather than concrete implementations) and Single Responsibility (each component owns one coherent responsibility). These were experienced through real refactoring rather than formal study. The formal SOLID framework study remains valuable to unify these practical experiences under a single conceptual umbrella.
+
+---
+
+### Q-0023
+
+**Title**  
+How do relational databases work internally, and how do I use SQL systematically?
+
+**Reason**  
+During Module 07, the student successfully used SQLite as an infrastructure detail through the Repository pattern. However, the student explicitly stated: "Никакого системного понимания синтаксиса, внутреннего устройства базы данных и прочего у меня пока нет. Хочется изучать это в будущих модулях." The student wants to understand:
+
+- SQL syntax systematically (SELECT, INSERT, UPDATE, DELETE, JOIN)
+- How relational databases store data internally (B-trees, pages)
+- Indexing and query performance
+- Transactions and atomicity
+- Schema design and migrations
+- The difference between SQLite, PostgreSQL, and other databases
+- When to use a database vs files vs in-memory storage
+
+**Related Topics**  
+SQL  
+Relational Databases  
+SQLite  
+PostgreSQL  
+Indexing  
+Transactions  
+Schema Design  
+Migrations  
+Query Optimization
+
+**Priority**  
+High
+
+**Status**  
+Open
+
+---
+
+### Q-0024
+
+**Title**  
+How would the QR Warehouse architecture change if I add a Web API alongside the CLI?
+
+**Reason**  
+During Module 07, the student discussed the future vision of the system growing to include a web interface for clients, a manager interface, and a warehouse worker interface. The student understands conceptually that the Use Cases should remain reusable across different Presentation layers, but has not yet experienced this in practice. This question will become relevant when the student is ready to build a second entry point into the application.
+
+**Related Topics**  
+Web Frameworks  
+HTTP API  
+Presentation Layer  
+Application Layer reuse  
+Multiple entry points  
+REST principles
+
+**Priority**  
+Medium
+
+**Status**  
+Open
+
 ---
 
 ## Discussing
@@ -357,6 +420,84 @@ The student initially wrote `assert ValueError("message")` instead of using the 
 
 ---
 
+### Q-0017
+
+**Title**  
+What is software architecture and how is it different from file organization?
+
+**Reason**  
+The student initially associated architecture with folder structures and file names. Module 07 needed to establish that architecture is about responsibilities, boundaries, and dependencies — not about how files are arranged on disk.
+
+**Resolution**  
+Студент глубоко усвоил, что архитектура — это не папки и файлы, а управление зависимостями и контроль над тем, как изменения распространяются по системе. Ключевой инсайт был сформулирован студентом самостоятельно: "Я понял, насколько полезно и эффективно изолировать бизнес логику от всего остального." Студент понял, что архитектура становится видимой через изменения: "Что произойдёт, если JSON станет SQLite? Что произойдёт, если CLI станет Web API?" — эти вопросы позволяют увидеть реальную архитектуру системы. Студент также самостоятельно сформулировал "Архитектурный фильтр" для классификации новых фич: правило о сущности → Домен; рабочий процесс → Приложение; техническая деталь → Инфраструктура. Концепция закреплена на практике через рефакторинг QR Warehouse и успешную замену JSON на SQLite без изменения бизнес-логики.
+
+---
+
+### Q-0018
+
+**Title**  
+What is the Repository pattern and when should I use it?
+
+**Reason**  
+The student needed to isolate persistence logic from business logic so that changing the storage mechanism (JSON → SQLite → PostgreSQL) would not require rewriting business rules. The student initially stored all catalog data inside `Inventory` as internal dictionaries, creating tight coupling between business logic and data loading.
+
+**Resolution**  
+Студент создал абстрактный контракт `EquipmentRepository` (ABC) с методами `find_by_sku()` и `update_available()`, а затем реализовал три конкретные реализации: `JsonEquipmentRepository` (чтение из JSON-файла), `SqliteEquipmentRepository` (работа с базой данных через `sqlite3`), и `InMemoryEquipmentRepository` (для тестов). Студент пережил ключевой архитектурный инсайт: при замене JSON на SQLite ни `Inventory`, ни `Estimate`, ни `AddItemToEstimate` не потребовали ни одной строчки изменений. Студент описал этот опыт словами: "Я без труда и без необходимости переписывать половину программы смог перевести работу программы с JSON файлов на базу данных." Студент также понял, когда Репозиторий избыточен: для крошечного скрипта с одним источником данных абстракция может быть ненужной. Концепция закреплена на практике в проекте QR Warehouse.
+
+---
+
+### Q-0019
+
+**Title**  
+What are Use Cases (Application Services) and how do they differ from domain objects?
+
+**Reason**  
+The student initially confused "Use Case" with user scenarios (e.g., "using the app on Windows 10" or "working offline"). This was a terminology collision between software architecture and product management/QA contexts. The student explicitly stated: "Мне бы понять предметную суть Use Case, тогда будет проще." Additionally, the student questioned why Use Cases were needed if `main.py` already orchestrates the program, fearing an "orchestrator of orchestrators" infinite loop.
+
+**Resolution**  
+Через ментальную модель "Сотрудник МФЦ / Дирижёр" студент понял, что Use Case — это оркестратор Слоя Приложения, который координирует доменные объекты для выполнения бизнес-процесса, не зная про UI или базу данных. Через модель "Директор завода против Начальника производства" студент понял разницу между Composition Root (`main.py` — создаёт и соединяет объекты) и Use Case (выполняет бизнес-процесс внутри уже собранной системы). Студент извлёк `AddItemToEstimate` как Use Case в отдельный файл `use_cases.py`, координирующий `Inventory` и `Estimate`. Студент также проявил прагматичность: решил НЕ создавать сложные классы Use Cases, когда простые функции в `main.py` достаточны для текущего масштаба проекта, но чётко понял, КОГДА они станут обязательными (добавление Web API, email-уведомлений, нескольких точек входа). Концепция закреплена на практике в проекте QR Warehouse.
+
+---
+
+### Q-0020
+
+**Title**  
+What is Dependency Inversion and how does it work in practice?
+
+**Reason**  
+The student needed to understand how to make stable business rules independent from unstable technical details. The initial code had `Inventory` directly storing catalog data in internal dictionaries (`self._catalog`, `self._stock`), creating tight coupling between business logic and the specific way data was loaded.
+
+**Resolution**  
+Студент пережил Dependency Inversion не как теоретический принцип SOLID, а как практический инструмент. Когда бизнес-логика (`Inventory`) стала зависеть от абстрактного контракта `EquipmentRepository`, а не от конкретной реализации, замена JSON на SQLite стала тривиальной. Студент понял: "Бизнес-логика зависит от контракта, а не от конкретного механизма хранения." Студент также освоил Dependency Injection на уровне приложения: `Inventory(repository)` получает зависимость извне через конструктор, а `main.py` (Composition Root) решает, какую конкретную реализацию передать. Студент создал три реализации одного контракта (JSON, SQLite, InMemory), доказав, что бизнес-логика не знает и не должна знать, какая именно реализация используется. Концепция закреплена на практике в проекте QR Warehouse и подтверждена архитектурными тестами.
+
+---
+
+### Q-0021
+
+**Title**  
+How do I separate Domain, Application, Presentation, and Infrastructure?
+
+**Reason**  
+The student needed a practical framework for deciding where each piece of code belongs. Without this framework, responsibilities drift and components accumulate unrelated reasons to change.
+
+**Resolution**  
+Студент самостоятельно сформулировал "Архитектурный фильтр" для классификации: (1) Это правило о самой сущности? → Домен. (2) Это рабочий процесс, связывающий несколько объектов или внешних систем? → Приложение / Use Case. (3) Это техническая деталь взаимодействия с внешним миром? → Инфраструктура. Студент успешно применил этот фильтр к гипотетическим требованиям: хранение в SQLite → Инфраструктура; скидка 20% на HMI_LIGHT при аренде больше 5 дней → Домен; генерация PDF и отправка по email после сохранения сметы → Use Case. Студент понял ключевое различие: Домен защищает истины (инварианты), Приложение координирует действия (рабочие процессы), Инфраструктура обеспечивает техническую поддержку (БД, файлы, сеть), Презентация переводит внешний мир на язык приложения. Концепция закреплена на практике в проекте QR Warehouse.
+
+---
+
+### Q-0022
+
+**Title**  
+How do I test business logic without real infrastructure (Fakes, Stubs, Mocks)?
+
+**Reason**  
+The student needed to verify that business logic works correctly without depending on real JSON files or SQLite databases. Testing against real infrastructure is slow, fragile, and makes tests depend on the environment.
+
+**Resolution**  
+Студент создал `InMemoryEquipmentRepository` как тестовый дублёр (Fake), реализующий тот же контракт `EquipmentRepository`, но хранящий данные в обычном словаре Python в оперативной памяти. Студент написал архитектурные тесты, доказывающие: успешное бронирование уменьшает доступное количество; отказ при отсутствии товара; возврат оборудования увеличивает количество. Все тесты проходят без реальных файлов и баз данных. Студент понял практическую разницу: Stub — предопределённые ответы; Fake — лёгкая рабочая реализация (InMemoryRepository); Mock — проверка взаимодействий (был ли вызван метод, с какими аргументами). Студент также понял принцип "поведение прежде взаимодействий": тесты должны доказывать значимые бизнес-результаты, а не просто проверять, что метод был вызван. Концепция закреплена на практике в проекте QR Warehouse.
+
+---
+
 ## Mentor Responsibilities
 
 The mentor should review this document at the beginning of every new module.
@@ -416,3 +557,4 @@ This continuous cycle of asking, understanding and applying is one of the defini
 ---
 
 *End of document.*
+```
