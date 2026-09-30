@@ -1,11 +1,13 @@
-Learning Journal
+# Learning Journal
 
-Version: 1.0
-Status: Active
-Owner: Student
-Maintained by: AI Programming Mentor
+**Version:** 1.0  
+**Status:** Active  
+**Owner:** Student  
+**Maintained by:** AI Programming Mentor
 
-Purpose
+---
+
+## Purpose
 
 The Learning Journal is a chronological record of the student's learning journey.
 
@@ -13,7 +15,7 @@ Unlike the Programming Handbook, which stores technical knowledge, the Learning 
 
 Its purpose is to document how understanding develops over time.
 
-This journal is not intended to be a diary of completed exercises.
+This journal is not intended to be a diary of completed exercises.  
 Instead, it captures important moments:
 
 - new insights;
@@ -24,7 +26,9 @@ Instead, it captures important moments:
 
 Reading older entries should allow the student to see how much they have grown.
 
-Writing Rules
+---
+
+## Writing Rules
 
 The mentor creates one new entry after every completed module.
 
@@ -42,70 +46,71 @@ Instead, it should answer questions such as:
 
 Entries should be concise but meaningful.
 
-Journal Entries
+---
 
-Module 00 — Foundations
+## Journal Entries
 
-Date: 2026-07-26
+### Module 00 — Foundations
 
-Major Insight
+**Date:** 2026-07-26
 
-Programming is not about writing code.
+**Major Insight**
+
+Programming is not about writing code.  
 Programming is about describing a process so precisely that a computer can execute it without interpretation.
 
 This realization shifted the student's attention away from syntax and toward problem solving.
 
-What Became Clear
+**What Became Clear**
 
 The student discovered that large problems become manageable once they are decomposed into smaller independent tasks.
 
-The concept of state became particularly important.
+The concept of state became particularly important.  
 The student intuitively understood that programs must keep track of changes over time and independently proposed solutions resembling state machines and idempotent processing before learning the formal terminology.
 
-Personal Breakthrough
+**Personal Breakthrough**
 
-The student realized that automation is not always fully automatic.
+The student realized that automation is not always fully automatic.  
 Some decisions require human judgment.
 
 This naturally led to the concept of Human-in-the-Loop, which became an important part of the student's engineering mindset.
 
-Difficulties
+**Difficulties**
 
-No significant conceptual difficulties were observed during this module.
+No significant conceptual difficulties were observed during this module.  
 The student demonstrated strong algorithmic thinking from the very beginning.
 
-Lessons Learned
+**Lessons Learned**
 
 - Think before coding.
 - Break problems into smaller parts.
 - Handle edge cases early.
 - Design first, implement later.
 
-Module 01 — Programming Foundations
+---
 
-Date: 2026-07-27
+### Module 01 — Programming Foundations
 
-Major Insight
+**Date:** 2026-07-27
 
-Functions are independent components rather than pieces of copied code.
+**Major Insight**
+
+Functions are independent components rather than pieces of copied code.  
 Separating user interaction from business logic makes programs easier to understand and maintain.
 
-What Became Clear
+**What Became Clear**
 
-The difference between `print()` and `return()` became one of the most important conceptual milestones.
-
+The difference between `print()` and `return()` became one of the most important conceptual milestones.  
 The student also gained a much stronger understanding of variables, loops, lists and state transitions.
 
-Personal Breakthrough
+**Personal Breakthrough**
 
-The student began viewing functions as independent systems with clearly defined inputs and outputs.
-
+The student began viewing functions as independent systems with clearly defined inputs and outputs.  
 This represents a significant shift from procedural thinking toward modular software design.
 
-Difficulties
+**Difficulties**
 
-Python syntax occasionally interrupted the student's reasoning.
-
+Python syntax occasionally interrupted the student's reasoning.  
 Most mistakes were not conceptual but syntactic:
 
 - missing punctuation;
@@ -115,63 +120,64 @@ Most mistakes were not conceptual but syntactic:
 
 These issues decreased steadily throughout the module.
 
-Learning Preference Discovered
+**Learning Preference Discovered**
 
-The student learns most effectively when new tools are introduced before being required in practical exercises.
-
+The student learns most effectively when new tools are introduced before being required in practical exercises.  
 Unexpected use of previously unseen functions (for example `sum()`) caused temporary confusion despite successful problem solving.
 
 Future modules should introduce language features explicitly before expecting independent application.
 
-Lessons Learned
+**Lessons Learned**
 
 - Understanding comes before syntax.
 - Functions should perform one responsibility.
 - Variables describe the current state of a program.
 - Good architecture is easier to debug than clever code.
 
-Module 02 — Python Toolbox
+---
 
-Date: 2026-08-10
+### Module 02 — Python Toolbox
 
-Major Insight
+**Date:** 2026-08-10
 
-Programming is not about writing everything yourself.
+**Major Insight**
+
+Programming is not about writing everything yourself.  
 It is about assembling existing tools into a solution.
 
 The student discovered that Python already contains specialists for counting, sorting, searching, and transforming data.
 
-This shifted the mindset from:
-"I must write a loop"
-to:
-"Does Python already have a tool for this?"
+This shifted the mindset from:  
+*"I must write a loop"*  
+to:  
+*"Does Python already have a tool for this?"*
 
 This single habit — checking the toolbox before reinventing — became the defining conceptual change of the module.
 
-What Became Clear
+**What Became Clear**
 
 The fundamental difference between mutable and immutable objects became the key conceptual milestone of this module.
 
-The student understood why string methods return new strings while list methods modify the existing list in place.
+The student understood why string methods return new strings while list methods modify the existing list in place.  
 This was not memorized. It was understood through the mental models of "Stone" (immutable) and "Basket" (mutable).
 
-The student also gained a deep understanding of dictionaries as a natural way to express relationships between data.
+The student also gained a deep understanding of dictionaries as a natural way to express relationships between data.  
 The transition from parallel lists to a dictionary of sets happened organically, driven by the student's own experience of losing data connections.
 
-File I/O with `with open()` became clear through the "Robot Assistant" mental model.
+File I/O with `with open()` became clear through the "Robot Assistant" mental model.  
 The student understood why context managers are safer than manual open/close patterns.
 
-Personal Breakthrough
+**Personal Breakthrough**
 
-The student independently redesigned the data architecture of the Tag Library Manager from a list of strings to a dictionary of sets:
+The student independently redesigned the data architecture of the Tag Library Manager from a list of strings to a dictionary of sets:  
 `{category: {tag1, tag2, ...}}`
 
 This transition was not prompted by the mentor. It emerged naturally from the student's own experience of losing connections between categories and tags. This represents a significant shift from "using collections" to "designing data structures."
 
-A second breakthrough:
+A second breakthrough:  
 The student used mock data — a text file simulating a folder of images — instead of creating real files. This is a standard engineering practice that the student discovered independently. It demonstrates growing engineering maturity.
 
-Difficulties
+**Difficulties**
 
 Type confusion when calling methods remained the most frequent issue. The student occasionally applied methods of one type to another:
 
@@ -183,14 +189,14 @@ The student understood the concept but needed practice to build the habit of che
 
 Indentation errors when creating data structures inside versus outside loops caused several bugs. The student sometimes created a dictionary outside a loop when it should have been inside, or vice versa.
 
-Missing parentheses on method calls appeared periodically:
+Missing parentheses on method calls appeared periodically:  
 `folder.exists` instead of `folder.exists()`.
 
 Inconsistent return values from functions caused unpacking errors: returning two values on success but one value on error.
 
 These issues decreased throughout the module but represent recurring patterns requiring continued practice.
 
-Lessons Learned
+**Lessons Learned**
 
 - Ask "Does Python already have a tool for this?" before writing a loop.
 - The type of the object determines which methods are available.
@@ -200,28 +206,29 @@ Lessons Learned
 - Functions should have predictable contracts.
 - Mock data is a legitimate engineering tool for testing.
 
-Module 03 — Architecture and File Systems
+---
 
-Date: 2026-08-19
+### Module 03 — Architecture and File Systems
 
-Major Insight
+**Date:** 2026-08-19
 
-A robust program is not a single monolith, but a pipeline of independent, responsible modules.
+**Major Insight**
 
+A robust program is not a single monolith, but a pipeline of independent, responsible modules.  
 The student discovered that professional software is built from specialized departments (config, validation, processing, export) rather than one giant file.
 
-This shifted the mindset from:
-"I need to write a script that does everything"
-to:
-"I need to design a system where each component has one clear responsibility."
+This shifted the mindset from:  
+*"I need to write a script that does everything"*  
+to:  
+*"I need to design a system where each component has one clear responsibility."*
 
 This represents the transition from programmer to software engineer.
 
-What Became Clear
+**What Became Clear**
 
 The concept of Data Boundaries became the key architectural milestone of this module.
 
-The student understood that external data (from files, users, APIs) is always "dirty" and must pass through validation before entering business logic.
+The student understood that external data (from files, users, APIs) is always "dirty" and must pass through validation before entering business logic.  
 This was not memorized. It was understood through the mental model of "The Bouncer" (validation) and "Sterile Club" (business logic).
 
 The student also gained a deep understanding of:
@@ -236,7 +243,7 @@ File operations with `pathlib` became clear through the "Smart Navigator" mental
 
 JSON serialization became clear through the "Shipping Container" mental model. The student understood why JSON is a universal format for data exchange.
 
-Personal Breakthrough
+**Personal Breakthrough**
 
 The student independently designed and implemented a complete multi-module data pipeline: Dataset Catalog Analyzer.
 
@@ -250,10 +257,10 @@ This project demonstrated:
 
 This transition was not prompted by the mentor. It emerged naturally from the student's own architectural thinking. This represents a significant shift from "writing scripts" to "designing systems."
 
-A second breakthrough:
+A second breakthrough:  
 The student naturally invented the "Bouncer" pattern for data validation. This is a professional pattern that the student discovered independently. It demonstrates strong engineering intuition.
 
-Difficulties
+**Difficulties**
 
 Syntactic traps remained the most frequent issue. The student encountered:
 
@@ -266,7 +273,7 @@ The student understood the concepts but needed practice to build syntactic fluen
 
 Lambda functions were introduced but not deeply explored. The student successfully applied `lambda` in `max()` but acknowledged limited understanding. This represents an open question for future modules.
 
-Lessons Learned
+**Lessons Learned**
 
 - Design architecture before writing code.
 - Each module should have one clear responsibility.
@@ -278,24 +285,25 @@ Lessons Learned
 - Tracebacks are your friend; read them from bottom to top.
 - Lambda functions are one-time anonymous functions (deeper exploration needed).
 
-Module 04 — QR Warehouse Project
+---
 
-Date: 2026-09-02
+### Module 04 — QR Warehouse Project
 
-Major Insight
+**Date:** 2026-09-02
 
-A real project is not just a collection of functions. It is a living system where data flows through boundaries, gets validated, processed, and exported.
+**Major Insight**
 
+A real project is not just a collection of functions. It is a living system where data flows through boundaries, gets validated, processed, and exported.  
 The student discovered that a production-ready application requires careful orchestration of multiple modules working together.
 
-This shifted the mindset from:
-"I need to write functions that do things"
-to:
-"I need to design a system where data flows safely from input to output."
+This shifted the mindset from:  
+*"I need to write functions that do things"*  
+to:  
+*"I need to design a system where data flows safely from input to output."*
 
 This represents the transition from software engineer to systems designer.
 
-What Became Clear
+**What Became Clear**
 
 The concept of the Complete Data Pipeline became the key architectural milestone of this module.
 
@@ -315,7 +323,7 @@ The student also gained a deep understanding of:
 - How to format output for human readability
 - How to handle the complete lifecycle of an estimate (create → add items → save)
 
-Personal Breakthrough
+**Personal Breakthrough**
 
 The student independently designed and implemented a complete warehouse management system: QR Warehouse Project.
 
@@ -329,10 +337,10 @@ This project demonstrated:
 
 This transition was not prompted by the mentor. It emerged naturally from the student's own architectural thinking. This represents a significant shift from "writing modules" to "designing complete systems."
 
-A second breakthrough:
+A second breakthrough:  
 The student naturally invented the concept of "reservation" for inventory management. This is a professional pattern that the student discovered independently. It demonstrates strong engineering intuition for real-world business problems.
 
-Difficulties
+**Difficulties**
 
 Integration between modules remained the most challenging aspect. The student encountered:
 
@@ -343,7 +351,7 @@ Integration between modules remained the most challenging aspect. The student en
 
 The student understood the concepts but needed practice to build integration fluency. These issues decreased throughout the module but represent recurring patterns requiring continued practice.
 
-Lessons Learned
+**Lessons Learned**
 
 - Real projects require careful orchestration of multiple modules.
 - Configuration should be separate from code.
@@ -352,28 +360,29 @@ Lessons Learned
 - Export formatting matters for user experience.
 - Integration testing is as important as unit testing.
 
-Module 05 — Object-Oriented Programming
+---
 
-Date: 2026-09-15
+### Module 05 — Object-Oriented Programming
 
-Major Insight
+**Date:** 2026-09-15
 
-Objects are not just data containers. Objects are entities that combine data and behavior into a single, self-protecting unit.
+**Major Insight**
 
+Objects are not just data containers. Objects are entities that combine data and behavior into a single, self-protecting unit.  
 The student discovered that professional software is built from smart objects that know how to protect their own state, rather than passive data structures manipulated by external functions.
 
-This shifted the mindset from:
-"I need to write functions that manipulate data"
-to:
-"I need to design objects that protect their own integrity."
+This shifted the mindset from:  
+*"I need to write functions that manipulate data"*  
+to:  
+*"I need to design objects that protect their own integrity."*
 
 This represents the transition from systems designer to object-oriented architect.
 
-What Became Clear
+**What Became Clear**
 
 The concept of Encapsulation became the key architectural milestone of this module.
 
-The student understood that objects should protect their internal state through methods, rather than exposing raw data for external manipulation.
+The student understood that objects should protect their internal state through methods, rather than exposing raw data for external manipulation.  
 This was not memorized. It was understood through the mental model of "The Object as a Safe with a Guard" (methods are the guards that protect the data inside).
 
 The student also gained a deep understanding of:
@@ -385,7 +394,7 @@ The student also gained a deep understanding of:
 - Composition (objects containing other objects)
 - The "Orchestra Conductor" pattern (`main.py` coordinates but doesn't interfere)
 
-Personal Breakthrough
+**Personal Breakthrough**
 
 The student independently designed and implemented a complete object-oriented architecture:
 
@@ -402,10 +411,10 @@ This project demonstrated:
 
 This transition was not prompted by the mentor. It emerged naturally from the student's own architectural thinking. This represents a significant shift from "designing systems" to "designing object-oriented architectures."
 
-A second breakthrough:
+A second breakthrough:  
 The student naturally invented the "Orchestra Conductor" pattern for `main.py`. This is a professional pattern that the student discovered independently. It demonstrates strong engineering intuition for clean architecture.
 
-Difficulties
+**Difficulties**
 
 Understanding when to use `@dataclass` versus regular classes remained the most challenging aspect. The student encountered:
 
@@ -415,7 +424,7 @@ Understanding when to use `@dataclass` versus regular classes remained the most 
 
 The student understood the concepts but needed practice to build object-oriented fluency. These issues decreased throughout the module but represent recurring patterns requiring continued practice.
 
-Lessons Learned
+**Lessons Learned**
 
 - Objects combine data and behavior into self-protecting units.
 - Encapsulation protects object invariants through methods.
@@ -425,28 +434,29 @@ Lessons Learned
 - Tests protect business logic from regressions.
 - Object references require careful handling (access attributes, not objects directly).
 
-Module 06 — Advanced Object-Oriented Programming
+---
 
-Date: 2026-10-10
+### Module 06 — Advanced Object-Oriented Programming
 
-Major Insight
+**Date:** 2026-10-10
 
-Inheritance is not a code-reuse shortcut. Inheritance is a modeling tool that expresses genuine "is-a" relationships between concepts.
+**Major Insight**
 
-The student discovered that the most important question in advanced OOP is not "How do I use inheritance?" but "What relationship actually exists between these things, and which design expresses that relationship with the least unnecessary complexity?"
+Inheritance is not a code-reuse shortcut. Inheritance is a modeling tool that expresses genuine "is-a" relationships between concepts.  
+The student discovered that the most important question in advanced OOP is not *"How do I use inheritance?"* but *"What relationship actually exists between these things, and which design expresses that relationship with the least unnecessary complexity?"*
 
-This shifted the mindset from:
-"I need to create class hierarchies to be a good OOP programmer"
-to:
-"I need to model relationships accurately, and sometimes the best model is composition, not inheritance."
+This shifted the mindset from:  
+*"I need to create class hierarchies to be a good OOP programmer"*  
+to:  
+*"I need to model relationships accurately, and sometimes the best model is composition, not inheritance."*
 
 This represents the transition from object-oriented architect to systems designer who thinks in relationships and trade-offs.
 
-What Became Clear
+**What Became Clear**
 
-The concept of Composition over Inheritance became the key architectural milestone of this module.
+The concept of **Composition over Inheritance** became the key architectural milestone of this module.
 
-The student understood that most relationships in software are "has-a" (composition) rather than "is-a" (inheritance).
+The student understood that most relationships in software are "has-a" (composition) rather than "is-a" (inheritance).  
 This was not memorized. It was understood through the Bird/Penguin exercise: a Penguin cannot safely inherit `fly()` from Bird, because that would violate the behavioral contract of the parent class.
 
 The student also gained a deep understanding of:
@@ -460,17 +470,17 @@ The student also gained a deep understanding of:
 - Strategy Pattern for interchangeable behaviors
 - Polymorphism as a tool to eliminate conditional logic
 
-Personal Breakthrough
+**Personal Breakthrough**
 
 The student independently discovered several professional patterns before learning their formal names:
 
-Strategy Pattern: When presented with the business requirement "VGIK students get 70% discount on tungsten lights, 50% on LED," the student designed a pricing policy system with interchangeable policy objects before learning the pattern's name.
+1. **Strategy Pattern:** When presented with the business requirement "VGIK students get 70% discount on tungsten lights, 50% on LED," the student designed a pricing policy system with interchangeable policy objects before learning the pattern's name.
 
-Composition over Inheritance: When asked about Square and Rectangle, the student proposed both should inherit from a common Shape ancestor — this is the correct professional solution to the famous LSP paradox, discovered independently.
+2. **Composition over Inheritance:** When asked about Square and Rectangle, the student proposed both should inherit from a common Shape ancestor — this is the correct professional solution to the famous LSP paradox, discovered independently.
 
-Factory Pattern: The student implemented centralized object creation for the notification system, correctly separating creation logic into dedicated methods.
+3. **Factory Pattern:** The student implemented centralized object creation for the notification system, correctly separating creation logic into dedicated methods.
 
-Template Method Pattern: The student designed a Logger architecture separating formatting (base class) from transport (derived classes), then realized complete method overriding was cleaner than using `super()` for this specific case.
+4. **Template Method Pattern:** The student designed a Logger architecture separating formatting (base class) from transport (derived classes), then realized complete method overriding was cleaner than using `super()` for this specific case.
 
 The student also demonstrated mature pragmatic judgment:
 
@@ -480,24 +490,24 @@ The student also demonstrated mature pragmatic judgment:
 
 This transition was not prompted by the mentor. It emerged naturally from the student's own architectural thinking. This represents a significant shift from "applying patterns" to "choosing when patterns are appropriate."
 
-Difficulties
+**Difficulties**
 
-The most persistent difficulty in this module was the recurring pattern of missing parentheses on method calls, which appeared in multiple contexts:
+The most persistent difficulty in this module was the recurring pattern of **missing parentheses on method calls**, which appeared in multiple contexts:
 
 - In f-strings: `{self.calculate_performance_score}` instead of `{self.calculate_performance_score()}`
 - In tests: `Penguin.fly == True` instead of `Penguin.fly() == True`
 
 The student recognizes this as a periodic mistake and is developing automatic correction habits. This pattern was first observed in Module 02 and remains the most persistent syntactic trap.
 
-A second difficulty: test logic inversion. The student occasionally writes assertions with inverted expected values (e.g., `assert Penguin.fly == True` when penguin cannot fly). This suggests a need to read test names as specifications before writing assertions.
+A second difficulty: **test logic inversion**. The student occasionally writes assertions with inverted expected values (e.g., `assert Penguin.fly == True` when penguin cannot fly). This suggests a need to read test names as specifications before writing assertions.
 
-A third difficulty: testing exceptions. The student did not know how to test expected exceptions in pytest and wrote `assert ValueError("message")` instead of using `with pytest.raises(ValueError)`. This was resolved during the module.
+A third difficulty: **testing exceptions**. The student did not know how to test expected exceptions in pytest and wrote `assert ValueError("message")` instead of using `with pytest.raises(ValueError)`. This was resolved during the module.
 
-A fourth difficulty: confusion between `self.attribute` and raw arguments. In `FileLogger.__init__`, the student wrote `self.full_path = log_dir / filename` instead of `self.full_path = self.log_dir / filename`, using the raw argument instead of the converted Path object. This was caught through code review.
+A fourth difficulty: **confusion between `self.attribute` and raw arguments**. In `FileLogger.__init__`, the student wrote `self.full_path = log_dir / filename` instead of `self.full_path = self.log_dir / filename`, using the raw argument instead of the converted Path object. This was caught through code review.
 
 These issues decreased throughout the module but represent recurring patterns requiring continued practice.
 
-Lessons Learned
+**Lessons Learned**
 
 - Inheritance expresses "is-a" relationships; composition expresses "has-a" relationships.
 - Not every relationship should be inheritance. Most should be composition.
@@ -511,121 +521,207 @@ Lessons Learned
 - Mini-projects are appropriate for exploring new patterns without polluting production code.
 - Tests should verify behavior, not just syntax. Read test names as specifications before writing assertions.
 
-Module 07 — Application Architecture & Software Design
+---
 
-Date: 2026-11-15
+### Module 07 — Application Architecture and Dependency Management
 
-Major Insight
+**Date:** 2026-11-15
 
-Architecture is not about folders, file names, or diagrams. Architecture is about controlling dependencies so that changes remain local, safe, and predictable.
+**Major Insight**
 
-The student discovered that the most powerful architectural skill is not knowing pattern names, but understanding where responsibilities belong, which direction dependencies should point, and how to isolate stable business rules from unstable technical details.
+Architecture is not about folders, file names, or diagrams. Architecture is about controlling dependencies so that changes remain local, safe, and predictable.  
+The student discovered that the true measure of good architecture is not how elegant it looks on a whiteboard, but how much code you do NOT have to rewrite when requirements change.
 
-This shifted the mindset from:
-"I need to organize my files into folders"
-to:
-"I need to design boundaries that contain change."
+This shifted the mindset from:  
+*"I need to organize my files neatly"*  
+to:  
+*"I need to control which parts of my system know about which other parts, so that a change in one place does not cascade everywhere."*
 
-This represents the transition from object-oriented architect to application-level systems designer who thinks in dependencies, contracts, and layers.
+This represents the transition from object-oriented architect to application-level systems architect.
 
-What Became Clear
+**What Became Clear**
 
-The concept of Dependency Inversion became the key architectural milestone of this module.
+The concept of **Dependency Direction** became the key architectural milestone of this module.
 
-The student understood that stable business rules should not depend directly on unstable technical details. Both can depend on an abstraction whose contract expresses the needed behavior.
-This was not memorized. It was understood through practical experience: replacing JSON storage with SQLite required changing exactly one file (`main.py` wiring), while `Inventory`, `Estimate`, and `AddItemToEstimate` remained completely untouched.
+The student understood that business logic should never depend on infrastructure details. Instead, infrastructure should depend on contracts defined by business logic.  
+This was not memorized. It was experienced through the JSON → SQLite migration: when the storage mechanism changed, the business logic (`Inventory`, `Estimate`, `AddItemToEstimate`) did not require a single line of modification because it depended on the `EquipmentRepository` contract, not on any concrete implementation.
 
 The student also gained a deep understanding of:
 
-- The difference between architecture (relationships and dependencies) and file organization (folders and names)
-- Separation of Concerns at application scale: Presentation, Application, Domain, Infrastructure
-- The Repository Pattern as a boundary between business logic and persistence
-- Use Cases (Application Services) as workflow coordinators distinct from domain objects
-- Dependency Injection at application scale (passing collaborators through constructors)
-- The "Architectural Filter": Core rule → Domain; Workflow → Application; External interaction → Infrastructure
-- The difference between Domain Rules (protecting truths) and Application Workflows (coordinating actions)
-- In-Memory Fakes as test doubles that allow testing business behavior without real infrastructure
-- The cost of abstraction: every boundary has a price, and overengineering is as dangerous as underengineering
+- The Repository Pattern as an isolation boundary between business logic and persistence
+- Use Cases / Application Services as orchestrators that coordinate Domain objects without knowing about UI or Databases
+- Dependency Inversion as a practical tool for surviving infrastructure changes
+- The distinction between Composition Root (`main.py` builds the system) and Use Cases (run business processes within it)
+- Domain / Application / Presentation / Infrastructure separation
+- In-Memory Fakes for architecture-level testing
 
-The student formulated a practical "Architectural Filter" for deciding where new features belong:
+The student independently formulated a practical decision framework called the **"Architectural Filter"**:
+- Is it a rule about the entity itself? → Domain
+- Is it a workflow connecting multiple objects or external systems? → Application / Use Case
+- Is it a technical detail of communication with the outside world? → Infrastructure
 
-1. Is it a rule about the entity itself? → Domain
-2. Is it a workflow connecting multiple objects or external systems? → Application / Use Case
-3. Is it a technical detail of communication with the outside world? → Infrastructure
+**Personal Breakthrough**
 
-Personal Breakthrough
+The student independently executed a complete infrastructure migration (JSON → SQLite) without modifying any business logic code. This was the defining moment of the module.
 
-The student independently experienced the power of the Repository Pattern by replacing JSON storage with SQLite:
+The student described this experience:  
+*"Я без труда и без необходимости переписывать половину программы смог перевести работу программы с JSON файлов на базу данных."*
 
-- Created `EquipmentRepository` as an abstract contract (ABC)
-- Implemented `JsonEquipmentRepository` for the current storage
-- Implemented `SqliteEquipmentRepository` for the new storage
-- Created `InMemoryEquipmentRepository` as a test double
-- Successfully ran the entire application with SQLite while business logic remained unchanged
+This was not a theoretical exercise. The student experienced the payoff of Dependency Inversion firsthand. The Repository Pattern, which had seemed abstract when introduced, became concrete and undeniable when the student observed that `Inventory`, `Estimate`, and `AddItemToEstimate` continued to work without any changes.
 
-The most profound realization was that `Inventory`, `Estimate`, and `AddItemToEstimate` did not require a single line of modification during the JSON → SQLite transition. This proved that the architecture was working as intended.
+A second breakthrough:  
+The student initially confused "Use Case" with user scenarios (e.g., "using the app on Windows 10"). Through guided discussion, the student realized that a Use Case is an Application Layer orchestrator that coordinates Domain objects. The student then independently formulated the distinction between `main.py` as Composition Root and Use Cases as Application Services.
 
-A second breakthrough:
-The student demonstrated mature engineering pragmatism by actively resisting overengineering. When discussing Use Cases, the student recognized that creating complex classes for simple workflows at the current project scale was unnecessary, but perfectly understood when they would become mandatory (e.g., adding a Web API, email notifications, or multiple entry points).
+A third breakthrough:  
+The student demonstrated mature pragmatic restraint by deciding NOT to create complex Use Case classes when simple functions sufficed for the current project scale. The student explicitly stated: *"Я пока не чувствую, что понимаю архитектуру на уровне Senior, и не могу с уверенностью принимать архитектурные решения."* This intellectual humility, combined with correct architectural instincts, is a rare and valuable trait.
 
-A third breakthrough:
-The student independently formulated the distinction between `main.py` as a Composition Root (technical orchestrator that creates and wires objects) and Use Cases as Application Services (business orchestrators that coordinate domain workflows). The "Factory Director vs. Production Manager" mental model resolved the initial confusion about "orchestrators of orchestrators."
+**Difficulties**
 
-Difficulties
+The most significant conceptual difficulty was the initial confusion between "Use Case" (Application Layer orchestrator) and "user scenario" (a product management / QA term). This terminology collision caused genuine confusion and required explicit clarification through the "MFC Employee / Conductor" mental model.
 
-Grasping the difference between the Composition Root (`main.py`) and Use Cases was initially confusing. The student questioned why Use Cases were needed if `main.py` already orchestrates the program, fearing an infinite "orchestrator of orchestrators" loop. This was resolved through the mental model of "Factory Director" (builds the factory, hires workers) vs. "Production Manager" (runs the business process within the factory).
+SQLite-specific difficulties also emerged:
+- Confusing `fetchone()` (returns one tuple) with `fetchall()` (returns list of tuples)
+- Forgetting to pass parameters as tuples to `cursor.execute()`
+- Being surprised by the binary nature of `.db` files (opening in a text editor showed garbled characters)
 
-Understanding the concept of "Use Case" itself required significant clarification. The student initially confused Use Cases with user scenarios (e.g., "using the app on Windows 10" or "working offline"). Through the "MFC Employee / Conductor" mental model, the student realized that a Use Case is an Application Layer orchestrator that coordinates Domain objects without knowing about UI or Databases.
+The student also experienced a moment of architectural doubt when questioning why Use Cases were needed if `main.py` already orchestrates the program, fearing an "orchestrator of orchestrators" infinite loop. This was resolved through the "Factory Director vs. Production Manager" mental model.
 
-Working with SQLite revealed syntactic traps:
+**Lessons Learned**
 
-- Misunderstanding `cursor.fetchone()`: the student tried to iterate over a single tuple (one row) with a `for` loop, not realizing `fetchone()` returns exactly one tuple, not a list of rows. This was resolved through the "Archivist brings one folder" mental model.
-- Forgetting to pass parameters as tuples to `cursor.execute()`: the student wrote `cursor.execute(sql_query)` without `(scan,)`, which would cause a `ProgrammingError`.
-- Confusion about where SQL code lives: the student initially thought SQL should be in a separate `.sql` file, not realizing it is simply a string passed to `cursor.execute()` in Python.
+- Architecture is about controlling dependencies, not about drawing diagrams.
+- The true test of good architecture: how much code stays unchanged when requirements change.
+- Repository Pattern isolates business logic from persistence details.
+- Use Cases orchestrate Domain objects; they do not contain business rules themselves.
+- Dependency Inversion means business logic depends on contracts, not implementations.
+- `main.py` builds the system (Composition Root); Use Cases run processes within it. These are different types of orchestration.
+- In-Memory Fakes enable architecture-level testing without real infrastructure.
+- Intellectual humility is strength: acknowledging what you do not know leads to better decisions.
+- Do not add architectural layers because you can. Add them because they solve a real problem.
 
-The student also expressed intellectual humility, noting: "I don't yet feel like a Senior making confident architectural decisions." This was addressed by reframing architecture as "asking the right questions and managing trade-offs" rather than "knowing all the answers."
+---
 
-Open Questions
+### Module 08 — Relational Databases and Full-Stack Architecture
 
-- Systematic study of relational databases: SQL syntax, internal B-tree structures, indexing, transactions, migrations, and schema design. The student successfully used SQLite as an infrastructure detail but wants to study databases fundamentally in future modules.
-- How the architecture would evolve when adding a Web API (Flask/FastAPI) as a second Presentation layer alongside CLI.
-- When and how to introduce real Dependency Injection frameworks versus keeping simple constructor injection.
+**Date:** 2026-12-20
 
-Lessons Learned
+**Major Insight**
 
-- Architecture is about managing dependencies, not just organizing files.
-- The Repository Pattern isolates persistence details, making infrastructure swaps (JSON → SQLite) trivial and safe.
-- Use Cases orchestrate Domain objects; they do not contain business rules themselves, nor do they handle UI/DB directly.
-- Domain protects truths (invariants); Application coordinates actions (workflows); Infrastructure handles technical details.
-- Pragmatism wins: Do not introduce architectural layers until the pain of not having them justifies the complexity.
-- SQL databases are powerful infrastructure tools, but treating them as "black boxes" via Repositories allows business logic to remain pure.
-- The "Architectural Filter" (Domain / Application / Infrastructure) is a practical tool for deciding where new features belong.
-- Composition Root (`main.py`) builds the system; Use Cases run the business processes within it. These are different types of orchestration, not duplicates.
-- In-Memory Fakes allow testing business behavior without real infrastructure, making tests fast and reliable.
-- Every abstraction has a cost. The benefit must exceed the cognitive and maintenance tax.
-- Architecture becomes visible through change: "What parts of the system must change when a particular external detail changes?"
+A database is not a storage box. A database is a model of relationships between business entities, and the way you design those relationships determines what your system can and cannot do.  
+The student discovered that the most important question in database design is not *"How do I store this data?"* but *"What must remain true about this data forever, and how do I protect those truths?"*
 
-Future Entries
+This shifted the mindset from:  
+*"I need to save data in tables"*  
+to:  
+*"I need to design a system of relationships where business rules are enforced by the database itself, and where historical facts are protected from future changes."*
+
+This represents the transition from application-level architect to full-stack systems architect who thinks in terms of data integrity, transaction boundaries, and temporal consistency.
+
+**What Became Clear**
+
+The concept of **Historical Snapshot** became the key architectural milestone of this module.
+
+The student understood that an estimate is a legal document: once confirmed, its prices must never change, even if the catalog changes.  
+This was not memorized. It was understood through business reasoning. When asked what should happen to an old estimate if a rental house raises prices, the student immediately answered: *"Смета это документ, который после утверждения и хода в работу сам по себе не меняется. Это как лист бумаги."*
+
+The student also gained a deep understanding of:
+
+- Relational schema design (multi-table with foreign keys, constraints, indexes)
+- The Unit of Work pattern (repositories do not commit; Use Cases own transactions)
+- Multi-repository coordination (equipment + estimate repositories in a single transaction)
+- Thick Use Cases (accept raw data, create domain objects, validate business rules, manage transactions)
+- The Application Shell pattern (`Application` class manages the complete lifecycle)
+- The distinction between Domain Entity (has behavior) and Read Model / DTO (data only)
+- NULL design for optional fields (manual items without SKU)
+- Idempotent seeding with `INSERT OR IGNORE` and `UNIQUE` constraints
+- Boolean simulation in SQLite (`INTEGER CHECK (from_catalog IN (0, 1))`)
+- Deletion order (children before parents) to satisfy FOREIGN KEY constraints
+
+**Personal Breakthrough**
+
+The student proposed and executed a domain-driven mini-project based on their own professional experience as a gaffer in the film industry. The student described a real, years-old pain point: manually combining equipment estimates from multiple rental houses in Excel. The student stated: *"Мне тогда очень хотелось сделать какой-то адекватный конструктор смет."*
+
+This personal connection to the problem domain produced exceptional engagement. The Gaffer Sandbox became a training ground where all Module 08 database concepts were explored before being applied to QR Warehouse:
+- Multi-vendor equipment catalog with foreign keys
+- Historical Snapshot for estimate pricing
+- Dynamic vendor selection with `enumerate()` and dictionary mapping
+- Category-based sorting with `ORDER BY CASE`
+
+A second breakthrough:  
+The student independently formulated the Unit of Work pattern before learning its formal name: *"Я бы сделал так, чтобы сам репозиторий не выполнял commit(), пусть это делает та часть кода, которая отвечает за вызов репозитория."* This demonstrates that the student had internalized the principle of transaction ownership at the Use Case level.
+
+A third breakthrough:  
+After completing the refactoring, the student independently identified that the `Estimate` class had become a pure data container: *"Ни один метод из класса Estimate не используется нигде, потому что мы все делаем через UseCases и репозиторий. Так зачем тогда в принципе существует Estimate? Может его сделать датаклассом?"* The student correctly recognized that `Estimate` had transitioned from a Domain Entity to a Read Model and simplified it to a `@dataclass`. This demonstrates the ability to recognize architectural debt and eliminate it.
+
+A fourth breakthrough:  
+Before starting the major refactoring, the student independently created a feature branch (`feature/db-refactoring`) and kept the old code open on a second screen as a reference. This was not prompted by the mentor. It demonstrates professional development workflow habits emerging naturally.
+
+**Difficulties**
+
+SQL syntax errors were the most persistent difficulty in this module. The student encountered:
+
+- `DROP TABLE estimates WHERE estimate_id = ?` instead of `DELETE FROM estimates WHERE estimate_id = ?` (confusing table destruction with row deletion)
+- `UPDATE INTO equipment (available) VALUES (?)` instead of `UPDATE equipment SET available = ?` (confusing INSERT syntax with UPDATE syntax)
+- `CREATE TABLE IF NOT EXISTIS` (typo in SQL keyword)
+- `SELECT (sku, name, ...)` with parentheses around the column list (invalid SQL syntax)
+
+The student also struggled with:
+- Unpacking `cursor.fetchone()` without checking for `None` first (would crash when no row is found)
+- Using `is not "0"` to compare an INTEGER value from SQLite (confusing type identity with value equality)
+- Missing `break` in search loops (appeared in two separate Use Cases)
+- Missing `return` statements in error paths
+- Double `commit()` calls when two repositories share the same connection
+- Unconditional `raise ValueError` outside if/elif/else block
+
+The most conceptually challenging moment was the student's initial confusion about why Use Cases exist alongside Domain objects: *"Зачем у меня в UseCase существует класс AddToEstimate, и при этом в классе Estimate существует метод add_item. У меня есть ощущение, что функционал дублируется."* This was resolved through the "Architect vs Builder" and "Waiter in Restaurant" mental models, but it revealed that the Domain/Application boundary needs to be reinforced with more concrete examples before implementation begins.
+
+**Lessons Learned**
+
+- A database schema is a system of business rules, not just a storage format.
+- Historical Snapshot: legal documents fix their data at creation time; future changes must not alter the past.
+- Repositories execute queries; Use Cases own transactions. One commit per business operation.
+- Thick Use Cases accept raw data, create domain objects, validate rules, coordinate repositories, and manage transactions.
+- Thin Use Cases that just proxy repository calls are an anti-pattern.
+- `DELETE FROM` removes rows; `DROP TABLE` destroys the entire table. They are not interchangeable.
+- `UPDATE ... SET` modifies existing rows; `INSERT INTO` creates new rows. They are not interchangeable.
+- Always check `fetchone()` result for `None` before unpacking.
+- SQLite stores booleans as integers (0/1); use `bool(row[n])` for conversion.
+- Use `break` after finding a match in a search loop.
+- Every code path in a function that returns a value must have an explicit `return`.
+- When two repositories share a connection, one `commit()` is sufficient.
+- Dead code is architectural debt. If no method is called anywhere, remove it.
+- Domain Entities have behavior; Read Models are data-only. Know which one you are building.
+- Feature branches protect working code during major refactoring.
+- Personal professional experience is the best source of domain models and motivation.
+
+---
+
+## Future Entries
 
 New entries should be appended below.
+
 Existing entries should never be rewritten unless factual corrections are necessary.
+
 The journal represents the historical evolution of the student's understanding.
 
-Long-Term Goal
+---
+
+## Long-Term Goal
 
 Over time this document should become a narrative of the student's transformation:
 
-Beginner
-↓
-Learner
-↓
-Programmer
-↓
-Software Engineer
-↓
+Beginner  
+↓  
+Learner  
+↓  
+Programmer  
+↓  
+Software Engineer  
+↓  
 Architect
 
-The purpose of this journal is not to record success.
+The purpose of this journal is not to record success.  
 Its purpose is to preserve the thinking that led to that success.
 
-End of document.
+---
+
+*End of document.*

@@ -49,14 +49,14 @@ Instead, newer evidence either reinforces or revises previous conclusions.
 | **Primary Goal** | Become an independent software engineer capable of designing, implementing and maintaining real-world software projects while using AI as an engineering assistant rather than as a replacement for thinking. |
 | **Learning Strategy** | Project-based learning. Theory is introduced immediately before practical application. Existing personal projects provide real-world context. |
 
-### Current Profile (Updated 2026-11-15)
+### Current Profile (Updated 2026-12-20)
 
 | Field | Value |
 |---|---|
-| **Learning Stage** | Software Engineer (Mastering Application Architecture & System Boundaries) |
-| **Current Focus** | Architecture as dependency management, Repository Pattern, Use Cases, Dependency Inversion, Domain/Application/Infrastructure separation, SQLite integration |
-| **Primary Goal** | Master application-level architecture: controlling dependencies, isolating business rules from infrastructure, designing maintainable systems that survive change. Deepen understanding of databases and external systems. |
-| **Learning Strategy** | Architecture-first approach. Architectural boundaries discovered through real refactoring pain. Pragmatic judgment about when abstractions are justified. Mental models before formal terminology. Databases as next major learning frontier. |
+| **Learning Stage** | Software Engineer (Mastering Relational Databases, Transactions & Full-Stack Architecture) |
+| **Current Focus** | Relational schema design, Historical Snapshot pattern, Unit of Work, multi-repository coordination, thick Use Cases, Application Shell pattern, Read Model vs Domain Entity distinction |
+| **Primary Goal** | Master relational database design and transaction management. Build production-grade systems with clean separation of concerns. Develop the ability to make and defend architectural decisions independently. |
+| **Learning Strategy** | Architecture-first approach reinforced by real-domain mini-projects (Gaffer Sandbox). Database concepts grounded in personal professional experience. Refactoring as the primary learning vehicle. Feature branches for safe experimentation. Dead code elimination as architectural hygiene. |
 
 ---
 
@@ -89,7 +89,11 @@ Examples include:
 - Liskov Substitution Principle (Square/Rectangle solution before learning the name);
 - Factory Pattern (centralized object creation before learning the name);
 - **Architectural Filter (Domain/Application/Infrastructure classification formulated independently)** (new);
-- **Repository boundary intuition (understood the need to isolate persistence before learning the pattern name)** (new).
+- **Repository boundary intuition (understood the need to isolate persistence before learning the pattern name)** (new);
+- **Unit of Work pattern (independently decided that repositories should not commit; Use Cases should own transactions)** (new);
+- **Historical Snapshot intuition (understood that estimate prices must be fixed at creation time, before learning the pattern name)** (new);
+- **Read Model recognition (independently identified that Estimate should be a dataclass after recognizing all its methods were dead code)** (new);
+- **Feature branch workflow (independently created `feature/db-refactoring` branch before starting major refactoring)** (new).
 
 **Educational Implication:**  
 Prioritize explanation through intuition.  
@@ -111,7 +115,10 @@ The student naturally explores:
 - "when NOT to use" questions (e.g., when logging is unnecessary);
 - cost of abstraction vs benefit;
 - **architectural boundaries and dependency direction** (new);
-- **"what happens when this changes?" reasoning** (new).
+- **"what happens when this changes?" reasoning** (new);
+- **multi-vendor data modeling (questioned whether to create separate tables per vendor or use a single table with foreign keys)** (new);
+- **NULL vs NOT NULL design decisions for optional fields (manual items without SKU)** (new);
+- **normalized vs denormalized storage trade-offs (name/category duplication in estimate_items)** (new).
 
 **Educational Implication:**  
 Exercises should contain realistic engineering decisions rather than mechanical syntax practice.  
@@ -131,13 +138,16 @@ before asking
 **Module 07 Evidence:**  
 The student refused to accept "Use Case" terminology until understanding the conceptual difference between a Use Case (Application Layer orchestrator) and a user scenario (e.g., "using the app on Windows"). The student explicitly stated: "Мне бы понять предметную суть Use Case, тогда будет проще." This demonstrates deep commitment to understanding before proceeding.
 
+**Module 08 Evidence:**  
+The student questioned the very existence of Use Cases: "Зачем мне выносить методы в UseCase, почему их нельзя держать в Estimate?" and "Зачем у меня в UseCase существует класс AddToEstimate, и при этом в классе Estimate существует метод add_item. У меня есть ощущение, что функционал дублируется." The student did not accept the layered architecture on faith but demanded a clear conceptual justification. Only after understanding the "Architect vs Builder" and "Waiter in Restaurant" mental models did the student accept and correctly implement thick Use Cases.
+
 **Educational Implication:**  
 Every new concept should begin with a mental model before introducing syntax.  
 Never introduce architectural terminology without first establishing the problem it solves.
 
 ### Pragmatic Judgment
 
-**Confidence:** High (reinforced in Module 07)
+**Confidence:** Very High (reinforced in Module 08)
 
 **Evidence:**  
 The student independently decided that QR Warehouse does not need pervasive logging in the current version, demonstrating mature judgment about when abstraction is overengineering.  
@@ -148,6 +158,10 @@ The student chose to study patterns on mini-projects to avoid polluting producti
 The student decided NOT to create complex Use Case classes when simple functions in `main.py` sufficed for the current project scale, but perfectly understood WHEN they would become mandatory (e.g., adding a Web API, email notifications, or multiple entry points).  
 The student explicitly stated: "Я пока не чувствую, что понимаю архитектуру на уровне Senior, и не могу с уверенностью принимать архитектурные решения." This intellectual humility combined with correct architectural instincts is a rare and valuable trait.
 
+**Module 08 Evidence:**  
+The student independently decided to simplify `Estimate` to a `@dataclass` after recognizing that all its methods (`add_item`, `remove_item`, `get_item_by_sku`) were dead code in the new architecture. The student stated: "Ни один метод из класса Estimate не используется нигде, потому что мы все делаем через UseCases и репозиторий. Так зачем тогда в принципе существует Estimate?" This is a mature architectural decision: recognizing when a Domain Entity has become a Read Model and simplifying accordingly.  
+The student also chose to keep `update_total_price` in `EstimateItem` despite its imperfection (not accounting for discounts), stating: "Я думаю, что оставлю это как есть." This demonstrates the ability to distinguish between "good enough" and "perfect" and to defer non-critical improvements.
+
 **Educational Implication:**  
 Continue asking "when NOT to use" questions alongside "how to use."  
 Validate pragmatic decisions explicitly to reinforce this judgment.  
@@ -155,7 +169,7 @@ Respect the student's self-assessment while validating correct instincts.
 
 ### Motivation
 
-**Confidence:** High
+**Confidence:** Very High (reinforced in Module 08)
 
 **Observation:**  
 The student demonstrates unusually strong intrinsic motivation.  
@@ -164,10 +178,14 @@ Learning is driven by long-term engineering goals rather than external rewards.
 **Module 07 Evidence:**  
 The student expressed genuine excitement about databases: "Уже не терпится приступить к базам данных." The student also expressed a desire to study databases fundamentally in future modules, not just as an infrastructure detail.
 
+**Module 08 Evidence:**  
+The student proposed the Gaffer Sandbox mini-project based on their own professional experience as a gaffer in the film industry. The student described a real, years-old pain point: manually combining equipment estimates from multiple rental houses in Excel. The student stated: "Мне тогда очень хотелось сделать какой-то адекватный конструктор смет." This personal connection to the problem domain produced exceptional engagement. The student also reported: "Я сегодня всю ночь думал над всем этим, мне снился хороший код" — indicating deep subconscious processing of architectural concepts.
+
 **Educational Implication:**  
 Avoid repetitive exercises.  
 Instead provide progressively more meaningful programming problems.  
-Connect architectural concepts to the student's vision of future system growth.
+Connect architectural concepts to the student's vision of future system growth.  
+Leverage the student's professional background (gaffer in film industry) as a source of domain models and motivation.
 
 ---
 
@@ -179,9 +197,9 @@ Current observations.
 |---|---|---|
 | **Preferred Teaching Style** | ★★★★★ | Conversation. Questions. Discovery. Guided reasoning. Mental models before terminology. |
 | **Preferred Order** | ★★★★★ | Concept → Mental Model → Visualization → Syntax → Practice → Project Integration |
-| **Preferred Examples** | ★★★★★ | Real engineering problems. Automation. File systems. Personal projects. Software architecture. Object-oriented design. Application architecture. |
-| **Preferred Exploration Mode** | ★★★★★ | Real project refactoring for architecture. Mini-projects for new patterns. Databases as next frontier. |
-| **Least Effective Approach** | — | Pure memorization. Large lists of syntax without context. Exercises introducing unknown tools without prior explanation. Terminology without conceptual grounding. |
+| **Preferred Examples** | ★★★★★ | Real engineering problems. Automation. File systems. Personal projects. Software architecture. Object-oriented design. Application architecture. Relational database design. Personal professional experience (gaffer estimates). |
+| **Preferred Exploration Mode** | ★★★★★ | Real project refactoring for architecture. Mini-projects for new patterns. Domain-driven sandbox projects for database concepts. Feature branches for safe experimentation. |
+| **Least Effective Approach** | — | Pure memorization. Large lists of syntax without context. Exercises introducing unknown tools without prior explanation. Terminology without conceptual grounding. Abstract database exercises without business context. |
 
 ---
 
@@ -406,6 +424,108 @@ The student successfully integrated SQLite as a second infrastructure implementa
 
 ---
 
+### Module 08
+
+**Major Development:**  
+The student achieved a fundamental shift from "engineer who uses databases as infrastructure" to "engineer who designs relational data models, manages transactions, and builds complete database-backed application architectures."
+
+This module was the most architecturally dense in the entire learning journey. The student simultaneously mastered relational database design, transaction management, multi-repository coordination, and full application lifecycle management — all while refactoring a production project.
+
+**Gaffer Sandbox (Domain-Driven Mini-Project):**  
+The student proposed a mini-project based on their past professional experience as a gaffer in the film industry. The student described a real, years-old pain point: manually combining equipment estimates from multiple rental houses in Excel, copying names, prices, and quantities by hand. The student stated: "Мне тогда очень хотелось сделать какой-то адекватный конструктор смет."
+
+This personal connection to the problem domain produced exceptional engagement and deep conceptual understanding. The Gaffer Sandbox served as a training ground for all Module 08 database concepts before applying them to QR Warehouse:
+- Multi-vendor equipment catalog (vendors + equipment tables with foreign keys)
+- Historical Snapshot for estimate pricing
+- Idempotent seeding with `INSERT OR IGNORE`
+- Dynamic vendor selection with `enumerate()` and dictionary mapping
+- Category-based sorting with `ORDER BY CASE`
+- NULL handling for manual items without SKU
+
+**Key Architectural Breakthroughs:**
+
+1. **Historical Snapshot (Independent Discovery Through Business Logic):**  
+   When asked what should happen to an old estimate if a rental house raises prices, the student immediately answered: "Смета это документ, который после утверждения и хода в работу сам по себе не меняется. Это как лист бумаги." The student independently arrived at the Historical Snapshot pattern through business reasoning, not technical instruction. This pattern was then correctly implemented: prices are copied from `equipment` to `estimate_items` at creation time and never change afterward.
+
+2. **Unit of Work Pattern (Independent Formulation):**  
+   The student independently decided that repositories should not call `commit()`. The student stated: "Я бы сделал так, чтобы сам репозиторий не выполнял commit(), пусть это делает та часть кода, которая отвечает за вызов репозитория." This is the Unit of Work pattern, which the student formulated before learning its formal name. The student correctly understood that transaction boundaries belong to the Use Case layer, not the Repository layer.
+
+3. **Multi-Repository Coordination (Two Aggregates):**  
+   The student independently proposed splitting the single repository into two: `SQLEquipmentRepository` for the equipment catalog and `SQLEstimateRepository` for estimates and estimate items. The student stated: "Мне кажется, что в QR Warehouse нам следует сделать два репозитория для общения с нашей базой. Первый будет отвечать за equipment, а второй за estimates и estimate_items." This demonstrates understanding of aggregate boundaries in data modeling.
+
+4. **Thick Use Cases (Coordination Layer):**  
+   The student initially questioned why Use Cases exist: "Зачем у меня в UseCase существует класс AddToEstimate, и при этом в классе Estimate существует метод add_item. У меня есть ощущение, что функционал дублируется." Through the "Architect vs Builder" and "Waiter in Restaurant" mental models, the student understood that Use Cases coordinate multiple repositories, apply business rules, create domain objects, and manage transactions. The student then implemented five thick Use Cases:
+   - `CreateEstimate` — creates estimate in DB and returns domain object
+   - `GetEstimate` — loads estimate with all items from DB
+   - `AddItemToEstimate` — coordinates equipment lookup, stock check, Historical Snapshot, and stock reservation
+   - `ChangeItemQuantity` — coordinates quantity update in estimate and stock adjustment
+   - `DeleteItemFromEstimate` — coordinates position deletion and stock return
+
+5. **Application Shell Pattern (Lifecycle Management):**  
+   The student independently proposed creating an `Application` class: "Я могу создать в модуле main.py класс app или application? Это имеет смысл?" The student understood that `main.py` should be a thin entry point while `Application` manages the full lifecycle: configuration loading, database initialization, repository creation, Use Case wiring, and the main interaction loop. This was implemented as a clean `Application` class with `__init__` for dependency setup and `run()` for the main loop.
+
+6. **Read Model Recognition (Estimate as Dataclass):**  
+   After completing the refactoring, the student independently identified that the `Estimate` class had become a pure data container: "Ни один метод из класса Estimate не используется нигде, потому что мы все делаем через UseCases и репозиторий. Так зачем тогда в принципе существует Estimate? Может его сделать датаклассом?" The student correctly recognized that `Estimate` had transitioned from a Domain Entity (with behavior) to a Read Model (data-only) and simplified it to a `@dataclass`. This demonstrates the ability to recognize and eliminate architectural debt.
+
+7. **Feature Branch Workflow (Independent Decision):**  
+   Before starting the major refactoring, the student independently created a feature branch: "Я создал отдельную git ветку от develop с названием feature/db-refactoring." The student also kept the old code open on a second screen as a reference. This demonstrates professional development workflow habits.
+
+8. **Relational Schema Design (Multi-Table with Constraints):**  
+   The student designed a complete relational schema with three tables:
+   - `equipment` (catalog with CHECK constraints for non-negative prices and quantities)
+   - `estimates` (project header with CHECK constraint for positive days)
+   - `estimate_items` (positions with FOREIGN KEYs to both parent tables, CHECK constraints, and indexes)
+
+   The student correctly handled:
+   - `FOREIGN KEY` relationships between tables
+   - `CHECK` constraints for business rules
+   - Indexes on frequently queried columns
+   - `INTEGER CHECK (from_catalog IN (0, 1))` for boolean simulation in SQLite
+   - Deletion order (children before parents) to satisfy FOREIGN KEY constraints
+
+9. **NULL Design for Manual Items:**  
+   The student designed a system for handling equipment that exists in an estimate but not in the catalog. The student described a real warehouse scenario: "По любому произойдет такое, что я забуду присвоить sku для какой-то маленькой штучки, которая завалялась где-то на складе." The solution: `sku TEXT` (nullable) with `from_catalog INTEGER` flag. When `sku` is NULL, the FOREIGN KEY check is skipped, allowing manual items. This demonstrates mature data modeling for real-world edge cases.
+
+**Mental Models Introduced and Mastered:**
+- "Receipt at Checkout" — Historical Snapshot (prices fixed at transaction time)
+- "Store Window vs Receipt" — current catalog prices vs fixed estimate prices
+- "Architect vs Builder" — Use Case (designs workflow) vs Repository (executes queries)
+- "Waiter in Restaurant" — Use Case coordinates kitchen (Domain) and cash register (Infrastructure)
+- "Coat Check" — Index vs Value confusion (ticket number vs rack position)
+- "Building Demolition vs Evicting Tenant" — DROP TABLE vs DELETE FROM
+- "Library with Separate Rooms vs One Room with Labels" — table-per-vendor vs single table with foreign key
+- "Postman and Mailbox" — CREATE TABLE IF NOT EXISTS protects table creation but INSERT does not protect data
+- "Translator Between Worlds" — SQLite-to-Python type mapping (INTEGER → int, BOOL → bool())
+
+**Integration with QR Warehouse (Complete Refactoring):**
+- Created `_database.py` with `init_database()` function (schema creation separated from repositories)
+- Created `SQLEquipmentRepository` with 4 methods (add, delete, find_by_sku, update_available)
+- Created `SQLEstimateRepository` with 7 methods (create, get, add_item, change_quantity, delete_item, delete_estimate, show_all)
+- Implemented Unit of Work: repositories do not commit; Use Cases own transactions
+- Implemented Historical Snapshot: prices copied from equipment to estimate_items at creation
+- Created 6 thick Use Cases with full error handling and rollback
+- Created `Application` class as the system core
+- Simplified `Estimate` to a `@dataclass` (Read Model)
+- Removed `Inventory` class (its responsibilities absorbed by Use Cases)
+- Removed dead code from `Estimate` (add_item, remove_item, get_item_by_sku)
+- Moved `PricePolicy` application to `AddItemToEstimate` Use Case
+- Implemented proper path resolution using `_get_path()` with `base_dir`
+- Added `show_all_estimates()` for estimate selection UI
+
+**Methodology Update:**  
+- Continue architecture-first approach with relational databases as the central theme.
+- Use domain-driven mini-projects (Gaffer Sandbox) grounded in the student's professional experience to teach database concepts before applying them to production code.
+- Teach database design through business scenarios ("What happens when the rental house changes prices?").
+- Use the "Historical Snapshot" concept as a bridge between business requirements and technical implementation.
+- Continue Socratic questioning for complex topics.
+- Validate the student's independent architectural discoveries (Unit of Work, repository splitting, Read Model recognition).
+- Reinforce transaction management: one commit per business operation, rollback on failure.
+- Teach SQL through common mistakes (DROP vs DELETE, UPDATE INTO, fetchone unpacking without None check).
+- Use feature branches as a standard practice for major refactoring.
+- Connect database concepts to the student's vision of future commercial implementation (QR codes, warehouse management, rental house workflows).
+
+---
+
 ## Recurring Difficulties
 
 These are recurring patterns rather than isolated mistakes.
@@ -431,12 +551,23 @@ Examples:
 - Missing parameter tuple in `cursor.execute(sql_query)` — forgot to pass `(scan,)` for parameterized query
 - Attempting to iterate over `cursor.fetchone()` result with `for row in equipment:` — confused a single tuple (one row) with a list of rows
 
+**Module 08 Evidence:**  
+- SQL typo: `EXISTIS` instead of `EXISTS` in CREATE TABLE
+- SQL syntax error: `UPDATE INTO equipment (available) VALUES (?)` instead of `UPDATE equipment SET available = ?`
+- Missing `break` in for-loops searching for items (appeared in both `ChangeItemQuantity` and `DeleteItemFromEstimate`)
+- Missing `return "error"` in except block of `ChangeItemQuantity`
+- Missing `return "success"` at the end of try block
+- Double `commit()` calls (calling commit on both repositories when they share the same connection)
+- Unconditional `raise ValueError` outside if/elif/else block in `_select_price_policy`
+- Unbalanced parentheses in `EquipmentRepository.__init__` abstract method signature
+
 **Action:**  
 Continue using small focused coding exercises.  
 Provide explicit examples of common syntactic traps.  
 Consider introducing linter or pre-commit checks.  
 Remind student of this pattern when reviewing code (without blame — this is a known periodic difficulty).  
-For SQLite specifically: reinforce that `fetchone()` returns ONE tuple, `fetchall()` returns a list of tuples.
+For SQL specifically: reinforce `UPDATE ... SET` syntax, `DELETE FROM` vs `DROP TABLE`, and `IF NOT EXISTS` spelling.  
+For Python specifically: reinforce `break` in search loops, `return` in all code paths, and single `commit()` per transaction.
 
 ### Type Confusion
 
@@ -449,10 +580,17 @@ Example: `isinstance("key_name", type)` instead of `isinstance(dict["key_name"],
 **Module 07 Evidence:**  
 The student initially tried to iterate over `cursor.fetchone()` result, confusing a single row tuple with a collection of rows. This was resolved through the "Archivist brings one folder" mental model.
 
+**Module 08 Evidence:**  
+- Unpacking `cursor.fetchone()` result without checking for None first: `sku1, name, ... = self.cursor.fetchone()` — would crash with `TypeError: cannot unpack non-iterable NoneType object` when no row is found
+- Using `is not "0"` to compare an INTEGER value from SQLite (which returns Python `int`, not `str`) — confused type identity with value equality
+- Attempting to access `estimate.items[sku]` as if `items` were a dictionary, when it is a list
+
 **Action:**  
 Emphasize the distinction between "container" and "content" in type checking.  
 Use visual examples (checking the label on a box vs checking what's inside the box).  
-For database work: reinforce the return type of `fetchone()` vs `fetchall()`.
+For database work: reinforce the return type of `fetchone()` vs `fetchall()`.  
+For SQLite type mapping: reinforce that SQLite INTEGER returns Python `int`, not `str`. Use `bool(row[7])` instead of string comparison.  
+For collection access: reinforce list indexing (integer) vs dictionary access (key).
 
 ### Variable Scope
 
@@ -464,10 +602,14 @@ The student occasionally creates variables inside loops when they should be outs
 **Module 07 Evidence:**  
 In the migration script, the student initially placed `conn.commit()` and `conn.close()` inside the `for` loop instead of after it. This was caught through code review and corrected.
 
+**Module 08 Evidence:**  
+In `DeleteItemFromEstimate`, the variable `quantity` was assigned inside a for-loop without a default value. If the SKU was not found in the loop, `quantity` would be undefined when used later, causing `UnboundLocalError`. The student initially believed this could not happen because the equipment existence check would catch it first, but was guided to understand that equipment existing in the catalog does not guarantee it exists in a specific estimate.
+
 **Action:**  
 Explicitly discuss variable lifetime and scope before complex loops.  
 Use mental execution to trace variable creation.  
-For database work: reinforce that `commit()` and `close()` should typically be outside loops (one transaction for the batch).
+For database work: reinforce that `commit()` and `close()` should typically be outside loops (one transaction for the batch).  
+Reinforce the pattern: initialize variables before loops, use `break` after finding a match, check for None/sentinel after the loop.
 
 ### Object Reference Confusion
 
@@ -519,7 +661,7 @@ Validate the student's existing understanding while clarifying the architectural
 
 ### SQLite Syntax and Mental Model (New)
 
-**Status:** New (first observed in Module 07)
+**Status:** Persistent (reinforced in Module 08)
 
 **Description:**  
 The student encountered several SQLite-specific conceptual difficulties:
@@ -528,11 +670,47 @@ The student encountered several SQLite-specific conceptual difficulties:
 - Initially thought SQL code should be in a separate `.sql` file rather than as a Python string
 - Was surprised by the binary nature of `.db` files (opened in text editor and saw garbled characters)
 
+**Module 08 Evidence (New):**  
+- Wrote `DROP TABLE estimates WHERE estimate_id = ?` instead of `DELETE FROM estimates WHERE estimate_id = ?` — confused table destruction with row deletion
+- Wrote `UPDATE INTO equipment (available) VALUES (?)` instead of `UPDATE equipment SET available = ?` — confused INSERT syntax with UPDATE syntax
+- Wrote `SELECT (sku, name, ...)` with parentheses around the column list — invalid SQL syntax
+- Used `cursor.rowcount` after SELECT to check for empty results — unreliable in SQLite for SELECT statements
+- Used `with sqlite3.connect(db_path) as conn:` in `init_database()` which auto-closes the connection, making it impossible to return an open connection
+
 **Action:**  
 Introduce SQLite mental models before syntax: "Archivist and Courier" for connections/cursors, "Open Book vs. Hard Drive" for JSON vs SQLite.  
 Emphasize that SQL is just a string passed to `cursor.execute()`.  
 Reinforce parameterized queries as the standard pattern.  
-Explain binary vs text file formats explicitly.
+Explain binary vs text file formats explicitly.  
+Reinforce the SQL verb vocabulary: `SELECT` (read), `INSERT INTO` (create), `UPDATE ... SET` (modify), `DELETE FROM` (remove rows), `DROP TABLE` (destroy table).  
+Reinforce that `with` context manager auto-closes connections — use plain assignment when the connection must outlive the function.
+
+### Index vs Value Confusion (New)
+
+**Status:** New (first observed in Module 08)
+
+**Description:**  
+When building a dynamic selection menu, the student confused list indices (positions) with list values (actual IDs). Wrote `vendor = rentals[choosed_vendor]` where `choosed_vendor` was the ID value entered by the user, not the position in the list. This caused either selecting the wrong vendor or `IndexError`.
+
+**Action:**  
+Use the "Coat Check" mental model: ticket number (value) vs rack position (index).  
+When building selection menus, use dictionaries to map user-facing numbers to internal IDs: `{1: vendor_id_1, 2: vendor_id_2}`.  
+Reinforce `enumerate()` for generating display numbers.
+
+### Missing Return Statements (New)
+
+**Status:** New (first observed in Module 08)
+
+**Description:**  
+The student occasionally writes functions or code paths that do not return a value. In Module 08, this appeared as:
+- Missing `return "success"` at the end of try blocks in Use Cases
+- Missing `return "error"` in except blocks
+- Missing `return None` after printing "No available estimates" in `_select_or_create_estimate`
+
+**Action:**  
+Reinforce the principle: every code path in a function that is expected to return a value must have an explicit `return`.  
+Use the "all roads lead to a return" mental model when reviewing functions.  
+When writing Use Cases, establish the pattern: try block ends with `return "success"`, except block ends with `return "error"`.
 
 ---
 
@@ -702,6 +880,57 @@ Ask "Is this abstraction solving a real problem right now?" before introducing n
 Respect the student's judgment about when to add vs. when to defer abstractions.  
 Use the "Pattern Tax" mental model: every abstraction has a cost that must be justified by a benefit.
 
+### Adjustment 015
+
+**Status:** Active (new)
+
+**Reason:**  
+The student proposed and successfully executed a domain-driven mini-project (Gaffer Sandbox) based on their own professional experience. This produced exceptional engagement and deep conceptual understanding. The student's personal connection to the problem domain (gaffer creating estimates from multiple rental houses) made abstract database concepts concrete and meaningful.
+
+**Action:**  
+When introducing new technical domains (databases, APIs, deployment), first ask the student about relevant experiences from their professional background.  
+Use the student's own domain as the training ground before applying concepts to QR Warehouse.  
+Encourage the student to propose mini-projects based on real problems they have experienced.  
+Connect technical patterns to business scenarios from the student's past (e.g., "What happens when a rental house changes prices?" → Historical Snapshot).
+
+### Adjustment 016
+
+**Status:** Active (new)
+
+**Reason:**  
+The student independently arrived at the Unit of Work pattern and multi-repository coordination. However, the student initially created "thin" Use Cases that simply proxied repository calls. Only after guided discussion did the student understand that Use Cases should be "thick" coordinators that accept raw data, create domain objects, validate business rules, coordinate multiple repositories, and manage transactions.
+
+**Action:**  
+When introducing Use Cases, explicitly contrast "thin proxy" Use Cases (anti-pattern) with "thick coordinator" Use Cases (correct pattern).  
+Use the "Waiter in Restaurant" mental model: the waiter takes the order (raw data), checks the kitchen (equipment_repo), checks the table (estimate_repo), creates the plate (EstimateItem), and brings the check (commit).  
+Require Use Cases to accept primitive parameters (estimate_id, sku, quantity), not pre-built domain objects.  
+Require Use Cases to handle all error paths and return meaningful status strings.
+
+### Adjustment 017
+
+**Status:** Active (new)
+
+**Reason:**  
+The student independently recognized dead code and proposed simplifying `Estimate` to a dataclass. This demonstrates the ability to recognize when a Domain Entity has become a Read Model. However, the student needed validation before acting on this insight: "Я думаю, что я в любом случае буду переписывать его." The student was uncertain whether removing methods was the right decision.
+
+**Action:**  
+When the student identifies dead code or unnecessary complexity, validate the instinct strongly: "You are absolutely right. This is dead code. Remove it."  
+Teach the distinction between Domain Entity (has behavior, protects invariants) and Read Model / DTO (data only, no behavior).  
+Encourage the student to ask: "Is this method called anywhere?" before keeping code.  
+Reinforce that removing dead code is not "breaking things" but architectural hygiene.
+
+### Adjustment 018
+
+**Status:** Active (new)
+
+**Reason:**  
+The student independently adopted professional development workflow practices: creating a feature branch (`feature/db-refactoring`), keeping the old code on a second screen as a reference, and working incrementally. This was not prompted by the mentor.
+
+**Action:**  
+Continue encouraging professional workflow habits: feature branches, incremental commits, reference implementations.  
+When starting major refactoring, ask: "How will you protect the working code?" to prompt feature branch creation.  
+Validate these habits explicitly: "This is exactly how senior developers work."
+
 ---
 
 ## Mentor Notes
@@ -709,45 +938,59 @@ Use the "Pattern Tax" mental model: every abstraction has a cost that must be ju
 This section contains long-term observations.  
 These notes are intended for future versions of the methodology rather than for evaluating the student.
 
-### Current Observation (Updated 2026-11-15)
+### Current Observation (Updated 2026-12-20)
 
-The student's architectural thinking has reached a level where they can independently reason about dependencies, boundaries, and change containment.
+The student's architectural thinking has reached a level where they can independently design complete database-backed application architectures, coordinate multiple repositories within transactions, and recognize when to simplify their own code.
 
-The student naturally invents patterns (Bouncer, Dashboard vs Engine, Data Pipeline, Safe with a Guard, Orchestra Conductor, Strategy, Composition over Inheritance, Factory, LSP solution, Architectural Filter) that are typically taught in intermediate/advanced courses.
+The student naturally invents patterns (Bouncer, Dashboard vs Engine, Data Pipeline, Safe with a Guard, Orchestra Conductor, Strategy, Composition over Inheritance, Factory, LSP solution, Architectural Filter, Unit of Work, Historical Snapshot, Read Model recognition) that are typically taught in intermediate/advanced courses.
 
-**New observation from Module 07:**  
-The student has developed a mature understanding of architecture as dependency management. The key insight — "Architecture is about controlling dependencies so that changes remain local, safe, and predictable" — was not memorized but experienced through the JSON → SQLite migration. The student's own words: "Я без труда и без необходимости переписывать половину программы смог перевести работу программы с JSON файлов на базу данных."
+**New observation from Module 08:**  
+The student has achieved a qualitative leap in architectural maturity. The key developments are:
 
-The student demonstrates three rare and valuable traits simultaneously:
+1. **From "using databases" to "designing data models."** The student no longer treats SQLite as a black box. They design schemas with foreign keys, constraints, indexes, and nullable fields based on business requirements. The Gaffer Sandbox demonstrated the ability to model multi-vendor catalogs, historical pricing, and manual item workflows.
+
+2. **From "single repository" to "coordinated aggregates."** The student independently split the persistence layer into two repositories and understood that transaction boundaries belong to Use Cases, not repositories. The Unit of Work pattern was formulated before learning its name.
+
+3. **From "smart domain objects" to "clean data models."** The student recognized that `Estimate` had become a Read Model and simplified it to a dataclass. This demonstrates the ability to evolve architecture as understanding deepens, rather than clinging to initial designs.
+
+4. **From "main.py as everything" to "Application Shell."** The student independently proposed the `Application` class pattern, demonstrating understanding of lifecycle management and dependency injection at the system level.
+
+The student demonstrates four rare and valuable traits simultaneously:
 1. **Strong architectural intuition** (invents patterns before learning names)
-2. **Pragmatic judgment** (knows when NOT to abstract)
-3. **Intellectual humility** (acknowledges what they don't know, doesn't pretend to be Senior)
+2. **Pragmatic judgment** (knows when NOT to abstract, recognizes dead code)
+3. **Intellectual humility** (acknowledges what they don't know, questions before accepting)
+4. **Domain-driven thinking** (grounds technical decisions in business scenarios from personal experience)
 
-This combination is unusual. Most students either overengineer (lacking pragmatism) or underengineer (lacking intuition). The student naturally finds the middle ground.
+This combination is unusual. Most students either overengineer (lacking pragmatism) or underengineer (lacking intuition). The student naturally finds the middle ground and improves it with each module.
 
 Syntactic fluency continues to improve but lags behind conceptual understanding.  
-The missing-parentheses issue remains the most persistent syntactic trap.  
-New syntactic traps in Module 07: missing parameter tuples in `cursor.execute()`, confusing `fetchone()` with `fetchall()`.
+The most persistent syntactic traps in Module 08 were SQL syntax errors (DROP vs DELETE, UPDATE INTO, EXISTIS typo) and missing return statements in error paths.  
+The fetchone/fetchall confusion from Module 07 was reinforced but also deepened: the student now understands both functions but occasionally forgets to check for None before unpacking.
 
 The student has successfully mastered:
-- Software architecture as dependency management
-- Repository Pattern (applied to QR Warehouse persistence)
-- Use Cases / Application Services (conceptual understanding + practical extraction)
-- Dependency Inversion (experienced through JSON → SQLite migration)
-- Dependency Injection at application scale (Composition Root wiring)
-- Domain / Application / Presentation / Infrastructure separation
-- In-Memory Fakes for architecture-level testing
-- SQLite integration (CREATE TABLE, SELECT, UPDATE, parameterized queries)
-- Architectural Filter (Domain / Application / Infrastructure classification)
-- Composition Root vs Use Case distinction
+- Relational schema design (multi-table, foreign keys, constraints, indexes)
+- Historical Snapshot pattern (fixing prices at estimate creation)
+- Unit of Work pattern (repositories don't commit, Use Cases own transactions)
+- Multi-repository coordination (equipment + estimate repositories in single transaction)
+- Thick Use Cases (raw data in, domain objects created, business rules validated, transactions managed)
+- Application Shell pattern (lifecycle management, dependency injection, main loop)
+- Read Model vs Domain Entity distinction (Estimate simplified to dataclass)
+- NULL design for optional fields (manual items without SKU)
+- Idempotent seeding (INSERT OR IGNORE, UNIQUE constraints)
+- Dynamic UI generation from database (enumerate + dictionary mapping)
+- Feature branch workflow for safe refactoring
+- Dead code identification and removal
 
 The QR Warehouse Project now demonstrates:
-- Repository Pattern with three implementations (JSON, SQLite, InMemory)
-- Use Case extraction (`AddItemToEstimate`)
-- Composition Root (`main.py` with helper functions)
-- Dependency Injection throughout
-- Architecture-level tests with In-Memory Fakes
-- Clean separation of Domain, Application, and Infrastructure concerns
+- Two repositories with abstract contracts (SQLEquipmentRepository, SQLEstimateRepository)
+- Six thick Use Cases with full error handling and rollback
+- Application Shell class managing the complete lifecycle
+- Historical Snapshot for estimate pricing
+- Unit of Work for transaction management
+- Clean separation of Domain (dataclasses), Application (Use Cases), and Infrastructure (repositories, database)
+- Read Model pattern for Estimate
+- Feature branch workflow for safe refactoring
+- Complete elimination of dead code (Inventory class, unused Estimate methods)
 
 ### Emerging Pattern
 
@@ -764,23 +1007,30 @@ The student learns most effectively when:
 - **Taught architecture through change scenarios ("What if X changes?")** (new)
 - **Allowed to experience coupling pain before introducing the solution** (new)
 - **Given intellectual space to question terminology before accepting it** (new)
+- **Connected to personal professional experience (gaffer estimates, rental houses, warehouse workflows)** (new)
+- **Allowed to propose and drive their own mini-projects based on real pain points** (new)
+- **Encouraged to recognize and eliminate dead code as architectural hygiene** (new)
+- **Given the "Architect vs Builder" framing for Use Cases vs Repositories** (new)
 
-### Methodology Effectiveness (Module 07)
+### Methodology Effectiveness (Module 08)
 
 What worked exceptionally well:
-- Repository Pattern was understood through real refactoring pain (JSON → SQLite)
-- Use Case concept was clarified through "MFC Employee / Conductor" mental model
-- Composition Root vs Use Case distinction was resolved through "Factory Director vs. Production Manager" mental model
-- SQLite was introduced through "Archivist and Courier" and "Open Book vs. Hard Drive" mental models
-- The student independently formulated the "Architectural Filter" for classifying features
-- The student demonstrated pragmatic restraint by not overengineering Use Cases
-- Architecture-level tests with InMemoryEquipmentRepository proved the architecture works
+- The Gaffer Sandbox mini-project grounded all database concepts in the student's real professional experience, producing exceptional engagement and deep understanding
+- Historical Snapshot was understood through business reasoning ("estimate is a document") before any technical implementation
+- Unit of Work was independently formulated by the student when asked about commit ownership
+- The "Receipt at Checkout" and "Store Window vs Receipt" mental models made the distinction between current prices and fixed prices immediately clear
+- The "Architect vs Builder" and "Waiter in Restaurant" mental models resolved the student's confusion about why Use Cases exist alongside Domain objects
+- The student independently proposed the Application class, repository splitting, and Estimate simplification — all validated and implemented
+- Feature branch workflow was adopted spontaneously, demonstrating professional habit formation
+- The student's question "Why does Estimate exist if nothing uses its methods?" led to a clean architectural simplification that removed dead code
 
 What needs improvement:
-- SQLite syntax (parameterized queries, fetchone vs fetchall) requires systematic attention
-- Architectural terminology should be explicitly distinguished from similar-sounding terms in other domains
-- The student's desire to study databases fundamentally should be addressed in a dedicated module
-- The student's intellectual humility should be validated while building confidence in correct instincts
+- SQL syntax errors (DROP vs DELETE, UPDATE INTO, EXISTIS) require a systematic SQL vocabulary review
+- Missing return statements in error paths require a "all roads lead to return" checklist
+- The fetchone None-check pattern should be reinforced as a standard idiom: `row = cursor.fetchone(); if row is None: return None`
+- The student's tendency to double-commit when two repositories share a connection should be addressed by emphasizing that one connection = one commit point
+- The student's initial confusion about why Use Cases exist alongside Domain objects suggests that the Domain/Application boundary needs to be reinforced with more concrete examples before implementation begins
+- The student's `config.yaml` path resolution issue (relative paths not using `_get_path()`) suggests that configuration management patterns should be reviewed in future modules
 
 ---
 
@@ -799,6 +1049,9 @@ Possible future sections include:
 - System Design Growth
 - **Database Design Growth** (new)
 - **API Design Growth** (new)
+- **Transaction Management Growth** (new)
+- **Dead Code Recognition and Architectural Hygiene** (new)
+- **Domain-Driven Design Growth** (new)
 
 The goal is to document not only what the student knows, but how the student thinks.
 

@@ -1,4 +1,3 @@
-```markdown
 # Questions
 
 **Version:** 1.0  
@@ -188,40 +187,8 @@ Open
 **Module 07 Progress Note:**  
 The student has now practically demonstrated understanding of Dependency Inversion (Repository pattern, business logic depending on abstractions rather than concrete implementations) and Single Responsibility (each component owns one coherent responsibility). These were experienced through real refactoring rather than formal study. The formal SOLID framework study remains valuable to unify these practical experiences under a single conceptual umbrella.
 
----
-
-### Q-0023
-
-**Title**  
-How do relational databases work internally, and how do I use SQL systematically?
-
-**Reason**  
-During Module 07, the student successfully used SQLite as an infrastructure detail through the Repository pattern. However, the student explicitly stated: "Никакого системного понимания синтаксиса, внутреннего устройства базы данных и прочего у меня пока нет. Хочется изучать это в будущих модулях." The student wants to understand:
-
-- SQL syntax systematically (SELECT, INSERT, UPDATE, DELETE, JOIN)
-- How relational databases store data internally (B-trees, pages)
-- Indexing and query performance
-- Transactions and atomicity
-- Schema design and migrations
-- The difference between SQLite, PostgreSQL, and other databases
-- When to use a database vs files vs in-memory storage
-
-**Related Topics**  
-SQL  
-Relational Databases  
-SQLite  
-PostgreSQL  
-Indexing  
-Transactions  
-Schema Design  
-Migrations  
-Query Optimization
-
-**Priority**  
-High
-
-**Status**  
-Open
+**Module 08 Progress Note:**  
+The student further deepened practical understanding of SRP (splitting a single repository into `SQLEquipmentRepository` and `SQLEstimateRepository`, separating schema creation into `init_database()`, simplifying `Estimate` to a dataclass when behavior was no longer needed) and DIP (Use Cases depend on repository contracts, not concrete implementations; `Application` class wires concrete implementations at the composition root). The student also practically demonstrated Interface Segregation by keeping repository contracts minimal and focused. Formal SOLID study would now be extremely productive as the student has lived experience with at least four of the five principles.
 
 ---
 
@@ -243,6 +210,104 @@ REST principles
 
 **Priority**  
 Medium
+
+**Status**  
+Open
+
+**Module 08 Progress Note:**  
+The Module 08 refactoring significantly improved readiness for this transition. The student now has thick Use Cases that accept raw data and return status strings (easily mapped to HTTP responses), an `Application` class that demonstrates lifecycle management (a web framework would replace this with its own lifecycle), and a clean separation where the CLI loop in `Application._main_loop()` is the only presentation-specific code. The six Use Cases (`CreateEstimate`, `GetEstimate`, `DeleteEstimate`, `AddItemToEstimate`, `ChangeItemQuantity`, `DeleteItemFromEstimate`) could be exposed as REST endpoints with minimal changes. The student also independently proposed the `Application` class pattern, demonstrating understanding of the composition root concept that would transfer directly to a web framework's dependency injection system.
+
+---
+
+### Q-0025
+
+**Title**  
+How do relational databases store data internally, and how do query optimizers work?
+
+**Reason**  
+During Module 08, the student mastered practical SQL and schema design but explicitly expressed interest in understanding what happens "under the hood." This question was split from Q-0023 after the practical SQL portion was mastered. The student wants to understand:
+
+- How B-trees and pages store data on disk
+- How the query optimizer chooses execution plans
+- Why indexes speed up reads but slow down writes
+- How `EXPLAIN QUERY PLAN` works in SQLite
+- The difference between SQLite, PostgreSQL, and MySQL architectures
+- When to choose a relational database vs document store vs key-value store
+
+**Related Topics**  
+B-Trees  
+Pages  
+Query Optimizer  
+EXPLAIN QUERY PLAN  
+Index Internals  
+SQLite Architecture  
+PostgreSQL Architecture  
+Database Selection Criteria
+
+**Priority**  
+Medium
+
+**Status**  
+Open
+
+---
+
+### Q-0026
+
+**Title**  
+How do I test thick Use Cases that coordinate multiple repositories?
+
+**Reason**  
+During Module 08, the student built six thick Use Cases that coordinate `SQLEquipmentRepository` and `SQLEstimateRepository` within transactions. However, no tests were written for the new architecture. The student needs to understand:
+
+- How to create in-memory fakes for both repositories
+- How to test transaction behavior (commit on success, rollback on failure)
+- How to test Historical Snapshot (prices fixed at creation time)
+- How to test multi-repository coordination (stock reservation + estimate update)
+- How to test error paths (equipment not found, not enough stock, estimate not found)
+
+**Related Topics**  
+Unit Testing  
+Integration Testing  
+Test Doubles (Fakes, Stubs, Mocks)  
+Transaction Testing  
+In-Memory Repositories  
+pytest fixtures
+
+**Priority**  
+High
+
+**Status**  
+Open
+
+---
+
+### Q-0027
+
+**Title**  
+How would the commercial version of QR Warehouse work?
+
+**Reason**  
+During Module 08, the student described their long-term vision: "В конечном счете, когда я дойду до коммерческой реализации проекта, мне нужно будет приехать на склад, вручную записать каждую позицию в базу, присвоив ей sku, и выпустить qr-код для этого sku." The student also described the workflow for handling items without SKU: "кладовщик должен нажать кнопку 'Добавить вручную', и ввести все нужные данные." This question captures the future commercial requirements:
+
+- QR code generation and printing for physical inventory
+- Multi-user support (multiple warehouse workers scanning simultaneously)
+- Mobile interface for warehouse workers (scanning QR codes)
+- Manager interface for confirming estimates
+- Client interface for browsing catalog and requesting estimates
+- Bulk import of existing inventory (thousands of items)
+- The "manual item" workflow for unregistered equipment
+
+**Related Topics**  
+QR Code Generation  
+Multi-user Architecture  
+Mobile Development  
+Role-based Access Control  
+Bulk Data Import  
+Production Deployment
+
+**Priority**  
+Low
 
 **Status**  
 Open
@@ -320,6 +385,9 @@ The student asked whether Inventory and Estimate should be dataclasses or regula
 
 **Resolution**  
 Студент глубоко усвоил разницу между пассивными структурами данных и активными объектами. Он понял, что `@dataclass` идеально подходит для простых контейнеров данных (например, `Equipment`, `EstimateItem`), где данные просто передаются и читаются. В то время как обычные классы с методами нужны для объектов, защищающих свои инварианты и выполняющих бизнес-логику (например, `Inventory`, `Estimate`). Концепция закреплена на практике: студент самостоятельно выбрал `@dataclass` для каталога оборудования и обычные классы для бизнес-логики склада и сметы, что сделало архитектуру чистой и безопасной.
+
+**Module 08 Progress Note:**  
+В ходе рефакторинга Module 08 студент самостоятельно принял решение перевести `Estimate` из обычного класса в `@dataclass`, распознав, что все методы класса (`add_item`, `remove_item`, `get_item_by_sku`) стали мёртвым кодом в новой архитектуре, где Use Cases координируют репозитории напрямую. Студент сформулировал это так: "Ни один метод из класса Estimate не используется нигде, потому что мы все делаем через UseCases и репозиторий. Так зачем тогда в принципе существует Estimate?" Это демонстрирует глубокое понимание того, что выбор между `@dataclass` и обычным классом зависит от архитектурного контекста, а не от фиксированного правила.
 
 ---
 
@@ -444,6 +512,9 @@ The student needed to isolate persistence logic from business logic so that chan
 **Resolution**  
 Студент создал абстрактный контракт `EquipmentRepository` (ABC) с методами `find_by_sku()` и `update_available()`, а затем реализовал три конкретные реализации: `JsonEquipmentRepository` (чтение из JSON-файла), `SqliteEquipmentRepository` (работа с базой данных через `sqlite3`), и `InMemoryEquipmentRepository` (для тестов). Студент пережил ключевой архитектурный инсайт: при замене JSON на SQLite ни `Inventory`, ни `Estimate`, ни `AddItemToEstimate` не потребовали ни одной строчки изменений. Студент описал этот опыт словами: "Я без труда и без необходимости переписывать половину программы смог перевести работу программы с JSON файлов на базу данных." Студент также понял, когда Репозиторий избыточен: для крошечного скрипта с одним источником данных абстракция может быть ненужной. Концепция закреплена на практике в проекте QR Warehouse.
 
+**Module 08 Progress Note:**  
+В ходе Module 08 студент самостоятельно принял решение разделить единый репозиторий на два: `SQLEquipmentRepository` (для каталога оборудования) и `SQLEstimateRepository` (для смет и позиций). Студент сформулировал это так: "Мне кажется, что в QR Warehouse нам следует сделать два репозитория для общения с нашей базой. Первый будет отвечать за equipment, а второй за estimates и estimate_items." Это демонстрирует понимание границ агрегатов: каждый репозиторий обслуживает одну концептуальную область данных. Студент также реализовал полный набор методов для обоих репозиториев, включая `find_by_sku`, `update_available`, `create_estimate`, `get_estimate`, `add_equipment_to_estimate`, `change_equipment_quantity`, `delete_equipment_from_estimate`, `delete_estimate`, и `show_all_estimates`.
+
 ---
 
 ### Q-0019
@@ -456,6 +527,9 @@ The student initially confused "Use Case" with user scenarios (e.g., "using the 
 
 **Resolution**  
 Через ментальную модель "Сотрудник МФЦ / Дирижёр" студент понял, что Use Case — это оркестратор Слоя Приложения, который координирует доменные объекты для выполнения бизнес-процесса, не зная про UI или базу данных. Через модель "Директор завода против Начальника производства" студент понял разницу между Composition Root (`main.py` — создаёт и соединяет объекты) и Use Case (выполняет бизнес-процесс внутри уже собранной системы). Студент извлёк `AddItemToEstimate` как Use Case в отдельный файл `use_cases.py`, координирующий `Inventory` и `Estimate`. Студент также проявил прагматичность: решил НЕ создавать сложные классы Use Cases, когда простые функции в `main.py` достаточны для текущего масштаба проекта, но чётко понял, КОГДА они станут обязательными (добавление Web API, email-уведомлений, нескольких точек входа). Концепция закреплена на практике в проекте QR Warehouse.
+
+**Module 08 Progress Note:**  
+В ходе Module 08 студент пережил второй концептуальный прорыв в понимании Use Cases. Первоначально студент создал "тонкие" Use Cases, которые просто проксировали вызовы к репозиториям. Затем студент задал фундаментальный вопрос: "Зачем у меня в UseCase существует класс AddToEstimate, и при этом в классе Estimate существует метод add_item. У меня есть ощущение, что функционал дублируется." Через ментальные модели "Архитектор против Строителя" и "Официант в ресторане" студент понял, что Use Cases должны быть "толстыми" координаторами: принимать сырые данные (estimate_id, sku, quantity), создавать доменные объекты (EstimateItem), проверять бизнес-правила (смета существует, оборудование существует, достаточно на складе), координировать несколько репозиториев и управлять транзакциями. Студент реализовал шесть толстых Use Cases: `CreateEstimate`, `GetEstimate`, `DeleteEstimate`, `AddItemToEstimate`, `ChangeItemQuantity`, `DeleteItemFromEstimate`. Каждый Use Case принимает примитивные параметры, возвращает строковые статусы и управляет `commit()`/`rollback()`.
 
 ---
 
@@ -470,6 +544,9 @@ The student needed to understand how to make stable business rules independent f
 **Resolution**  
 Студент пережил Dependency Inversion не как теоретический принцип SOLID, а как практический инструмент. Когда бизнес-логика (`Inventory`) стала зависеть от абстрактного контракта `EquipmentRepository`, а не от конкретной реализации, замена JSON на SQLite стала тривиальной. Студент понял: "Бизнес-логика зависит от контракта, а не от конкретного механизма хранения." Студент также освоил Dependency Injection на уровне приложения: `Inventory(repository)` получает зависимость извне через конструктор, а `main.py` (Composition Root) решает, какую конкретную реализацию передать. Студент создал три реализации одного контракта (JSON, SQLite, InMemory), доказав, что бизнес-логика не знает и не должна знать, какая именно реализация используется. Концепция закреплена на практике в проекте QR Warehouse и подтверждена архитектурными тестами.
 
+**Module 08 Progress Note:**  
+В ходе Module 08 студент применил Dependency Inversion на новом уровне: класс `Application` получает конфигурацию через конструктор и создаёт все зависимости (логгер, репозитории, Use Cases) в `__init__`. Use Cases получают репозитории и логгер через конструктор, не зная об их конкретных реализациях. `PricePolicy` передаётся в `AddItemToEstimate` после выбора пользователем, демонстрируя отложенное внедрение зависимостей. Студент также самостоятельно предложил вынести создание `AddItemToEstimate` из `_create_usecases()` в `run()`, чтобы обеспечить правильное внедрение `PricePolicy` после выбора пользователем.
+
 ---
 
 ### Q-0021
@@ -483,6 +560,9 @@ The student needed a practical framework for deciding where each piece of code b
 **Resolution**  
 Студент самостоятельно сформулировал "Архитектурный фильтр" для классификации: (1) Это правило о самой сущности? → Домен. (2) Это рабочий процесс, связывающий несколько объектов или внешних систем? → Приложение / Use Case. (3) Это техническая деталь взаимодействия с внешним миром? → Инфраструктура. Студент успешно применил этот фильтр к гипотетическим требованиям: хранение в SQLite → Инфраструктура; скидка 20% на HMI_LIGHT при аренде больше 5 дней → Домен; генерация PDF и отправка по email после сохранения сметы → Use Case. Студент понял ключевое различие: Домен защищает истины (инварианты), Приложение координирует действия (рабочие процессы), Инфраструктура обеспечивает техническую поддержку (БД, файлы, сеть), Презентация переводит внешний мир на язык приложения. Концепция закреплена на практике в проекте QR Warehouse.
 
+**Module 08 Progress Note:**  
+В ходе Module 08 студент успешно применил Архитектурный фильтр к новой структуре проекта: `models.py` и `_estimate.py` → Домен; `_use_cases.py` → Приложение; `_repository.py` и `_database.py` → Инфраструктура; `app.py` → Composition Root / Presentation. Студент самостоятельно удалил мёртвый код из Домена (методы `add_item`, `remove_item`, `get_item_by_sku` из `Estimate`), распознав, что в новой архитектуре эти обязанности перешли к Use Cases и репозиториям. Студент также удалил класс `Inventory`, чьи обязанности были поглощены толстыми Use Cases. Это демонстрирует зрелое понимание того, что слои архитектуры не являются фиксированными — они эволюционируют по мере изменения системы.
+
 ---
 
 ### Q-0022
@@ -495,6 +575,136 @@ The student needed to verify that business logic works correctly without dependi
 
 **Resolution**  
 Студент создал `InMemoryEquipmentRepository` как тестовый дублёр (Fake), реализующий тот же контракт `EquipmentRepository`, но хранящий данные в обычном словаре Python в оперативной памяти. Студент написал архитектурные тесты, доказывающие: успешное бронирование уменьшает доступное количество; отказ при отсутствии товара; возврат оборудования увеличивает количество. Все тесты проходят без реальных файлов и баз данных. Студент понял практическую разницу: Stub — предопределённые ответы; Fake — лёгкая рабочая реализация (InMemoryRepository); Mock — проверка взаимодействий (был ли вызван метод, с какими аргументами). Студент также понял принцип "поведение прежде взаимодействий": тесты должны доказывать значимые бизнес-результаты, а не просто проверять, что метод был вызван. Концепция закреплена на практике в проекте QR Warehouse.
+
+---
+
+### Q-0023
+
+**Title**  
+How do relational databases work internally, and how do I use SQL systematically?
+
+**Reason**  
+During Module 07, the student successfully used SQLite as an infrastructure detail through the Repository pattern. However, the student explicitly stated: "Никакого системного понимания синтаксиса, внутреннего устройства базы данных и прочего у меня пока нет. Хочется изучать это в будущих модулях." The student wants to understand:
+
+- SQL syntax systematically (SELECT, INSERT, UPDATE, DELETE, JOIN)
+- How relational databases store data internally (B-trees, pages)
+- Indexing and query performance
+- Transactions and atomicity
+- Schema design and migrations
+- The difference between SQLite, PostgreSQL, and other databases
+- When to use a database vs files vs in-memory storage
+
+**Related Topics**  
+SQL  
+Relational Databases  
+SQLite  
+PostgreSQL  
+Indexing  
+Transactions  
+Schema Design  
+Migrations  
+Query Optimization
+
+**Priority**  
+High
+
+**Status**  
+Mastered (practical portion)
+
+**Resolution**  
+Студент полностью освоил практическую часть работы с реляционными базами данных в ходе Module 08. Через мини-проект "Песочница гафера" (основанный на личном профессиональном опыте студента как гафера в киноиндустрии) и полный рефакторинг QR Warehouse студент освоил:
+
+**Систематический SQL:** студент уверенно использует `SELECT` с `JOIN`, `WHERE`, `ORDER BY` (включая `ORDER BY CASE` для бизнес-сортировки по категориям), `INSERT INTO`, `UPDATE ... SET`, `DELETE FROM`, параметризованные запросы через `?`, `cursor.fetchone()` и `cursor.fetchall()`.
+
+**Проектирование схем:** студент спроектировал реляционную схему из трёх таблиц (`equipment`, `estimates`, `estimate_items`) с `FOREIGN KEY` связями, `CHECK` ограничениями для бизнес-правил (неотрицательные цены, положительное количество), индексами на часто запрашиваемых колонках, и симуляцией булевых значений через `INTEGER CHECK (from_catalog IN (0, 1))`.
+
+**Транзакции и атомарность:** студент самостоятельно сформулировал паттерн Unit of Work: "Я бы сделал так, чтобы сам репозиторий не выполнял commit(), пусть это делает та часть кода, которая отвечает за вызов репозитория." Студент реализовал атомарные транзакции с `commit()` при успехе и `rollback()` при ошибке, координируя два репозитория через одно соединение.
+
+**Исторический снимок (Historical Snapshot):** студент самостоятельно пришёл к этому паттерну через бизнес-рассуждение: "Смета это документ, который после утверждения и хода в работу сам по себе не меняется." Цены, названия и категории копируются из каталога в `estimate_items` в момент создания позиции и никогда не изменяются.
+
+**Обработка NULL:** студент спроектировал систему для ручных позиций без SKU (`sku TEXT` без `NOT NULL`, `from_catalog INTEGER`), основанную на реальном сценарии: "По любому произойдёт такое, что я забуду присвоить sku для какой-то маленькой штучки."
+
+**Идемпотентное наполнение:** студент освоил `INSERT OR IGNORE` с `UNIQUE` ограничениями для безопасного повторного запуска наполнения базы.
+
+Внутреннее устройство баз данных (B-деревья, страницы, планировщик запросов) и сравнение SQLite с PostgreSQL остаются для будущего изучения (см. Q-0025).
+
+---
+
+### Q-0028
+
+**Title**  
+How do I model multi-vendor data in a relational database?
+
+**Reason**  
+During the Gaffer Sandbox mini-project, the student needed to model equipment from multiple rental houses (vendors). The student initially proposed creating a separate table per vendor (`ACT_Equipment`, `KinoPolis_Equipment`), which would lead to schema explosion. The student asked: "Рентал номер 1 будет иметь свою собственную таблицу, например, ACT_Equipment, рентал номер 2 будет иметь свою таблицу KinoPolis_Equipment."
+
+**Resolution**  
+Через ментальную модель "Библиотека с отдельными комнатами против одной комнаты с наклейками" студент понял, что правильная модель — одна таблица `equipment` с колонкой `vendor_id` (FOREIGN KEY на таблицу `vendors`), а не отдельные таблицы для каждого поставщика. Студент понял разницу: отдельные таблицы приводят к "взрыву схемы" (нужно создавать новую таблицу для каждого нового поставщика, переписывать все запросы, делать UNION для аналитики), в то время как одна таблица с внешним ключом позволяет фильтровать по поставщику через `WHERE vendor_id = ?`, делать аналитику через `GROUP BY vendor_id`, и добавлять новых поставщиков простым `INSERT` в таблицу `vendors`. Студент также понял, что одинаковые приборы (например, Arri M90) в разных ренталах — это разные записи с разными `id`, разными `vendor_id`, разными SKU и разными ценами, но одинаковым `name`. Концепция закреплена на практике в мини-проекте "Песочница гафера".
+
+---
+
+### Q-0029
+
+**Title**  
+What is the Historical Snapshot pattern and when should I use it?
+
+**Reason**  
+During the Gaffer Sandbox and QR Warehouse refactoring, the student needed to ensure that confirmed estimates never change their prices, even if the equipment catalog changes. The student asked: "Что, если на, допустим, Arri M90 в рентале номер 1 цена 5000, а в рентале номер 2 цена будет 6000?" and later: "Что произойдёт со старой сметой, если рентал поднимет цены?"
+
+**Resolution**  
+Студент самостоятельно пришёл к паттерну Исторического Снимка через бизнес-рассуждение: "Смета это документ, который после утверждения и хода в работу сам по себе не меняется. Это как лист бумаги. Ты написал на нем название и цену, и больше ничего с этим сделать не можешь." Через ментальную модель "Витрина магазина против Чека на кассе" студент понял разницу между текущими ценами в каталоге (могут меняться) и зафиксированными ценами в смете (никогда не меняются). Технически это реализовано копированием `name`, `category`, `price_per_unit` из таблицы `equipment` в таблицу `estimate_items` в момент создания позиции. Поле `total_position_price` вычисляется и сохраняется при создании, фиксируя итоговую стоимость. Студент также сохранил `days_in_rent` для каждой позиции, позволяя разному оборудованию иметь разный срок аренды. Концепция закреплена на практике в проектах "Песочница гафера" и QR Warehouse.
+
+---
+
+### Q-0030
+
+**Title**  
+What is the Unit of Work pattern and who owns transactions?
+
+**Reason**  
+During the QR Warehouse refactoring, the student needed to coordinate two repositories (`SQLEquipmentRepository` and `SQLEstimateRepository`) within a single business operation. The student independently asked: "Я бы сделал так, чтобы сам репозиторий не выполнял commit(), пусть это делает та часть кода, которая отвечает за вызов репозитория."
+
+**Resolution**  
+Студент самостоятельно сформулировал паттерн Unit of Work до изучения его формального названия. Ключевой инсайт: репозитории только выполняют SQL-запросы, а управление транзакциями (commit/rollback) принадлежит Use Case. Студент понял проблему на конкретном примере: если `update_available()` делает `commit()` и затем `save_estimate_items()` падает с ошибкой, склад уже "заморожен" (первый commit сработал), но в смете нет позиций. Целостность нарушена. Решение: оба репозитория работают с одним `connection`, передаваемым через конструктор, и ни один из них не вызывает `commit()`. Use Case вызывает `commit()` после успешного выполнения всех операций и `rollback()` при любой ошибке. Студент реализовал это во всех шести Use Cases: `try` блок заканчивается `conn.commit()`, `except` блок начинается с `conn.rollback()`. Концепция закреплена на практике в проекте QR Warehouse.
+
+---
+
+### Q-0031
+
+**Title**  
+What is the difference between a Domain Entity and a Read Model?
+
+**Reason**  
+After completing the QR Warehouse refactoring in Module 08, the student noticed that the `Estimate` class had methods (`add_item`, `remove_item`, `get_item_by_sku`) that were never called anywhere in the new architecture. The student asked: "Ни один метод из класса Estimate не используется нигде, потому что мы все делаем через UseCases и репозиторий. Так зачем тогда в принципе существует Estimate? Может его сделать датаклассом?"
+
+**Resolution**  
+Студент самостоятельно распознал, что `Estimate` перестал быть Доменной Сущностью (объект с поведением, защищающий инварианты) и стал Моделью Чтения (пассивный контейнер данных для передачи из базы в интерфейс). В новой архитектуре все мутации происходят через репозитории и Use Cases, а объект `Estimate` просто загружается из базы через `get_estimate()` и передаётся в `exporter.format_estimate()` для отображения. Студент принял зрелое архитектурное решение: упростить `Estimate` до `@dataclass` с полями `estimate_id`, `project_name`, `days`, `items` и вычисляемым свойством `grand_total`. Студент также удалил мёртвые методы (`add_item`, `remove_item`, `get_item_by_sku`) и класс `Inventory`, чьи обязанности были поглощены толстыми Use Cases. Это демонстрирует понимание того, что архитектурные роли объектов эволюционируют: объект, который был Доменной Сущностью в одной архитектуре, может стать Моделью Чтения в другой. Концепция закреплена на практике в проекте QR Warehouse.
+
+---
+
+### Q-0032
+
+**Title**  
+What is the Application Shell pattern and how does it manage the system lifecycle?
+
+**Reason**  
+During the QR Warehouse refactoring, the student's `main.py` was growing into a monolithic function handling configuration, database initialization, repository creation, Use Case wiring, and the main interaction loop. The student independently asked: "Слушай, а я могу создать в модуле main.py класс app или application? Это имеет смысл?"
+
+**Resolution**  
+Студент самостоятельно предложил паттерн "Оболочка приложения" (Application Shell) до изучения его формального названия. Через ментальную модель "Точка входа против Ядра приложения" студент понял, что `main.py` должен быть минимальным (чтение конфига, создание `Application`, вызов `run()`), а вся логика координации должна жить в классе `Application`. Студент реализовал `Application` с `__init__` (создание логгера, соединения с БД, репозиториев, Use Cases) и `run()` (выбор ценовой политики, выбор или создание сметы, главный цикл). Студент также правильно решил создавать `AddItemToEstimate` после выбора `PricePolicy`, а не в `__init__`, демонстрируя понимание порядка внедрения зависимостей. Концепция закреплена на практике в проекте QR Warehouse.
+
+---
+
+### Q-0033
+
+**Title**  
+How do I handle optional fields and manual data entry in a relational database?
+
+**Reason**  
+During the QR Warehouse refactoring, the student described a real warehouse scenario: "По любому произойдёт такое, что я забуду присвоить sku для какой-то маленькой штучки, которая завалялась где-то на складе. И на такой случай у кладовщика должен быть обходной путь." The student needed to allow estimates to contain items that don't exist in the equipment catalog.
+
+**Resolution**  
+Студент спроектировал систему с `sku TEXT` (без `NOT NULL`) и `from_catalog INTEGER CHECK (from_catalog IN (0, 1))` в таблице `estimate_items`. Когда `sku` заполнен (каталожная позиция), `FOREIGN KEY` проверяет ссылку на таблицу `equipment`. Когда `sku` равен `NULL` (ручная позиция), `FOREIGN KEY` не проверяется, позволяя вставить произвольные данные. Студент понял, что это элегантное решение: `FOREIGN KEY` в SQLite пропускает проверку для `NULL` значений. Студент также описал полный рабочий процесс: кладовщик нажимает "Добавить вручную", вводит название и цену; позже, когда предмет возвращается на склад, администратор выпускает QR-код и SKU, и позиция может быть обновлена. Концепция закреплена на практике в схеме базы данных QR Warehouse.
 
 ---
 
@@ -557,4 +767,3 @@ This continuous cycle of asking, understanding and applying is one of the defini
 ---
 
 *End of document.*
-```
