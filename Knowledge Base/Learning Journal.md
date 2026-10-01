@@ -695,6 +695,96 @@ The most conceptually challenging moment was the student's initial confusion abo
 
 ---
 
+### Module 09 — HTTP, Web API, FastAPI и Async/Await
+
+**Date:** 2027-01-25
+
+**Major Insight**
+
+A Web API is not a separate program that talks to your application. A Web API is simply a second entrance to the exact same building.  
+The student discovered that adding a Web API does not require changing how the application thinks; it only requires adding a new way for the outside world to speak to it.
+
+This shifted the mindset from:  
+*"I need to write a server that controls my application"*  
+to:  
+*"I need to add a new Presentation Layer that translates HTTP requests into Use Case calls, without touching the business logic."*
+
+This represents the transition from full-stack systems architect to multi-entry-point system designer.
+
+**What Became Clear**
+
+The concept of **Presentation Layer Translation** became the key architectural milestone of this module.
+
+The student understood that HTTP endpoints are pure "Translators." They extract data from HTTP (Path, Query, Body), call the Use Case, and translate the structured business response into HTTP status codes and JSON.  
+This was not memorized. It was understood through the "Two Entrances to One Building" mental model (CLI is the main door, API is the service entrance, both lead to the same kitchen/Application Layer).
+
+The student also gained a deep understanding of:
+
+- HTTP methods (GET, POST, PATCH, DELETE) and their semantic meanings
+- HTTP status codes (200, 201, 204, 404, 409, 422, 500)
+- The "Three Baskets" for HTTP data (Path, Query, Body)
+- Pydantic as the "Bouncer" at the HTTP boundary (validating Request Bodies)
+- The Result Pattern (structured business responses decoupled from HTTP)
+- Swagger UI as a visual feedback loop for API development
+- SQLite thread-safety for web servers (`check_same_thread=False`)
+- Pragmatic API test isolation (cleanup via API)
+
+**Personal Breakthrough**
+
+The student independently designed and implemented the Crew Scheduler mini-project based on their film industry experience (booking gaffers and DOPs for shooting dates). This sandbox safely isolated the complexity of HTTP and the Result pattern before touching the production QR Warehouse codebase.
+
+A second breakthrough:  
+The student independently discovered two advanced API design principles before learning their formal names:
+1. **Information Leakage Prevention:** When designing an error response for a scheduling conflict, the student rejected returning the conflicting project's name: *"Я решил не добавлять conflicting_project, потому что это точно не та информация, которую должен знать клиент... Если проект снимается секретно, то клиент случайно узнает его название."*
+2. **Actionable Error Responses:** The student proposed returning available dates when a conflict occurs: *"в идеале положить сюда интервалы, в которые человек свободен"* — allowing the client to automatically suggest alternatives.
+
+A third breakthrough:  
+The student explicitly set a boundary with the AI mentor regarding code generation: *"Ты написал код за меня, но я не стал его копировать... Не нужно писать готовый код за меня, обучение не будет иметь смысла."* This demonstrates exceptional metacognition and ownership of the learning process.
+
+A fourth breakthrough:  
+When faced with test data pollution, the student rejected a complex Application Factory refactoring suggested by the mentor, recognizing it as premature overengineering, and implemented a simple, pragmatic cleanup step instead.
+
+**Async/Await Understanding**
+
+The student completed the async/await mini-project with three coroutines (coffee, toast, eggs) and demonstrated understanding of:
+
+- Sequential execution (6 seconds total: 3+1+2)
+- Concurrent execution with `asyncio.gather()` (3 seconds total: max of all tasks)
+- The difference between Concurrency (one waiter serving multiple tables) and Parallelism (multiple waiters working simultaneously)
+- Why async is useful for I/O-bound operations but not CPU-bound computations
+- Why the current synchronous `sqlite3` in QR Warehouse should not be artificially converted to async
+
+**Difficulties**
+
+HTTP-specific difficulties emerged:
+- Confusing Path parameters with Request Bodies (trying to use Pydantic models for GET/DELETE requests)
+- Misaligning HTTP status codes (returning 201 for PATCH, 404 for an empty list)
+- Test assertion type confusion (comparing status code to string `"201"` instead of int `201`, checking if a value is a dictionary key instead of checking key existence)
+
+SQL and Python syntax errors persisted:
+- Placing `WHERE` before `FROM` in SQL queries
+- Swapping tuple parameter order in `cursor.execute()` (`(sku, quantity_change)` instead of `(quantity_change, sku)`)
+- Using `and` instead of `or` for negative value validation
+- Inconsistent variable naming (`result`, `res`, `r`) due to IDE autocomplete frustration
+
+**Lessons Learned**
+
+- A Web API is a Presentation Layer concern, not Infrastructure.
+- HTTP endpoints are Translators: they translate HTTP to Use Cases, and Use Cases to HTTP.
+- Use Cases should return structured `Result` objects, not raw strings or tuples.
+- Pydantic is the Bouncer at the HTTP boundary; it protects Use Cases from dirty data.
+- Path parameters are for resource identifiers; Body is for payload data. They are not interchangeable.
+- 201 Created is strictly for resource creation; 200 OK is for successful updates.
+- 404 Not Found is for missing specific resources; an empty collection is a valid 200 response.
+- API errors should be safe (no information leakage) and actionable (help the client fix the problem).
+- Swagger UI is the best visual feedback loop for API development.
+- When writing API tests, clean up your data via the API at the end of the test.
+- Do not let AI write your implementation code. AI is a mentor, not a typist.
+- Async is for I/O-bound concurrency, not CPU-bound speedup.
+- Synchronous `sqlite3` in FastAPI should use regular `def` endpoints, not `async def`.
+
+---
+
 ## Future Entries
 
 New entries should be appended below.

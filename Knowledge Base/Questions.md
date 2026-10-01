@@ -190,32 +190,8 @@ The student has now practically demonstrated understanding of Dependency Inversi
 **Module 08 Progress Note:**  
 The student further deepened practical understanding of SRP (splitting a single repository into `SQLEquipmentRepository` and `SQLEstimateRepository`, separating schema creation into `init_database()`, simplifying `Estimate` to a dataclass when behavior was no longer needed) and DIP (Use Cases depend on repository contracts, not concrete implementations; `Application` class wires concrete implementations at the composition root). The student also practically demonstrated Interface Segregation by keeping repository contracts minimal and focused. Formal SOLID study would now be extremely productive as the student has lived experience with at least four of the five principles.
 
----
-
-### Q-0024
-
-**Title**  
-How would the QR Warehouse architecture change if I add a Web API alongside the CLI?
-
-**Reason**  
-During Module 07, the student discussed the future vision of the system growing to include a web interface for clients, a manager interface, and a warehouse worker interface. The student understands conceptually that the Use Cases should remain reusable across different Presentation layers, but has not yet experienced this in practice. This question will become relevant when the student is ready to build a second entry point into the application.
-
-**Related Topics**  
-Web Frameworks  
-HTTP API  
-Presentation Layer  
-Application Layer reuse  
-Multiple entry points  
-REST principles
-
-**Priority**  
-Medium
-
-**Status**  
-Open
-
-**Module 08 Progress Note:**  
-The Module 08 refactoring significantly improved readiness for this transition. The student now has thick Use Cases that accept raw data and return status strings (easily mapped to HTTP responses), an `Application` class that demonstrates lifecycle management (a web framework would replace this with its own lifecycle), and a clean separation where the CLI loop in `Application._main_loop()` is the only presentation-specific code. The six Use Cases (`CreateEstimate`, `GetEstimate`, `DeleteEstimate`, `AddItemToEstimate`, `ChangeItemQuantity`, `DeleteItemFromEstimate`) could be exposed as REST endpoints with minimal changes. The student also independently proposed the `Application` class pattern, demonstrating understanding of the composition root concept that would transfer directly to a web framework's dependency injection system.
+**Module 09 Progress Note:**  
+The student practically demonstrated Single Responsibility at the HTTP boundary: endpoints are pure "Translators" that only extract data, call Use Cases, and map responses — they contain no business logic or SQL. The student also demonstrated Interface Segregation by designing Pydantic models that accept only the fields needed for each specific operation (e.g., `AddItemToEstimateRequest` only contains `sku` and `quantity`, not `estimate_id` which comes from the Path). Formal SOLID study would now unify five principles with lived experience.
 
 ---
 
@@ -280,6 +256,9 @@ High
 **Status**  
 Open
 
+**Module 09 Progress Note:**  
+In Module 09, the student wrote automated API tests using `pytest` and FastAPI's `TestClient`, covering both success and error paths for the HTTP endpoints. However, these are API-level tests, not Use Case unit tests. The student still needs to write unit tests for the thick Use Cases using in-memory fakes to isolate business logic from the HTTP layer. The API tests demonstrate the student's growing testing maturity, but the specific techniques for testing multi-repository coordination remain open.
+
 ---
 
 ### Q-0027
@@ -308,6 +287,83 @@ Production Deployment
 
 **Priority**  
 Low
+
+**Status**  
+Open
+
+**Module 09 Progress Note:**  
+The Module 09 Web API implementation significantly advanced readiness for the commercial vision. The student now has a fully functional HTTP API with 11 endpoints covering CRUD operations for both Estimates and Equipment. This API can serve as the backend for a mobile interface (warehouse workers scanning QR codes), a manager interface (confirming estimates), and a client interface (browsing catalog). The student also independently discovered API security principles (Information Leakage prevention) and Actionable Error Responses, which are critical for a production system. The next steps for the commercial vision are: authentication/authorization, QR code generation, and production deployment.
+
+---
+
+### Q-0037
+
+**Title**  
+How do I deploy a FastAPI application to a production server?
+
+**Reason**  
+During Module 09, the student successfully built and tested a Web API locally using Uvicorn and Swagger UI. The student now needs to understand how to make this API accessible from the internet and handle real-world production concerns:
+
+- How to configure Uvicorn/Gunicorn for production
+- How to use environment variables for configuration (instead of hardcoded paths)
+- How to set up a reverse proxy (Nginx) for HTTPS and load balancing
+- How to use Docker for containerization
+- How to deploy to a cloud platform (e.g., Railway, Render, AWS)
+- How to manage database migrations in production
+- How to set up logging and monitoring for a production API
+
+**Related Topics**  
+Production Deployment  
+Uvicorn  
+Gunicorn  
+Nginx  
+Docker  
+Cloud Platforms  
+Environment Variables  
+Database Migrations  
+Logging and Monitoring
+
+**Priority**  
+Medium
+
+**Status**  
+Open
+
+---
+
+### Q-0038
+
+**Title**  
+How do I implement authentication and authorization for a multi-user Web API?
+
+**Reason**  
+During Module 09, the student built a Web API that is currently open to anyone who knows the URL. For the commercial version of QR Warehouse, different users need different permissions:
+
+- Warehouse workers can scan QR codes and update stock
+- Managers can confirm estimates and apply discounts
+- Clients can browse the catalog and request estimates
+- Administrators can manage the equipment catalog and user accounts
+
+The student needs to understand:
+
+- Authentication vs Authorization (who you are vs what you can do)
+- JWT tokens and session management
+- Password hashing (bcrypt)
+- Role-based access control (RBAC)
+- How to protect specific endpoints with FastAPI dependencies
+- How to store user credentials securely
+
+**Related Topics**  
+Authentication  
+Authorization  
+JWT Tokens  
+Password Hashing  
+Role-based Access Control  
+FastAPI Dependencies  
+Security Best Practices
+
+**Priority**  
+Medium
 
 **Status**  
 Open
@@ -402,6 +458,9 @@ The student asked how to test object state transitions and edge cases automatica
 
 **Resolution**  
 Студент освоил инструменты `pytest` для модульного тестирования. Он настроил конфигурацию тестов (`pytest.ini`), написал 11 автотестов для проверки бизнес-логики (бронирование, удаление, пересчет итогов) и научился использовать фикстуры для подготовки тестовых данных. Студент понял концепцию "красный-зеленый-рефакторинг" и успешно применил тестирование для защиты критических методов `check_and_reserve`, `add_item` и `remove_one`. Концепция закреплена на практике и все тесты успешно проходят.
+
+**Module 09 Progress Note:**  
+В ходе Module 09 студент расширил навыки тестирования на уровень HTTP API. Он написал автоматические тесты через `pytest` и `TestClient` FastAPI, покрывающие успешные и ошибочные сценарии (создание сметы, получение существующей и несуществующей сметы, невалидные данные). Студент также освоил прагматичный подход к изоляции тестовых данных: вместо сложной фабрики приложений была использована простая очистка через API в конце теста. Это демонстрирует зрелое понимание того, что тестирование может быть одновременно надёжным и простым.
 
 ---
 
@@ -630,6 +689,36 @@ Mastered (practical portion)
 
 ---
 
+### Q-0024
+
+**Title**  
+How would the QR Warehouse architecture change if I add a Web API alongside the CLI?
+
+**Reason**  
+During Module 07, the student discussed the future vision of the system growing to include a web interface for clients, a manager interface, and a warehouse worker interface. The student understands conceptually that the Use Cases should remain reusable across different Presentation layers, but has not yet experienced this in practice. This question will become relevant when the student is ready to build a second entry point into the application.
+
+**Related Topics**  
+Web Frameworks  
+HTTP API  
+Presentation Layer  
+Application Layer reuse  
+Multiple entry points  
+REST principles
+
+**Priority**  
+Medium
+
+**Status**  
+Mastered
+
+**Module 08 Progress Note:**  
+The Module 08 refactoring significantly improved readiness for this transition. The student now has thick Use Cases that accept raw data and return status strings (easily mapped to HTTP responses), an `Application` class that demonstrates lifecycle management (a web framework would replace this with its own lifecycle), and a clean separation where the CLI loop in `Application._main_loop()` is the only presentation-specific code. The six Use Cases (`CreateEstimate`, `GetEstimate`, `DeleteEstimate`, `AddItemToEstimate`, `ChangeItemQuantity`, `DeleteItemFromEstimate`) could be exposed as REST endpoints with minimal changes. The student also independently proposed the `Application` class pattern, demonstrating understanding of the composition root concept that would transfer directly to a web framework's dependency injection system.
+
+**Resolution**  
+В ходе Module 09 студент полностью ответил на этот вопрос через практику. Студент добавил `presentation/api/routes.py` как вторую точку входа, не изменив ни одной строчки в бизнес-логике (Use Cases) или инфраструктуре (репозитории). Ключевой инсайт был сформулирован через ментальную модель "Два входа в одно здание": CLI — это главный вход, HTTP API — служебный вход, оба ведут в одну и ту же кухню (Application Layer). Студент успешно запустил оба входа одновременно, разделяя одну базу данных и одни и те же Use Cases. Студент также самостоятельно перешёл от строковых статусов к структурированному паттерну `Result` (`success`, `status`, `details`), что позволило чисто отделить бизнес-результаты от HTTP-перевода. Концепция закреплена на практике в проекте QR Warehouse.
+
+---
+
 ### Q-0028
 
 **Title**  
@@ -705,6 +794,45 @@ During the QR Warehouse refactoring, the student described a real warehouse scen
 
 **Resolution**  
 Студент спроектировал систему с `sku TEXT` (без `NOT NULL`) и `from_catalog INTEGER CHECK (from_catalog IN (0, 1))` в таблице `estimate_items`. Когда `sku` заполнен (каталожная позиция), `FOREIGN KEY` проверяет ссылку на таблицу `equipment`. Когда `sku` равен `NULL` (ручная позиция), `FOREIGN KEY` не проверяется, позволяя вставить произвольные данные. Студент понял, что это элегантное решение: `FOREIGN KEY` в SQLite пропускает проверку для `NULL` значений. Студент также описал полный рабочий процесс: кладовщик нажимает "Добавить вручную", вводит название и цену; позже, когда предмет возвращается на склад, администратор выпускает QR-код и SKU, и позиция может быть обновлена. Концепция закреплена на практике в схеме базы данных QR Warehouse.
+
+---
+
+### Q-0034
+
+**Title**  
+What is the Result pattern and how does it decouple business logic from HTTP translation?
+
+**Reason**  
+During Module 09, the student needed to translate business outcomes (success, equipment not found, not enough stock) into HTTP status codes (200, 404, 409). Initially, Use Cases returned raw strings or tuples, which tightly coupled business logic to specific response formats. The student needed a structured way to communicate business results without knowing about HTTP.
+
+**Resolution**  
+Студент самостоятельно спроектировал паттерн `Result` как структурированный ответ Use Case: `Result(success: bool, status: str, details: Any)`. Use Case возвращает бизнес-статус (`"success"`, `"equipment_not_found"`, `"not_enough_stock"`), а эндпоинт переводит этот статус в HTTP-код. Это позволило полностью отделить бизнес-логику от HTTP: Use Cases не знают про статус-коды, а эндпоинты не знают про бизнес-правила. Студент также самостоятельно принял решение использовать `details: Any` вместо `dict | str`, мотивируя это прагматичностью: "Мне не всегда нужно и удобно передавать словарь, иногда проще передать строку." Концепция закреплена на практике в проектах "Планировщик съёмочной группы" и QR Warehouse.
+
+---
+
+### Q-0035
+
+**Title**  
+How do I design secure API error responses that don't leak sensitive data?
+
+**Reason**  
+During Module 09, when designing the error response for a scheduling conflict in the Crew Scheduler, the mentor suggested returning the `conflicting_project` name. The student needed to think about what data is safe to expose to external clients.
+
+**Resolution**  
+Студент самостоятельно открыл принцип предотвращения утечки информации (Information Leakage Prevention) и минимизации данных (Data Minimization) до изучения их формальных названий. Студент отверг предложение вернуть название конфликтующего проекта: "Я решил не добавлять conflicting_project, потому что это точно не та информация, которую должен знать клиент... Если проект снимается секретно, то клиент случайно узнает его название." Студент понял, что ошибки должны быть безопасными (не раскрывать коммерческую тайну) и действенными (помогать клиенту исправить проблему). Студент также самостоятельно предложил возвращать доступные даты при конфликте: "в идеале положить сюда интервалы, в которые человек свободен" — позволяя клиенту автоматически предложить альтернативы. Концепция закреплена на практике в проекте "Планировщик съёмочной группы".
+
+---
+
+### Q-0036
+
+**Title**  
+How do I build a multi-entry-point architecture where CLI and HTTP API share the same business logic?
+
+**Reason**  
+During Module 09, the student needed to add a Web API to the existing QR Warehouse project without modifying the business logic. The student initially confused FastAPI with an HTTP client ("Does api.py send requests to the Use Cases?") and needed to understand that FastAPI is a server (Presentation Layer), not a client.
+
+**Resolution**  
+Через ментальную модель "Два входа в одно здание" студент понял, что веб-приложение — это не отдельная программа, которая общается с вашим приложением, а просто второй вход в то же самое здание. Студент успешно добавил `presentation/api/routes.py` как вторую точку входа, не изменив ни одной строчки в бизнес-логике (Use Cases) или инфраструктуре (репозитории). Студент также успешно разрешил технические проблемы: `sys.path` для импортов, пути к базе данных, потокобезопасность SQLite (`check_same_thread=False`). Студент запустил оба входа одновременно и убедился, что они разделяют одну базу данных. Концепция закреплена на практике в проекте QR Warehouse.
 
 ---
 
