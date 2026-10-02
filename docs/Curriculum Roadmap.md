@@ -2,7 +2,7 @@
 
 **Framework:** AI Programming Mentor Framework (APMF)
 
-**Version:** 0.1 Alpha
+**Version:** 0.2
 
 **Status:** Active
 
@@ -12,11 +12,13 @@
 
 This document defines the long-term educational roadmap for the AI Programming Mentor Framework.
 
-The roadmap describes the progression from a complete beginner programmer to an independent software developer capable of designing, implementing, debugging, and maintaining software systems.
+The roadmap describes progression from programming fundamentals toward independent software development.
 
-The roadmap is competency-based.
+The roadmap is **competency-based**.
 
-Completion is determined by demonstrated abilities rather than time spent studying.
+Completion of a stage is determined by demonstrated understanding and practical ability rather than by the number of completed lessons or hours spent studying.
+
+The roadmap is also a planning model rather than a rigid sequence. Topics may overlap, return at greater depth, or be introduced earlier when required by a project.
 
 ---
 
@@ -24,22 +26,25 @@ Completion is determined by demonstrated abilities rather than time spent studyi
 
 The curriculum follows these principles:
 
-* Fundamentals before complexity.
+* Fundamentals before unnecessary complexity.
 * Understanding before memorization.
 * Practice before mastery.
 * Real projects alongside structured learning.
 * Gradual increase of independence.
-* Continuous application of previously learned concepts.
+* Repeated application of previously learned concepts.
+* Architecture should emerge from concrete problems rather than from pattern memorization.
+* AI should support learning and engineering work, not replace understanding.
+* Progress should be evaluated by what the student can explain, implement, debug, and modify independently.
 
-The student should not only learn how to write code.
+The goal is not simply to learn Python.
 
-The student should learn how to think like a software engineer.
+The goal is to develop the ability to reason about software systems and gradually become capable of building and maintaining them independently.
 
 ---
 
 # 3. Development Stages Overview
 
-The curriculum consists of the following stages:
+The curriculum consists of the following broad stages:
 
 ```text
 Stage 0
@@ -73,7 +78,7 @@ Object-Oriented Programming
 ↓
 
 Stage 6
-Working With Real Data and External Systems
+Data, Persistence and External Systems
 
 ↓
 
@@ -96,15 +101,17 @@ Stage 10
 Independent Developer
 ```
 
+The stages are conceptual rather than strictly sequential.
+
+A student may work with material from several stages simultaneously once the necessary foundations have been established.
+
 ---
 
 # Stage 0 — Computational Thinking
 
 ## Objective
 
-Develop the ability to think in terms of problems, processes, and logical solutions.
-
-Before learning programming syntax, the student must understand the fundamental mental model behind programming.
+Develop the ability to think in terms of problems, processes, states, constraints, and logical solutions.
 
 ---
 
@@ -112,29 +119,31 @@ Before learning programming syntax, the student must understand the fundamental 
 
 The student can:
 
-* describe problems clearly;
-* divide large problems into smaller tasks;
-* understand inputs and outputs;
+* describe a problem clearly;
+* identify inputs, outputs, and constraints;
+* divide a problem into smaller tasks;
 * describe algorithms in natural language;
 * identify repeated patterns;
-* understand the concept of automation.
+* distinguish a problem from a particular implementation;
+* understand automation as the transformation of a manual process into a repeatable procedure.
 
 ---
 
 ## Key Topics
 
 * What programming is;
-* How computers execute instructions;
+* How programs execute instructions;
 * Algorithms;
 * Problem decomposition;
-* Logical thinking;
-* Abstraction.
+* Logical reasoning;
+* Abstraction;
+* Program state.
 
 ---
 
 ## Completion Criteria
 
-The student can take a simple real-world problem and describe a logical sequence of steps required to solve it.
+The student can take a simple real-world problem and describe a logical sequence of steps required to solve it, including relevant inputs, outputs, and state changes.
 
 ---
 
@@ -153,25 +162,29 @@ The student can:
 * store and manipulate information;
 * control program execution;
 * create reusable logic;
-* understand program state.
+* understand program state;
+* distinguish expressions from actions that change state.
 
 ---
 
 ## Key Topics
 
 * Variables;
+* Assignment;
 * Data types;
 * Expressions;
 * Conditions;
 * Loops;
 * Functions;
+* Parameters and arguments;
+* Return values;
 * Basic debugging.
 
 ---
 
 ## Completion Criteria
 
-The student can create small programs independently and explain how they work.
+The student can create small programs independently and explain their control flow and state changes.
 
 ---
 
@@ -181,7 +194,7 @@ The student can create small programs independently and explain how they work.
 
 Develop practical programming ability using Python.
 
-Python is used as the first implementation language because of its readability, ecosystem, and suitability for rapid development.
+Python remains the primary implementation language of the curriculum because it allows the student to focus on programming concepts while providing a practical path toward backend development.
 
 ---
 
@@ -191,8 +204,11 @@ The student can:
 
 * write Python programs;
 * use standard data structures;
-* organize code into files;
-* work with modules.
+* work with functions;
+* organize code into modules;
+* work with files and basic external data;
+* use virtual environments and project dependencies;
+* understand mutable and immutable objects at a practical level.
 
 ---
 
@@ -206,13 +222,17 @@ The student can:
 * Functions;
 * Modules;
 * Packages;
-* Virtual environments.
+* Virtual environments;
+* Exceptions;
+* File I/O;
+* JSON;
+* Basic dependency management.
 
 ---
 
 ## Completion Criteria
 
-The student can independently create small Python applications.
+The student can independently create small Python applications and explain the main language constructs used in them.
 
 ---
 
@@ -220,7 +240,7 @@ The student can independently create small Python applications.
 
 ## Objective
 
-Develop the ability to design solutions rather than only write syntax.
+Develop the ability to design solutions rather than only translate instructions into Python syntax.
 
 ---
 
@@ -228,10 +248,12 @@ Develop the ability to design solutions rather than only write syntax.
 
 The student can:
 
-* analyze problems;
-* choose appropriate approaches;
-* evaluate complexity;
-* improve inefficient solutions.
+* analyze a problem;
+* decompose it into smaller operations;
+* select appropriate data structures;
+* compare alternative solutions;
+* reason about basic algorithmic complexity;
+* debug incorrect logic systematically.
 
 ---
 
@@ -240,15 +262,20 @@ The student can:
 * Algorithm design;
 * Searching;
 * Sorting;
+* Iteration;
 * Recursion;
 * Complexity;
-* Data structure selection.
+* Data structure selection;
+* Edge cases;
+* State transitions.
 
 ---
 
 ## Completion Criteria
 
-The student can solve unfamiliar programming problems through structured reasoning.
+The student can solve unfamiliar small and medium programming problems through structured reasoning and can explain why a chosen solution works.
+
+Advanced algorithms are not considered a prerequisite for backend development at this stage.
 
 ---
 
@@ -256,7 +283,7 @@ The student can solve unfamiliar programming problems through structured reasoni
 
 ## Objective
 
-Move from writing scripts to building organized software.
+Move from isolated scripts toward organized software projects.
 
 ---
 
@@ -264,26 +291,33 @@ Move from writing scripts to building organized software.
 
 The student can:
 
-* structure projects;
+* divide code into modules;
 * separate responsibilities;
-* create maintainable code.
+* distinguish business logic from input/output;
+* identify dependencies;
+* organize application flow;
+* recognize when code structure makes change unnecessarily difficult.
 
 ---
 
 ## Key Topics
 
 * Project structure;
+* Modules and packages;
 * Separation of concerns;
-* Code organization;
-* Configuration;
+* Dependency management;
+* Dependency injection;
+* Pure functions and side effects;
 * Error handling;
-* Documentation.
+* Configuration;
+* Documentation;
+* Refactoring.
 
 ---
 
 ## Completion Criteria
 
-The student can create projects that remain understandable as they grow.
+The student can create a multi-module Python project whose responsibilities are understandable and whose components can be modified without unnecessarily affecting unrelated parts.
 
 ---
 
@@ -291,7 +325,7 @@ The student can create projects that remain understandable as they grow.
 
 ## Objective
 
-Understand and apply object-oriented design.
+Understand when and how objects can be used to represent domain concepts and manage related state and behavior.
 
 ---
 
@@ -299,9 +333,13 @@ Understand and apply object-oriented design.
 
 The student can:
 
-* model real-world entities;
+* model domain entities;
 * design classes;
-* understand relationships between objects.
+* use dataclasses where appropriate;
+* understand composition;
+* understand inheritance and polymorphism at a practical level;
+* distinguish domain objects from infrastructure concerns;
+* recognize when object-oriented design is useful and when simpler structures are sufficient.
 
 ---
 
@@ -309,24 +347,29 @@ The student can:
 
 * Classes;
 * Objects;
+* Attributes;
+* Methods;
 * Encapsulation;
-* Inheritance;
+* Dataclasses;
 * Composition;
-* Design principles.
+* Inheritance;
+* Polymorphism;
+* Abstract interfaces;
+* Basic SOLID principles.
 
 ---
 
 ## Completion Criteria
 
-The student can design object-oriented systems where appropriate.
+The student can design and implement a small domain model and explain the responsibilities and relationships of its objects.
 
 ---
 
-# Stage 6 — Working With Real Data and External Systems
+# Stage 6 — Data, Persistence and External Systems
 
 ## Objective
 
-Learn how software interacts with the outside world.
+Learn how applications interact with persistent data and external resources.
 
 ---
 
@@ -334,9 +377,15 @@ Learn how software interacts with the outside world.
 
 The student can:
 
-* read and write data;
-* communicate with external services;
-* process information.
+* read and write structured data;
+* model relational data;
+* work with SQLite;
+* use SQL for common operations;
+* separate persistence from business logic;
+* implement repository-style persistence boundaries;
+* coordinate changes across multiple repositories;
+* understand the basic purpose of transactions and Unit of Work;
+* consume external APIs at a basic level.
 
 ---
 
@@ -344,16 +393,25 @@ The student can:
 
 * Files;
 * JSON;
-* Databases;
-* APIs;
-* Networking basics;
-* Data processing.
+* Relational databases;
+* Tables and relationships;
+* SQL;
+* SQLite;
+* Repository pattern;
+* Persistence boundaries;
+* Transactions;
+* Unit of Work;
+* Historical snapshots;
+* External APIs;
+* Serialization.
 
 ---
 
 ## Completion Criteria
 
-The student can create applications that interact with external resources.
+The student can build an application that stores domain data persistently while keeping business logic reasonably independent from the underlying storage mechanism.
+
+The student is not expected to have deep database-engineering knowledge at this stage. PostgreSQL internals, advanced query optimization, migrations, locking, and production database operations remain areas for later development.
 
 ---
 
@@ -361,7 +419,7 @@ The student can create applications that interact with external resources.
 
 ## Objective
 
-Develop professional development habits.
+Develop reliable development habits and the ability to change software safely.
 
 ---
 
@@ -369,9 +427,14 @@ Develop professional development habits.
 
 The student can:
 
-* maintain code quality;
-* collaborate effectively;
-* manage changes safely.
+* use Git for normal development workflows;
+* write automated tests;
+* distinguish unit and integration tests;
+* use test doubles where appropriate;
+* debug failures systematically;
+* refactor without unnecessarily changing behavior;
+* evaluate the effect of architectural changes;
+* use AI tools while retaining responsibility for understanding and validating the result.
 
 ---
 
@@ -379,17 +442,27 @@ The student can:
 
 * Git;
 * Testing;
+* pytest;
+* Fixtures;
+* `pytest.raises`;
+* Test doubles and in-memory fakes;
+* Unit testing;
+* Integration testing;
+* API testing;
 * Debugging methodology;
-* Code review;
 * Refactoring;
+* Code review;
 * Documentation;
-* Development workflows.
+* Development workflows;
+* AI-assisted development.
 
 ---
 
 ## Completion Criteria
 
-The student can work on software projects using professional practices.
+The student can add and modify functionality in an existing project while using tests and debugging tools to reduce regressions.
+
+At the current stage, the student has practical experience with pytest, TestClient, fixtures, in-memory fakes, and API-level testing. Further work is required in integration testing, broader test coverage, and testing multi-component coordination.
 
 ---
 
@@ -397,7 +470,7 @@ The student can work on software projects using professional practices.
 
 ## Objective
 
-Build complete user-facing applications.
+Learn how separate components form a complete application with multiple interfaces and external boundaries.
 
 ---
 
@@ -405,26 +478,108 @@ Build complete user-facing applications.
 
 The student can:
 
-* design application structure;
-* create interfaces;
-* connect components;
-* manage application lifecycle.
+* structure an application into layers or meaningful boundaries;
+* implement application use cases;
+* connect domain logic with persistence;
+* expose functionality through an HTTP API;
+* understand HTTP methods and status codes;
+* validate external input;
+* separate presentation concerns from business logic;
+* support multiple application entry points;
+* write basic API tests.
 
 ---
 
-## Possible Topics
+## Key Topics
 
-* GUI development;
-* Web applications;
-* Desktop applications;
-* User experience;
-* Application architecture.
+* Application architecture;
+* Use Cases;
+* Application Shell;
+* Domain entities;
+* Read Models;
+* Repository boundaries;
+* HTTP;
+* REST-style APIs;
+* FastAPI;
+* Pydantic;
+* HTTP status codes;
+* Request and response models;
+* API testing;
+* Swagger/OpenAPI;
+* Multiple entry points;
+* Basic asynchronous programming;
+* Concurrency for I/O-bound operations.
+
+---
+
+## Current Position
+
+The student has completed the material through **Module 09**.
+
+At this point the student has practical experience with:
+
+* multi-module Python applications;
+* domain entities and dataclasses;
+* repositories;
+* SQLite persistence;
+* Unit of Work;
+* multi-repository coordination;
+* Use Cases;
+* Application Shell;
+* Read Model vs Domain Entity;
+* pytest-based testing;
+* FastAPI;
+* Pydantic request/response validation;
+* HTTP methods and status codes;
+* API-level testing with TestClient;
+* multiple entry points sharing the same application logic;
+* basic `async`/`await` and `asyncio.gather`;
+* the distinction between concurrency and parallelism;
+* the distinction between I/O-bound and CPU-bound work.
+
+The current development focus should therefore deepen these concepts rather than reintroduce them from zero.
+
+---
+
+## Current Learning Priorities
+
+The next stage of development should emphasize:
+
+* integration testing;
+* test isolation;
+* test doubles;
+* testing multi-repository coordination;
+* reliable error handling;
+* deeper SQL and transaction understanding;
+* API design;
+* authentication and authorization;
+* configuration and deployment;
+* production application boundaries;
+* continued independent implementation without relying on AI-generated code as a substitute for understanding.
 
 ---
 
 ## Completion Criteria
 
-The student can independently develop complete applications.
+The student can independently implement a complete small application feature spanning:
+
+```text
+External Input
+      ↓
+Presentation Layer
+      ↓
+Use Case
+      ↓
+Domain Logic
+      ↓
+Repository
+      ↓
+Database
+```
+
+and can test the relevant parts at appropriate levels.
+
+The student does not need to master every production technology before moving forward. The important criterion is the ability to understand the path of data and responsibility through the application.
 
 ---
 
@@ -432,34 +587,75 @@ The student can independently develop complete applications.
 
 ## Objective
 
-Develop higher-level engineering thinking.
+Develop the ability to reason about software architecture, trade-offs, system boundaries, and long-term maintainability.
 
 ---
 
 ## Core Competencies
 
-The student can:
+The student should gradually become able to:
 
-* make architectural decisions;
-* evaluate trade-offs;
-* design scalable systems.
+* identify architectural boundaries;
+* make explicit design decisions;
+* compare alternative architectures;
+* understand trade-offs;
+* recognize overengineering;
+* design systems around changing requirements;
+* reason about reliability and failure modes;
+* work with unfamiliar existing codebases;
+* understand the consequences of persistence, concurrency, and deployment decisions.
 
 ---
 
 ## Key Topics
 
-* Architecture patterns;
+* Layered architecture;
+* Clean Architecture concepts;
+* Hexagonal Architecture concepts;
+* Repository pattern;
+* Unit of Work;
+* Application services and Use Cases;
+* Domain vs infrastructure boundaries;
+* Read Models;
+* Dependency inversion;
 * Design patterns;
+* API architecture;
+* Authentication and authorization;
+* Transactions;
+* Concurrency;
 * Performance;
 * Security basics;
-* Large codebases;
-* System design.
+* Deployment;
+* Reverse proxies;
+* HTTPS;
+* PostgreSQL;
+* Database migrations;
+* Observability;
+* System design;
+* Working with existing codebases.
+
+---
+
+## Current Status
+
+The student has begun working with architectural concepts in practical projects and can explain several common boundaries and patterns.
+
+However, this stage is **in progress**.
+
+The student should not yet be treated as having broad independent architecture expertise. Further evidence is needed through:
+
+* independent design of unfamiliar systems;
+* implementation without step-by-step guidance;
+* evaluation of competing architectural approaches;
+* production-oriented deployment;
+* deeper database and concurrency work;
+* maintenance of larger existing codebases.
 
 ---
 
 ## Completion Criteria
 
-The student can participate in complex software development decisions.
+The student can design a moderately complex application, explain the major architectural decisions, identify meaningful trade-offs, and revise the design when requirements change.
 
 ---
 
@@ -467,7 +663,7 @@ The student can participate in complex software development decisions.
 
 ## Objective
 
-Achieve the ability to independently learn, design, and build software.
+Develop the ability to independently learn, design, implement, debug, deploy, and maintain software.
 
 ---
 
@@ -475,20 +671,57 @@ Achieve the ability to independently learn, design, and build software.
 
 The student can:
 
-* start projects from ideas;
+* start a project from an ambiguous problem;
+* clarify requirements;
 * research unfamiliar technologies;
-* design solutions;
-* write maintainable code;
+* choose appropriate tools;
+* design an architecture proportional to the problem;
+* implement features independently;
+* write and maintain tests;
 * debug complex problems;
-* effectively use AI as an engineering assistant.
+* work with existing codebases;
+* deploy applications;
+* monitor and maintain software;
+* evaluate technical trade-offs;
+* effectively use AI as an engineering assistant without outsourcing understanding or decision-making.
+
+---
+
+## Completion Criteria
+
+There is no single project or examination that permanently marks completion of this stage.
+
+Evidence should come from repeated independent work across different problems and contexts.
+
+The student should be able to move from:
+
+```text
+Problem
+   ↓
+Requirements
+   ↓
+Design
+   ↓
+Implementation
+   ↓
+Testing
+   ↓
+Debugging
+   ↓
+Deployment
+   ↓
+Maintenance
+```
+
+with progressively less external guidance.
 
 ---
 
 # 4. Project Integration Strategy
 
-Real projects should gradually become increasingly important.
+Real projects should become increasingly important as the student's competencies develop.
 
-The recommended progression:
+The recommended progression is:
 
 ```text
 Exercises
@@ -511,28 +744,78 @@ Complete Applications
 
 ↓
 
+Real-World Projects
+
+↓
+
 Independent Software Development
 ```
 
-The student's existing projects may be used as learning environments.
+The student's existing projects should be used as learning environments whenever they provide realistic problems.
 
-However, practical development shall not replace fundamental competency development.
+In particular, the QR Warehouse project can serve as a practical environment for studying:
+
+* domain modeling;
+* relational databases;
+* persistence;
+* application architecture;
+* HTTP APIs;
+* testing;
+* authentication and authorization;
+* integration with existing systems;
+* deployment;
+* real-world requirements;
+* maintainability.
+
+However, project development must not completely replace fundamental learning.
+
+A real project is a learning environment, not proof that every underlying competency has already been mastered.
 
 ---
 
 # 5. Progress Evaluation
 
-A student may advance only when:
+Progress should be evaluated using multiple forms of evidence.
 
-* required competencies are demonstrated;
-* previous knowledge is stable;
-* new complexity can be introduced safely.
+The mentor should consider whether the student can:
 
-The mentor should prefer mastery over speed.
+* explain a concept without reproducing memorized definitions;
+* implement it in a known context;
+* modify an existing implementation;
+* debug a broken implementation;
+* apply it in a slightly unfamiliar context;
+* explain why one solution was chosen over another;
+* recognize limitations of their own solution.
+
+A concept should not be considered fully mastered merely because the student successfully implemented it once with substantial guidance.
 
 ---
 
-# 6. Adaptation
+# 6. Independence Model
+
+The curriculum should gradually shift the student's role from following instructions toward making engineering decisions.
+
+```text
+Guided Implementation
+        ↓
+Implementation With Explanations
+        ↓
+Independent Feature Implementation
+        ↓
+Independent Design + Implementation
+        ↓
+Independent Problem Solving
+```
+
+AI assistance may be used throughout this progression.
+
+However, the amount of AI-generated implementation should decrease when the educational objective is to develop independent programming ability.
+
+The student should remain capable of explaining and modifying code produced with AI assistance.
+
+---
+
+# 7. Adaptation
 
 This roadmap is not a rigid schedule.
 
@@ -542,11 +825,39 @@ The mentor may adjust:
 * depth of topics;
 * practice volume;
 * project integration;
+* review frequency;
+* difficulty of exercises;
 
-based on student progress.
+based on demonstrated progress and unresolved gaps.
 
 The roadmap defines direction, not a fixed timeline.
 
+Current competency should always take precedence over assumptions based solely on completed module numbers.
+
 ---
 
-**End of Curriculum Roadmap v0.1 Alpha**
+# 8. Current Curriculum Position
+
+**Completed through Module 09.**
+
+The student has progressed beyond basic Python and introductory OOP into practical application development involving:
+
+* modular architecture;
+* domain modeling;
+* persistence;
+* repositories;
+* transactions and Unit of Work;
+* automated testing;
+* HTTP APIs;
+* FastAPI;
+* API validation;
+* multiple application entry points;
+* basic asynchronous programming.
+
+The next curriculum phase should consolidate these skills through testing, integration, reliability, deeper database work, security fundamentals, deployment, and increasingly independent implementation.
+
+The curriculum should continue to expose gaps rather than hide them behind broad labels such as "advanced developer" or "software architect".
+
+---
+
+**End of Curriculum Roadmap v0.2**
