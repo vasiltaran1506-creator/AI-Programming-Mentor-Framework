@@ -1,6 +1,6 @@
 # Development Log
 
-**Version:** 2.0
+**Version:** 3.0
 **Status:** Active
 **Maintained by:** AI Methodologist
 
@@ -52,7 +52,7 @@ The current state should always be based on the most recent demonstrated evidenc
 | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Learning Stage**    | Beginning Programmer                                                                                                                                                        |
 | **Primary Language**  | Python                                                                                                                                                                      |
-| **Primary Goal**      | Become capable of designing, implementing, testing, and maintaining real software while using AI as an engineering assistant rather than as a substitute for understanding. |
+| **Primary Goal**      | Become capable of designing, implementing, testing, and maintaining real software while using AI as an engineering assistant rather than as an substitute for understanding. |
 | **Learning Strategy** | Project-based learning combined with structured curriculum and guided discovery.                                                                                            |
 
 ---
@@ -69,6 +69,54 @@ The current state should always be based on the most recent demonstrated evidenc
 The current description intentionally avoids labels such as "professional engineer", "senior engineer", or "architect".
 
 The student has demonstrated several advanced concepts in guided project contexts, but broader independent experience across unfamiliar systems is still developing.
+
+---
+
+## Current Profile — After Module 11
+
+> The Module 09 profile above is retained unchanged as a historical record.
+> The following description supersedes it as the current assessment.
+
+| Field                 | Value                                                                                                                                                                                   |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Learning Stage**    | Intermediate learning stage: application development with first operational deployment experience                                                                                       |
+| **Current Focus**     | Linux server operation, SSH-based administration, Docker images and containers, persistent storage, Docker Compose, CI pipelines, and the boundary between application code and infrastructure |
+| **Primary Goal**      | Develop QR Warehouse into a maintainable, deployable backend product; reach independent operational competence; prepare for PostgreSQL and commercial-grade deployment                  |
+| **Learning Strategy** | Mental model → conceptual understanding → guided implementation → verification on real infrastructure → failure diagnosis → scope negotiation → reflection                                |
+
+### What changed in Module 11
+
+The student crossed a significant boundary:
+
+```text
+"An application that runs on my computer"
+                 ↓
+"A service that runs on a machine I operate"
+```
+
+This is not merely a new tool in the toolbox. It introduces an entirely new class of problems:
+
+* state that survives process death;
+* environment that differs from the development machine;
+* code delivery between machines;
+* authentication between systems rather than between a person and a site;
+* automatic recovery after reboot;
+* verification that happens independently of the developer.
+
+### Calibration
+
+The student successfully completed a guided end-to-end deployment and independently diagnosed several failures.
+
+This does **not** yet constitute independent operational expertise. The student has not yet:
+
+* deployed a service from scratch without dialogue;
+* operated a multi-service system;
+* configured reverse proxy, HTTPS, or authentication;
+* administered PostgreSQL;
+* performed a real backup-and-restore cycle;
+* written a meaningful test suite autonomously.
+
+The correct description remains **intermediate**, now with a first real deployment behind them.
 
 ---
 
@@ -93,11 +141,23 @@ Examples include:
 * asking what happens when an infrastructure component changes;
 * questioning how an HTTP API can coexist with the existing CLI.
 
+### Additional evidence — Module 11
+
+* asking why GitHub abolished passwords for Git operations;
+* immediately challenging the answer: "but can't a key leak just like a password?";
+* asking what a daemon actually is and why it is called a daemon;
+* asking whether `0.0.0.0` is really necessary and what a specific IP would do instead;
+* asking how Docker physically redirects a request from the host IP to the container IP;
+* asking why `COPY . .` contains two dots;
+* asking whether configuration files belong in a volume.
+
 ### Educational implication
 
 New concepts should begin with the problem they solve.
 
 The mentor should avoid presenting architectural patterns as arbitrary rules.
+
+Module 11 additionally confirms that the student is not satisfied with a correct-looking command. They want the mechanism underneath it.
 
 ---
 
@@ -125,6 +185,14 @@ Examples include:
 This is useful evidence of developing architectural intuition.
 
 However, these discoveries should not automatically be interpreted as broad architecture mastery. Most were developed within known project contexts and with some degree of guidance.
+
+### Additional evidence — Module 11
+
+* independently concluded that container-local data is disposable and must be externalized;
+* correctly distinguished build-time configuration from run-time configuration;
+* proposed separating client-side presentation (exports, charts, files) from server-side logic;
+* proposed splitting CI into separate jobs by test category;
+* recognized that hard-coded paths are a design problem, not only a Docker problem.
 
 ### Educational implication
 
@@ -154,9 +222,21 @@ A recurring question is effectively:
 
 This is particularly visible in the QR Warehouse and Gaffer Sandbox projects.
 
+### Additional evidence — Module 11
+
+The student repeatedly reasoned correctly about lifecycle questions before being taught the terminology:
+
+* what happens to the database when the container is deleted;
+* what happens when the volume itself is deleted;
+* what happens to configuration when a new empty volume replaces an old one;
+* what happens to a foreground process when the SSH session closes;
+* whether a test suite can be manipulated to produce a false green result.
+
 ### Educational implication
 
 Prefer realistic problems with competing constraints over purely mechanical exercises.
+
+Lifecycle and failure questions are now a particularly productive entry point for this student.
 
 ---
 
@@ -176,6 +256,22 @@ This was particularly visible with:
 * HTTP API architecture.
 
 Mental models have consistently helped resolve these conceptual boundaries.
+
+### Module 11 extension
+
+The same pattern appeared with infrastructure terminology:
+
+* daemon;
+* image versus container;
+* volume versus container;
+* bind mount versus named volume;
+* build-time versus run-time;
+* port mapping;
+* detached mode.
+
+The student explicitly refused to proceed on the basis of unexplained flags:
+
+> "Я не очень понимаю, что значит COPY . . и что значат все эти флаги"
 
 ### Educational implication
 
@@ -214,6 +310,22 @@ Examples include:
 
 At the same time, independent architectural judgment across unfamiliar systems has not yet been sufficiently tested.
 
+### Refinement after Module 11
+
+The earlier judgment about synchronous SQLite has **evolved rather than been contradicted**.
+
+In Module 09 the student concluded that async conversion was unnecessary. In Module 11 the student identified the synchronous driver as a genuine product limitation, connected it to their unused async/await knowledge, and connected PostgreSQL to both employability and commercial readiness.
+
+The difference is context: the project is no longer framed as an exercise.
+
+### Additional Module 11 evidence of pragmatism
+
+* chose to keep SQLite for the first deployment rather than expand the module's scope;
+* declined to add a coverage threshold while the suite is shallow;
+* declined to implement backups for disposable test data on a capacity-constrained disk;
+* justified backup frequency using actual business cadence rather than a generic rule;
+* agreed to skip a redundant `--build` experiment after demonstrating understanding.
+
 ### Educational implication
 
 Every architectural concept should include:
@@ -223,6 +335,8 @@ Every architectural concept should include:
 * what it costs;
 * what simpler alternative exists;
 * what future change would justify introducing it.
+
+Module 11 shows that the student can now participate in this trade-off discussion rather than only receive it.
 
 ---
 
@@ -240,6 +354,21 @@ The student regularly distinguishes between:
 This is important because the student has sometimes developed strong solutions while simultaneously recognizing gaps in knowledge.
 
 The mentor should preserve this calibration rather than replacing it with exaggerated labels.
+
+### Additional evidence — Module 11
+
+The student openly stated:
+
+* "Я пока не знаю, как устроена файловая система докера изнутри";
+* "я не особо понимаю" regarding port redirection;
+* "Я не знаю, что значит флаг -t";
+* an explicit admission that they dislike writing tests and that existing tests were written formally rather than from conviction.
+
+These are high-quality signals. The student does not manufacture confidence to satisfy the mentor.
+
+### Educational implication
+
+Preserve and reward explicit uncertainty. Never allow a green CI badge or a running container to be interpreted as proof of understanding.
 
 ---
 
@@ -269,6 +398,122 @@ Whenever possible, introduce abstract concepts through realistic domain problems
 
 ---
 
+## 3.8 Transfer of Existing Mental Models
+
+**Confidence:** Medium-High
+
+**First clearly recorded in Module 11.**
+
+The student repeatedly reused previously learned models to approach unfamiliar infrastructure:
+
+* class versus object → image versus container;
+* recipe → Dockerfile;
+* isolated kitchen → virtual environment;
+* hotel room versus bank safe → container versus volume;
+* key versus spoken code → SSH key versus password.
+
+Importantly, the student also transferred a **wrong** model initially:
+
+* described an image as "a snapshot of a container";
+* described a volume as "a separate container";
+* assumed the base image should mirror the server's operating system;
+* assumed `routes.py` was an executable file.
+
+Each misconception was corrected through dialogue and did not persist.
+
+### Educational implication
+
+Elicit the student's existing model before introducing a new one.
+
+Then explicitly test where the analogy breaks. Analogy-based learning is effective for this student, but broken analogies become durable misconceptions if left uncorrected.
+
+---
+
+## 3.9 Self-Diagnosis and Verification
+
+**Confidence:** High
+
+**First clearly demonstrated in Module 11.**
+
+The student independently located and resolved several failures:
+
+* identified that CI did not trigger because the workflow's branch filter did not match the working branch;
+* recognized that `pip` had installed stale dependencies because `requirements.txt` had not been pushed;
+* chose the Git-based repair path rather than editing the file directly on the server;
+* noticed after reboot that data was absent and correctly traced it to an earlier volume reset.
+
+This is a meaningful shift from "tell me what to do" to "here is what I observed, here is my hypothesis".
+
+### Educational implication
+
+Provide diagnostic space before supplying the answer.
+
+Productive questions now include:
+
+> What would you check first?
+
+> Which part of this output actually failed?
+
+> What evidence would confirm or refute your hypothesis?
+
+---
+
+## 3.10 Willingness to Question the Method Itself
+
+**Confidence:** Medium, emerging
+
+**First clearly recorded in Module 11.**
+
+The student began questioning the educational structure, not only the technical content:
+
+* "Чему у нас посвящен модуль? Если модуль чисто про докер, то я не вижу смысла изучать постгрес внутри него";
+* asked whether test results can be falsified by rewriting the tests;
+* proposed restructuring CI jobs by test category;
+* declined an exercise that would add no new information.
+
+This is a sign of growing ownership over the learning process.
+
+### Educational implication
+
+Answer scope questions explicitly and honestly.
+
+Treat student criticism of an exercise as curriculum-design evidence, not as resistance.
+
+---
+
+## 3.11 Commercial and Product Awareness
+
+**Confidence:** Medium-High, emerging
+
+**First clearly recorded in Module 11.**
+
+The student explicitly reframed the project:
+
+> "я давно перестал думать об этом проекте как об учебном"
+
+They articulated:
+
+* an intended buyer (a company);
+* an approximate customer and project cadence;
+* a change frequency for the equipment catalog;
+* a disk-capacity constraint on the current server;
+* a career motivation for learning PostgreSQL;
+* a future client/server split of the application.
+
+### Educational implication
+
+Use this as a source of realistic constraints.
+
+At the same time, distinguish carefully between:
+
+* a problem that exists now;
+* a problem that will exist at commercial scale;
+* a problem that belongs to a different module.
+
+The student's commercial vision is an asset. It must not become a source of premature scope expansion.
+
+---
+
 # 4. Learning Preferences
 
 | Aspect                       | Current Observation                                     |
@@ -282,6 +527,16 @@ Whenever possible, introduce abstract concepts through realistic domain problems
 | **Testing**                  | Learn through behavior and failure cases                |
 | **Least Effective Approach** | Memorization without context or unexplained terminology |
 
+### Additional preferences observed in Module 11
+
+| Aspect                       | Current Observation                                     |
+| ---------------------------- | ------------------------------------------------------- |
+| **Infrastructure Learning**  | Lifecycle and data-flow models before commands          |
+| **Failure Analysis**         | Diagnose the actual failing component before fixing     |
+| **Scope Negotiation**        | Explicit module boundaries and recorded deferrals       |
+| **Exercise Selection**       | May skip a drill once reasoning is demonstrated         |
+| **Pacing**                   | Wants to move to practice once the concept is clear     |
+
 The student responds particularly well to questions such as:
 
 > What happens if X changes?
@@ -291,6 +546,18 @@ The student responds particularly well to questions such as:
 > What would break if this dependency were replaced?
 
 > Is this abstraction solving a real problem?
+
+### Additional productive questions from Module 11
+
+> What happens to this data when the container is deleted?
+
+> Which layer owns this decision: build time or run time?
+
+> Is this needed now, or in the next module?
+
+> What would you check first?
+
+> Where does this file physically live?
 
 ---
 
@@ -524,7 +791,7 @@ Major developments included:
 The key conceptual shift was:
 
 ```text
-CLI ───────┐
+CLI ───────
            ↓
      Presentation
            ↓
@@ -554,6 +821,157 @@ It should consolidate application development through:
 * deeper database work;
 * deployment;
 * independent implementation.
+
+---
+
+## Module 11
+
+### Home Server, Linux, Docker, CI/CD
+
+The student moved from developing an application to operating a service on a separate machine.
+
+This module was conducted on a real home server (`homelab`, Ubuntu 26.04 LTS), not in a simulated environment.
+
+### Server and network foundations
+
+* SSH access under a regular user rather than root;
+* understanding of `sudo` and least privilege;
+* interpretation of `ip addr` output;
+* distinction between dynamic DHCP assignment and a stable address;
+* creation of a DHCP reservation on the router;
+* verification of reconnection after reboot.
+
+### Code delivery between machines
+
+* GitHub as a single source of truth;
+* the local → staging → commit → push → remote model;
+* generation of a server-side SSH key pair;
+* understanding of why passwords were replaced by keys and tokens for Git operations;
+* the distinction between a private key and a public key;
+* cloning the repository over SSH;
+* feature-branch isolation for infrastructure work.
+
+### Baseline before containerization
+
+* installation of `pip` and `venv`;
+* creation of a virtual environment on the server;
+* execution of the existing test suite as a known-working baseline;
+* recovery from a stale `requirements.txt` caused by an unpushed local change;
+* deliberate choice of the Git-based repair rather than server-side file editing.
+
+### Docker concepts
+
+* daemon versus client;
+* image versus container;
+* layers and build caching;
+* `FROM`, `WORKDIR`, `COPY`, `RUN`, `CMD`;
+* dependency-first layer ordering;
+* `.dockerignore` and defensive exclusion patterns;
+* the relationship between build context and container filesystem;
+* why existing relative paths in the application did not require rewriting.
+
+### Persistence
+
+* understanding that container-local state is disposable;
+* named volumes as independent storage;
+* volume mount points as "doors" rather than copies;
+* volume population on first use;
+* separation of code and configuration (image) from user data (volume);
+* an explicit persistence test: create data → delete container → recreate container → verify data survived.
+
+### Runtime and orchestration
+
+* port mapping (`host:container`) and its relationship to `--host 0.0.0.0`;
+* detached mode;
+* image tagging;
+* Docker Compose as Infrastructure as Code;
+* service definitions, port mappings, volume declarations;
+* `up`, `down`, `ps`, `logs`;
+* the difference between `up -d` and `up -d --build`;
+* restart policies;
+* verification of automatic service startup after a full server reboot.
+
+### Continuous Integration
+
+* GitHub Actions as an independent verification environment;
+* workflow triggers and branch filters;
+* checkout → setup Python → install dependencies → run tests;
+* diagnosis of a non-triggering workflow caused by a branch mismatch;
+* generalization of the trigger to `feature/**`;
+* discussion of what a failing check does and does not prevent;
+* discussion of test falsification and defense in depth (review, coverage, security scanning, culture).
+
+### Operational decisions made by the student
+
+* **PostgreSQL deferred** to a dedicated module, with explicit reasoning about scope and depth of learning;
+* **SQLite retained** for the first deployment;
+* **Backups deferred** after reviewing the mechanism, with reasoning about data value, change cadence, and disk capacity;
+* **Coverage thresholds deferred** until the test suite is meaningful;
+* **Application rewrite refused as part of infrastructure work** after discussion of scope creep;
+* **CI kept minimal** (one job) until the project justifies splitting it.
+
+### Failures encountered and diagnosed
+
+* a pre-existing broken `amneziawg-dkms` package blocked `apt`; the student learned to distinguish "my change failed" from "an unrelated system component was already broken";
+* stale dependencies installed from an unpushed `requirements.txt`;
+* CI did not trigger because of a branch filter mismatch;
+* data was absent after the final reboot because a volume had been reset during an earlier exploratory step.
+
+### Key conceptual shift
+
+```text
+Code on my machine
+        ↓
+Service on a machine I operate
+        ↓
+Infrastructure I can rebuild from a file
+```
+
+And, within that infrastructure:
+
+```text
+Image      = definition
+Container  = ephemeral execution
+Volume     = persistent state
+Compose    = declared topology
+CI         = independent verification
+```
+
+### Calibration: what was and was not demonstrated
+
+**Demonstrated:**
+
+* completing a guided end-to-end deployment;
+* verifying persistence through a controlled experiment;
+* verifying automatic startup after reboot;
+* independently diagnosing branch, dependency, and package failures;
+* making and justifying scope decisions.
+
+**Not demonstrated:**
+
+* deploying independently from an empty machine without dialogue;
+* operating multiple interacting services;
+* reverse proxy, HTTPS, authentication, or secrets management;
+* PostgreSQL administration or migration;
+* a real backup-and-restore cycle;
+* autonomous authorship of a meaningful test suite.
+
+**Important verification caveat:**
+
+The final reboot verified **service recovery**, not **data survival**. The volume had been reset earlier during exploration, so the database was intentionally empty at that point. Persistence itself had been verified in a separate earlier test.
+
+These are two different claims and must not be merged into one.
+
+### Methodology change
+
+The next stage should not add more frameworks.
+
+It should:
+
+* deepen one subsystem at a time (PostgreSQL as its own module);
+* increase test depth and connect tests to their actual engineering purpose;
+* progressively reduce guidance during operational work;
+* preserve the distinction between "it ran" and "I can reproduce and explain it".
 
 ---
 
@@ -604,6 +1022,8 @@ The student has practical experience with:
 
 The remaining challenge is increasing test depth and independence.
 
+**Module 11 addition:** the student now understands the *role* tests play in a delivery pipeline. This is a motivational and architectural advance, not yet a quantitative improvement in test coverage or test authorship skill.
+
 ### HTTP APIs
 
 The student can build and reason about basic FastAPI endpoints and understands that endpoints should translate between HTTP and application-level operations.
@@ -613,6 +1033,47 @@ The student can build and reason about basic FastAPI endpoints and understands t
 The student increasingly treats AI as a tool whose output must be understood and evaluated rather than blindly copied.
 
 This should continue to develop toward independent implementation and code review.
+
+### Deployment and containerization
+
+**Added after Module 11.**
+
+The student can now work with:
+
+* a Dockerfile and its layer ordering;
+* `.dockerignore` and build context;
+* images, containers, and their different lifecycles;
+* named volumes and persistence requirements;
+* port mapping and network exposure;
+* Docker Compose as declarative infrastructure;
+* restart policies and reboot recovery.
+
+This competence was demonstrated on real hardware and was verified through observation, not only through explanation.
+
+### Infrastructure debugging
+
+**Added after Module 11.**
+
+The student demonstrated the ability to:
+
+* read a long package-manager log and identify the actually failing component;
+* distinguish a local change from a remote state;
+* trace a CI non-trigger to its configuration cause;
+* reconnect to a server after reboot and verify service state;
+* notice that an expected result was missing and propose a cause.
+
+### Operational judgment
+
+**Added after Module 11.**
+
+The student can now participate in decisions about:
+
+* what belongs in an image versus a volume;
+* what belongs in this module versus the next one;
+* what is required now versus at commercial scale;
+* which verification is sufficient for which claim.
+
+This is emerging judgment, still dependent on dialogue, but no longer purely receptive.
 
 ---
 
@@ -670,6 +1131,67 @@ The most important current gaps are:
 The student has demonstrated strong performance in known project contexts.
 
 The next important progression is applying the same reasoning to unfamiliar requirements and codebases with progressively less guidance.
+
+---
+
+## Revision after Module 11
+
+The lists above are retained as the historical gap assessment. The following table records the current state based on new evidence.
+
+| Area                       | Previous status | Current evidence                                  | Remaining gap                                        |
+| -------------------------- | --------------- | ------------------------------------------------- | ---------------------------------------------------- |
+| Linux server environment   | Unaddressed     | SSH, users, sudo, packages, reboot, service checks | Independent administration of an unfamiliar system   |
+| Docker                     | Unaddressed     | Image, container, volume, Compose, restart policy  | Multi-service topology, networking, production hardening |
+| Deployment workflows       | Unaddressed     | Git → build → run → verify; CI pipeline            | End-to-end independent deployment without guidance   |
+| Process management         | Unaddressed     | Detached containers, restart policies             | systemd, resource limits, health checks              |
+| Backups                    | Unaddressed     | Mechanism discussed and understood conceptually   | No implemented backup; no restore drill              |
+| Reverse proxy / HTTPS      | Unaddressed     | Not attempted                                     | Entirely open                                        |
+| Logging / monitoring       | Unaddressed     | Container logs read and interpreted               | Structured logging, aggregation, alerting            |
+| PostgreSQL                 | Unaddressed     | Deliberately deferred by agreement                | Entirely open; next dedicated module                 |
+| Testing                    | Shallow         | CI now executes the existing suite automatically  | Suite depth, autonomy of authorship, coverage        |
+| Async programming          | Conceptual only | Synchronous driver identified as a real limitation| No applied async database work                       |
+
+### Interpretation
+
+Several items previously listed as gaps are now **partially addressed**, not closed.
+
+The distinction matters:
+
+* the student has seen and operated a mechanism;
+* the student cannot yet reproduce it independently under unfamiliar conditions.
+
+### Testing motivation — explicit observation
+
+Module 11 produced an unusually clear self-report:
+
+> the student dislikes writing tests; existing tests were written formally, without understanding their role in a delivery pipeline.
+
+The student now articulates the correct purpose of tests:
+
+* they protect behavior across changes;
+* they run independently of the author;
+* they serve the future maintainer, including the future self.
+
+This is a genuine conceptual shift. It has not yet produced a larger or deeper suite.
+
+**Agreed approach:**
+
+* keep CI running the existing suite;
+* do not impose a coverage threshold while the suite is shallow;
+* grow tests incrementally when real change or real risk justifies them;
+* do not treat a green badge as evidence of product quality.
+
+### Deployment gaps that remain open
+
+* reverse proxy and TLS termination;
+* authentication and authorization;
+* secrets management;
+* structured logging and observability;
+* health checks and monitoring;
+* backup and restore drills;
+* multi-container networking;
+* database migrations and schema versioning;
+* zero-downtime or controlled-update deployment.
 
 ---
 
@@ -802,6 +1324,114 @@ value = thing stored there
 ```
 
 and use explicit mappings when user-facing numbers represent database identifiers.
+
+---
+
+## 8.6 Local vs Remote State Synchronization
+
+**Status:** New, observed in Module 11
+
+The student repeatedly encountered a gap between what exists locally and what exists remotely:
+
+* an edited `requirements.txt` was committed or present locally but not pushed, so the server cloned an outdated version;
+* a CI workflow was written for one branch while the actual work moved to another.
+
+In both cases the reasoning was correct; the **state assumption** was wrong.
+
+### Action
+
+Before building or deploying, explicitly verify:
+
+```text
+Which branch am I on?
+What is actually on the remote?
+Which revision will the server receive?
+```
+
+Useful habits:
+
+* `git status`;
+* `git log --oneline`;
+* `git remote -v`;
+* checking the remote file tree after a push.
+
+This difficulty is procedural, not conceptual, and is highly trainable.
+
+---
+
+## 8.7 Environment Parity Assumptions
+
+**Status:** Improving
+
+The student initially assumed that the server environment would resemble the development machine.
+
+Observed gaps included:
+
+* `pip` not installed;
+* no virtual environment;
+* no project dependencies;
+* a different package set than expected.
+
+By the end of the module the student understood why the container must carry its own environment rather than rely on the host.
+
+### Action
+
+Continue framing deployment as:
+
+```text
+Do not assume the target machine.
+Declare it.
+```
+
+Docker and Compose are the current instruments for that declaration.
+
+---
+
+## 8.8 Reading System-Level Failure Output
+
+**Status:** Improving
+
+During Module 11 the student faced a long `apt`/`dpkg` log in which the requested packages installed successfully but an unrelated pre-existing package failed to configure.
+
+The initial reading was that the installation had failed.
+
+After guidance, the student could identify:
+
+* which packages were actually set up;
+* which component failed;
+* why an unrelated broken package blocks future operations.
+
+### Action
+
+Teach a consistent reading order for long logs:
+
+```text
+What was requested?
+What succeeded?
+What actually failed?
+Is this failure caused by my change or by pre-existing state?
+```
+
+This is a transferable operational skill, not a one-off fix.
+
+---
+
+## 8.9 Command and Flag Fluency
+
+**Status:** Improving
+
+The student did not initially recognize:
+
+* `-t`, `-d`, `-p` in Docker commands;
+* the two-argument form of `COPY`;
+* the module-object syntax used by uvicorn;
+* the meaning of `0.0.0.0`.
+
+Each was resolved through explicit explanation rather than memorization.
+
+### Action
+
+Continue Adjustment 002. Never introduce an unexplained flag into an instruction for this student.
 
 ---
 
@@ -980,6 +1610,166 @@ The student should be encouraged to:
 
 ---
 
+## Adjustment 015 — One Subsystem at a Time
+
+**Status:** Active, added after Module 11
+
+Infrastructure work must not become an excuse for an application rewrite.
+
+When the student proposes simultaneous changes to code architecture and deployment architecture, separate them into distinct stages with a verified working state between them.
+
+Module 11 demonstrated the value of this constraint: the existing application was containerized without modification, which made every failure attributable to infrastructure rather than to a rewrite.
+
+---
+
+## Adjustment 016 — Establish a Baseline Before Containerizing
+
+**Status:** Active, added after Module 11
+
+Before packaging an application, verify that it runs in a plain environment on the target machine.
+
+This separates two questions that are otherwise conflated:
+
+```text
+Does the application work here?
+Does the container work?
+```
+
+---
+
+## Adjustment 017 — Persistence Must Be Demonstrated, Not Assumed
+
+**Status:** Active, added after Module 11
+
+For any stateful service, require an explicit survival test:
+
+```text
+Create data
+    ↓
+Destroy the container
+    ↓
+Recreate the container
+    ↓
+Verify the data
+```
+
+Reading an explanation of volumes is not equivalent to observing persistence.
+
+Equally, verify **which claim** a test supports. A reboot test that shows a running service does not prove data survival if the volume was reset beforehand.
+
+---
+
+## Adjustment 018 — Treat Failures as Diagnostic Material
+
+**Status:** Active, added after Module 11
+
+Broken packages, stale remote files, and non-triggering workflows are not interruptions to the lesson. They are the lesson.
+
+The mentor should resist immediately supplying the fix and instead guide the student through:
+
+```text
+Observation
+    ↓
+Hypothesis
+    ↓
+Verification
+    ↓
+Repair
+    ↓
+Re-verification
+```
+
+Module 11 produced some of the strongest independent reasoning during exactly these moments.
+
+---
+
+## Adjustment 019 — Separate Build Time From Run Time Explicitly
+
+**Status:** Active, added after Module 11
+
+For infrastructure topics, maintain a visible boundary between:
+
+* what is baked into an artifact;
+* what is decided when the artifact is executed.
+
+Confusion between these two layers was a recurring source of questions in Module 11 and was resolved whenever the boundary was named explicitly.
+
+---
+
+## Adjustment 020 — Verify Remote State Before Assuming Deployment Correctness
+
+**Status:** Active, added after Module 11
+
+Before issuing build or deploy instructions, confirm:
+
+* the current branch;
+* the remote URL;
+* whether local changes have been pushed;
+* which revision the target machine will receive.
+
+Two separate Module 11 failures originated from incorrect state assumptions rather than incorrect technical understanding.
+
+---
+
+## Adjustment 021 — Negotiate and Record Scope Explicitly
+
+**Status:** Active, added after Module 11
+
+When a student asks whether a technology belongs in the current module, answer directly.
+
+Then record:
+
+* the decision;
+* the reasoning;
+* what is deliberately deferred;
+* where the deferred work will appear.
+
+Module 11's decisions to defer PostgreSQL and backups were sound and should be preserved as decisions, not forgotten as omissions.
+
+---
+
+## Adjustment 022 — Connect Testing to Its Actual Engineering Purpose
+
+**Status:** Active, added after Module 11
+
+For this student, abstract arguments for testing were insufficient.
+
+The effective reframing was:
+
+```text
+A test is a contract with the future maintainer.
+CI enforces that contract independently of the author.
+```
+
+Continue connecting test authorship to real change and real risk rather than to coverage quotas.
+
+---
+
+## Adjustment 023 — Allow the Student to Decline a Redundant Exercise
+
+**Status:** Active, added after Module 11
+
+When the student demonstrates correct reasoning about a mechanism, an additional confirming drill may add little value.
+
+Module 11 included a justified decision to skip a planned `--build` experiment. This should be treated as evidence of efficiency, not as avoidance.
+
+The mentor should distinguish:
+
+* "I don't want to do the work" — investigate;
+* "I already understand this mechanism" — verify the reasoning and move on.
+
+---
+
+## Adjustment 024 — Pace Theory Against demonstrated Readiness
+
+**Status:** Active, added after Module 11
+
+The student signals clearly when a concept has landed and wants to proceed to practice.
+
+Extended Socratic sequences remain valuable for genuinely difficult concepts, but should not be prolonged once the student can already predict the behavior correctly.
+
+---
+
 # 10. Mentor Notes — Current State
 
 The student has now moved beyond introductory Python and OOP into practical application development.
@@ -1028,6 +1818,66 @@ The next phase should therefore focus less on accumulating design patterns and m
 
 ---
 
+## Revision after Module 11
+
+The deployment node in the diagram above is no longer abstract.
+
+The student has now stood on the other side of it: they have operated a machine, moved code between machines, packaged an application, externalized its state, and observed it recover after a reboot.
+
+This produces a new kind of learning material. From now on, architectural questions can be grounded in operational consequences:
+
+> What happens to this abstraction when it runs inside a container?
+
+> Which layer should own configuration if the environment changes?
+
+> What does this design cost when we need to migrate databases?
+
+> What breaks if two instances share one file?
+
+### Observations about the mentor's own practice
+
+Module 11 also produced evidence about the teaching process itself.
+
+**1. Confirm state before issuing commands.**
+
+The CI branch mismatch and the stale `requirements.txt` were partly enabled by the mentor generating instructions against an assumed branch and an assumed remote state. Future instructions should begin from verified state.
+
+**2. Separate exploration from verification artifacts.**
+
+An exploratory volume reset during the module destroyed the data that would later have served as evidence in the reboot test. Experimental destruction should use a separate, clearly disposable volume so that the primary verification artifact remains intact.
+
+**3. Do not let an example silently define the scope.**
+
+A mentor's illustration can become an implicit commitment. When PostgreSQL was raised, the student rightly asked whether it belonged in this module at all. Scope must be negotiated explicitly.
+
+**4. Accept calibrated refusal.**
+
+The student's decisions to defer PostgreSQL, backups, and coverage thresholds were better reasoned than a default "do everything" approach. The mentor should support such decisions and record their trade-offs rather than pushing for completeness.
+
+**5. Distinguish execution from understanding.**
+
+A running container and a green CI check are weak evidence on their own. The stronger evidence in Module 11 was the student's ability to predict what would happen to data under deletion, and to diagnose why a pipeline did not run.
+
+### Current positioning
+
+The student is an application developer with a first real deployment behind them.
+
+They are not yet an independent operator, and should not be described as one.
+
+The next meaningful progression is not "learn another tool". It is:
+
+```text
+Guided deployment
+        ↓
+Reproducible deployment
+        ↓
+Independent deployment
+        ↓
+Independent operational design
+```
+
+---
+
 # 11. Emerging Learning Pattern
 
 The student learns most effectively when:
@@ -1060,6 +1910,67 @@ System boundaries
 ```
 
 This recursive deepening should remain a central feature of the curriculum.
+
+---
+
+## Additional patterns observed in Module 11
+
+The student learns particularly well when:
+
+* the consequence of a lifecycle event can be predicted before it is demonstrated;
+* a familiar model can be transferred to an unfamiliar domain and then explicitly corrected;
+* the failure is real rather than simulated;
+* the student is allowed to challenge the premise of a question;
+* the boundary of the current learning unit is stated explicitly;
+* the student can connect a technical decision to a business or career consequence.
+
+A second recursive deepening sequence is now available:
+
+```text
+Container
+   ↓
+Why the environment must be isolated
+   ↓
+Image versus container
+   ↓
+Build time versus run time
+   ↓
+Where state belongs
+   ↓
+System lifecycle and recovery
+```
+
+A third, still emerging:
+
+```text
+Test
+   ↓
+Behavior contract
+   ↓
+Automated enforcement
+   ↓
+Independent verification
+   ↓
+Trust in a delivery process
+   ↓
+Limits of that trust
+```
+
+### A new characteristic of the student's questions
+
+Earlier modules produced questions of the form:
+
+> Where should this responsibility live?
+
+Module 11 added questions of the form:
+
+> What happens to this when the thing that owns it disappears?
+
+And, at the methodological level:
+
+> Why is this topic in this module at all?
+
+Both are signs of progressing from component-level reasoning to system-level and process-level reasoning.
 
 ---
 
@@ -1113,6 +2024,67 @@ The next major development areas should include:
    * deciding when AI should and should not be used;
    * maintaining independent technical judgment.
 
+### Status of these areas after Module 11
+
+Area 4 has been partially addressed: Linux fundamentals, Docker, Compose, and a first deployment workflow are now demonstrated.
+
+Still open within area 4:
+
+* reverse proxy;
+* HTTPS;
+* secrets management;
+* monitoring and structured logging;
+* backup and restore drills.
+
+Area 2 remains the next major focused effort.
+
+---
+
+## 7. Database migration — next agreed module
+
+**Explicitly deferred from Module 11 by student decision.**
+
+Planned scope:
+
+* PostgreSQL as a second service in a Compose topology;
+* Docker networking between application and database;
+* connection configuration through environment variables;
+* `asyncpg` and genuine async database access;
+* connection pooling;
+* schema migrations with Alembic;
+* transaction behavior and concurrency;
+* indexes and query planning;
+* PostgreSQL backup and restore (`pg_dump`, recovery procedures);
+* replacement of the SQLite infrastructure adapter without rewriting the domain layer.
+
+The last item is a deliberate architectural test: the boundaries established in Modules 07–09 should make this migration possible without touching business logic.
+
+---
+
+## 8. Operational depth
+
+After the database migration:
+
+* reverse proxy and TLS termination;
+* authentication and authorization;
+* secrets management;
+* structured logging;
+* health checks and monitoring;
+* scheduled backup with a verified restore procedure;
+* controlled application updates.
+
+---
+
+## 9. Testing as a product requirement
+
+Reframe test work from "an exercise I dislike" to "a maintenance asset a buyer will inspect":
+
+* Use Case tests that protect business invariants;
+* API contract tests;
+* repository and transaction tests;
+* migration tests;
+* a coverage threshold introduced only once the suite is meaningful.
+
 ---
 
 # 13. Long-Term Principle
@@ -1155,4 +2127,29 @@ The curriculum should continue moving toward independent problem solving without
 
 ---
 
-*End of Development Log v2.0*
+## Position update after Module 11
+
+Module 11 provides the first concrete evidence for the stage:
+
+> "I can modify it safely."
+
+The student containerized a working application without rewriting it, externalized its state, verified persistence, verified recovery, and added an independent verification pipeline.
+
+The following stage remains open:
+
+> "I can design a solution myself."
+
+In the deployment domain this means being able to look at an unfamiliar service and independently decide:
+
+* how it should be packaged;
+* where its state belongs;
+* how it should be exposed;
+* how it should be verified;
+* how it should be backed up and recovered;
+* what should be deferred and why.
+
+Module 11 moved the student from having never performed these actions to performing them with guidance. The next modules should move them toward performing them without it.
+
+---
+
+*End of Development Log v3.0*

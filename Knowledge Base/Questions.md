@@ -1,6 +1,6 @@
 # Questions
 
-**Version:** 2.0
+**Version:** 2.1
 **Status:** Active
 **Maintained by:** AI Programming Mentor
 
@@ -229,32 +229,6 @@ This question represents a product-development problem rather than a single prog
 
 ---
 
-## Q-0037 — How do I deploy a FastAPI application to a production server?
-
-**Status:** Open
-**Priority:** Medium
-
-The student can currently run and test a FastAPI application locally.
-
-The production deployment question remains open.
-
-Relevant topics:
-
-* Uvicorn;
-* production process management;
-* environment variables;
-* reverse proxy;
-* HTTPS;
-* Docker;
-* database configuration;
-* migrations;
-* logging;
-* monitoring;
-* backups;
-* deployment workflow.
-
----
-
 ## Q-0038 — How do I implement authentication and authorization for a multi-user Web API?
 
 **Status:** Open
@@ -278,6 +252,130 @@ This is particularly relevant to the future QR Warehouse system.
 
 ---
 
+## Q-0039 — How do I migrate from SQLite to PostgreSQL without rewriting business logic?
+
+**Status:** Open
+**Priority:** High
+
+The student explicitly deferred PostgreSQL migration to a dedicated module, recognizing it as a substantial architectural change.
+
+Relevant topics:
+
+* asyncpg vs sqlite3;
+* asynchronous database drivers;
+* connection pooling;
+* PostgreSQL-specific features;
+* schema migrations with Alembic;
+* repository pattern for database abstraction;
+* dependency injection for swapping implementations;
+* testing with in-memory vs real database;
+* data migration between SQLite and PostgreSQL.
+
+This question directly connects to the Repository Pattern (Q-0018) and Dependency Inversion (Q-0020) already mastered in earlier modules.
+
+---
+
+## Q-0040 — How do I implement automated backups and disaster recovery for a production system?
+
+**Status:** Open
+**Priority:** Medium
+
+The student discussed the backup mechanism conceptually but deferred implementation, correctly reasoning that test data does not require frequent backups.
+
+Relevant topics:
+
+* SQLite file backup strategies;
+* PostgreSQL pg_dump and WAL archiving;
+* backup scheduling (cron);
+* offsite storage;
+* restore procedures;
+* backup verification;
+* retention policies;
+* point-in-time recovery.
+
+This is a production operations question that will become critical when QR Warehouse moves to commercial deployment.
+
+---
+
+## Q-0041 — How do Docker layers work and why does build order matter?
+
+**Status:** Open
+**Priority:** Medium
+
+The student understands that Dockerfile instructions create layers and that dependency installation should precede code copying for caching.
+
+The remaining question concerns the internal mechanisms:
+
+* OverlayFS and copy-on-write;
+* layer caching behavior;
+* multi-stage builds;
+* layer size optimization;
+* build context and `.dockerignore`;
+* image size reduction;
+* security implications of layer contents.
+
+---
+
+## Q-0042 — How do Docker containers communicate over networks?
+
+**Status:** Open
+**Priority:** Medium
+
+The student understands port mapping (`-p host:container`) and `0.0.0.0` binding, but has not yet worked with multi-container networking.
+
+Relevant topics:
+
+* Docker bridge networks;
+* container-to-container communication;
+* service discovery by name;
+* Docker Compose networking;
+* network isolation;
+* exposing vs publishing ports;
+* internal vs external network access.
+
+This will become important when adding PostgreSQL as a second service.
+
+---
+
+## Q-0043 — How do I manage secrets and environment variables in Docker?
+
+**Status:** Open
+**Priority:** Medium
+
+The student used hardcoded configuration in the current deployment. Production systems require secure secret management.
+
+Relevant topics:
+
+* environment variables in Docker;
+* `.env` files;
+* Docker secrets;
+* secret management tools (Vault, AWS Secrets Manager);
+* avoiding secrets in images;
+* runtime vs build-time secrets;
+* Git security and `.gitignore` for sensitive files.
+
+---
+
+## Q-0044 — How do I set up HTTPS and reverse proxy for a production API?
+
+**Status:** Open
+**Priority:** Medium
+
+The current deployment uses plain HTTP on port 8000. Production deployment requires TLS termination and proper routing.
+
+Relevant topics:
+
+* Nginx or Traefik as reverse proxy;
+* TLS/SSL certificates;
+* Let's Encrypt automation;
+* HTTP to HTTPS redirection;
+* proxy headers (X-Forwarded-For, X-Real-IP);
+* load balancing;
+* rate limiting;
+* security headers.
+
+---
+
 # 4. Discussing
 
 There are currently no questions in the Discussing state.
@@ -288,9 +386,44 @@ When a new module directly addresses an Open question, the mentor should move th
 
 # 5. Answered
 
-There are currently no questions that require the intermediate Answered state.
+## Q-0037 — How do I deploy a FastAPI application to a production server?
 
-A question may use this state when the student understands the concept theoretically but has not yet demonstrated it sufficiently through practical work.
+**Status:** Answered
+
+Module 11 provided the first practical deployment experience.
+
+The student demonstrated:
+
+* SSH access to a Linux server;
+* DHCP reservation for stable addressing;
+* Git clone from GitHub;
+* Python virtual environment setup;
+* Uvicorn execution with `--host 0.0.0.0`;
+* Docker containerization with Dockerfile;
+* Volume persistence for database;
+* Docker Compose orchestration;
+* GitHub Actions CI pipeline;
+* service recovery after reboot.
+
+The student correctly identified the distinction between:
+
+```text
+Image      = definition
+Container  = ephemeral execution
+Volume     = persistent state
+```
+
+**Remaining gaps:**
+
+* reverse proxy and HTTPS (Q-0044);
+* environment variable management (Q-0043);
+* monitoring and logging;
+* health checks;
+* zero-downtime deployments;
+* multi-container networking (Q-0042);
+* production PostgreSQL (Q-0039).
+
+The question has moved from Open to Answered because the student can explain the basic deployment model and has demonstrated it in practice, but has not yet mastered production-hardened deployment patterns.
 
 ---
 
@@ -761,7 +894,7 @@ Only the presentation/translation layer differs.
 
 # 7. Current Knowledge-Gap Map
 
-After Module 09, the most important unresolved areas are:
+After Module 11, the most important unresolved areas are:
 
 ### Python internals
 
@@ -784,8 +917,8 @@ After Module 09, the most important unresolved areas are:
 * internal database architecture;
 * indexes;
 * query planning;
-* PostgreSQL;
-* migrations;
+* PostgreSQL migration (Q-0039);
+* migrations with Alembic;
 * deeper transaction and concurrency behavior.
 
 ### Testing
@@ -798,23 +931,30 @@ After Module 09, the most important unresolved areas are:
 
 ### Web development
 
-* authentication;
-* authorization;
+* authentication and authorization (Q-0038);
 * security boundaries;
-* production deployment;
-* configuration;
+* production deployment hardening;
+* HTTPS and reverse proxy (Q-0044);
+* configuration management;
 * observability.
 
 ### Production engineering
 
-* Linux server administration;
-* Docker;
-* reverse proxy;
-* HTTPS;
-* deployment;
-* logging;
-* monitoring;
-* backups.
+* Docker internals and layer optimization (Q-0041);
+* multi-container networking (Q-0042);
+* secrets management (Q-0043);
+* backup and disaster recovery (Q-0040);
+* monitoring and logging;
+* health checks;
+* zero-downtime deployments.
+
+### Linux server administration
+
+* systemd service management;
+* log rotation;
+* firewall configuration;
+* user and permission management;
+* package security updates.
 
 These gaps should guide future modules without implying that all of them must be completed before the student can build useful software.
 
@@ -910,4 +1050,4 @@ The purpose is to make the boundaries of current understanding visible so that t
 
 ---
 
-*End of Questions v2.0*
+*End of Questions v2.1*

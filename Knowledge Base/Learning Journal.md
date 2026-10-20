@@ -1,6 +1,6 @@
 # Learning Journal
 
-**Version:** 1.1
+**Version:** 1.2
 **Status:** Active
 **Owner:** Student
 **Maintained by:** AI Programming Mentor
@@ -757,6 +757,132 @@ These remain implementation-fluency issues rather than evidence that the underly
 * Tests should isolate their data where appropriate.
 * Async programming is primarily useful for concurrent I/O-bound work.
 * Synchronous SQLite access does not automatically need to become asynchronous.
+
+---
+
+### Module 11 — Home Server, Linux, Docker и CI/CD
+
+**Date:** 2026-06-03
+
+**Major Insight**
+
+Deployment is not about copying files to another machine.
+Deployment is about making an application independent of the specific environment where it was developed.
+
+The student moved from thinking of QR Warehouse as a program that runs on their own computer toward thinking of it as a service that can run on any machine where its environment is correctly declared.
+
+This shift changed the meaning of the project itself.
+QR Warehouse stopped being only a learning exercise and began being treated as a product that will eventually be shown to a real company.
+
+**What Became Clear**
+
+The most important conceptual change was the understanding that **code, environment, and data are three different things**.
+
+The student worked with:
+
+* SSH access under a regular user;
+* least privilege and `sudo`;
+* DHCP reservation for a stable address;
+* GitHub as the single source of truth;
+* SSH key pairs and passwordless authentication;
+* Docker images versus containers;
+* build-time versus run-time configuration;
+* `.dockerignore` and build context;
+* volumes as persistent storage;
+* port mapping and `0.0.0.0`;
+* Docker Compose as Infrastructure as Code;
+* restart policies;
+* GitHub Actions as independent verification.
+
+A particularly important realization was:
+
+```text
+Image      = definition
+Container  = ephemeral execution
+Volume     = persistent state
+```
+
+This distinction resolved most of the student's initial confusion about Docker.
+
+**Personal Breakthrough**
+
+The student independently diagnosed several failures without being told the answer.
+
+Examples:
+
+* recognizing that a CI workflow did not trigger because the branch filter did not match the working branch;
+* recognizing that pip installed stale dependencies because `requirements.txt` had not been pushed;
+* recognizing that data was missing after reboot because the volume had been reset earlier during exploration.
+
+These moments showed a meaningful shift from:
+
+> "Tell me what to do."
+
+toward:
+
+> "Here is what I observed, and here is my hypothesis."
+
+**Changed Understanding of Tests**
+
+The student made an unusually honest self-observation:
+
+> Existing tests were written formally, without understanding their role in a delivery pipeline.
+
+After Module 11 the student began to understand that tests are not a personal exercise.
+They are a contract with the future maintainer, enforced independently by CI.
+
+This did not immediately produce more tests, but it changed the purpose of writing them.
+
+**Scope Discipline**
+
+The student made several deliberate decisions about what **not** to do in this module:
+
+* PostgreSQL migration deferred to a dedicated module;
+* backups deferred after reviewing the mechanism;
+* coverage thresholds deferred until the test suite is meaningful;
+* application rewrite refused as part of infrastructure work.
+
+These decisions were reasoned, not lazy.
+They demonstrate growing awareness that scope creep is itself a form of failure.
+
+**Difficulties**
+
+Several misconceptions had to be corrected during the module:
+
+* initially described an image as "a snapshot of a container";
+* initially described a volume as "a separate container";
+* assumed the base image should mirror the server's operating system;
+* assumed `routes.py` was an executable file;
+* did not understand flags such as `-d`, `-t`, `-p` until they were explained;
+* confused build-time configuration with run-time configuration.
+
+Each of these was corrected through dialogue and did not persist.
+
+A separate difficulty was the distinction between local and remote state:
+
+* an edited `requirements.txt` existed locally but had not been pushed;
+* a CI workflow was written for one branch while work moved to another.
+
+In both cases the student's reasoning was correct; the state assumption was wrong.
+
+**Open Questions**
+
+* PostgreSQL migration — explicitly deferred;
+* backup and restore — mechanism understood conceptually but not implemented;
+* meaningful test authorship — motivation improved, practice still shallow;
+* independent deployment without guidance — not yet attempted.
+
+**Lessons Learned**
+
+* Code, environment, and data are three different things.
+* The container is disposable; the volume is persistent.
+* Build time and run time are different layers.
+* GitHub is the single source of truth for code delivery.
+* A green CI badge is not proof of understanding.
+* Infrastructure failures are diagnostic material, not interruptions.
+* Scope decisions are engineering decisions.
+* A reboot test that shows a running service does not automatically prove data survival.
+* Do not assume the target machine; declare it.
 
 ---
 
