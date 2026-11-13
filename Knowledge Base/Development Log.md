@@ -1,6 +1,8 @@
+---
+
 # Development Log
 
-**Version:** 3.0
+**Version:** 3.1
 **Status:** Active
 **Maintained by:** AI Methodologist
 
@@ -117,6 +119,83 @@ This does **not** yet constitute independent operational expertise. The student 
 * written a meaningful test suite autonomously.
 
 The correct description remains **intermediate**, now with a first real deployment behind them.
+
+---
+
+## Current Profile — After Module 12
+
+> The Module 09 and Module 11 profiles above are retained unchanged as historical records.
+> The following description supersedes them as the current assessment.
+
+| Field                 | Value                                                                                                                                          |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Learning Stage**    | Intermediate learning stage: application development with a first real database migration and a substantially redesigned domain model        |
+| **Current Focus**     | PostgreSQL as a separate service, SQLAlchemy Core over an async driver, Alembic schema migrations, multi-table transactional workflows, repository boundaries under load |
+| **Primary Goal**      | Complete the operational lifecycle of QR Warehouse on PostgreSQL and reach independent implementation ability in the persistence and application layers |
+| **Learning Strategy** | Mental model → decomposition → implementation → review → correction → integration → reflection                                                |
+
+### Context availability note
+
+The retained dialogue covers Module 12 only from the middle of the repository-migration work onward.
+
+The earlier phases — persistence audit, PostgreSQL fundamentals in Compose, the driver/interface decision, the isolated async experiment, and the test/CI work — are reported by the student as completed, and later work presupposes them. They are not directly observable in the retained context.
+
+They are therefore recorded as **reported and indirectly corroborated**, not as mentor-observed demonstrations. Before a final module assessment is issued, the corresponding artifacts (notes, driver-decision record, test suite, CI workflow) should be inspected directly.
+
+### What changed in Module 12
+
+The student crossed a second boundary:
+
+```text
+"My application stores data in a file"
+                 ↓
+"My application coordinates state in a database server"
+```
+
+This introduced a new class of problem that did not exist with a single-file database:
+
+* several tables that must change together or not at all;
+* a distinction between retrieving data and deciding what the data means;
+* schema evolution against a database that already contains rows;
+* identifiers that refer to different entities and are easy to confuse;
+* an asynchronous call chain in which a single missing `await` produces a runtime failure rather than a type error.
+
+### Scope deviation and its consequences
+
+Module 12 was specified as an infrastructure replacement: swap the SQLite adapter for PostgreSQL while preserving the domain model and business behavior. The final item of the planned scope was explicitly an architectural test — the boundaries built in Modules 07–09 should make the swap possible without touching business logic.
+
+The student instead replaced the data model and rewrote most of the application. The simple early schema was replaced by a domain model covering equipment types with individual/bulk tracking, estimates with item snapshots, reservations, picking tasks, and item allocations.
+
+This decision was reasoned: migrating disposable learning data into a schema that did not represent the real domain would have produced work with no product value.
+
+The trade-off must be recorded honestly:
+
+* the student gained substantially more domain-modelling and multi-entity workflow experience than the module planned;
+* the specific claim the module was designed to test — **infrastructure replaced without disturbing business logic** — was not tested, because the business logic changed at the same time;
+* the two changes were not separated by a verified working state, which is what Adjustment 015 exists to prevent.
+
+This is not a failure of the module. It is a scope deviation whose cost is a missing piece of evidence, and it should be recorded as such rather than absorbed silently into "module completed".
+
+### Calibration
+
+Demonstrated in the retained portion of the module:
+
+* implementing multi-table write workflows across several repositories with a single commit boundary;
+* applying Alembic migrations against a live server database, including reading a generated revision before applying it;
+* diagnosing a `NOT NULL` migration failure and correctly proposing the nullable → backfill → constrain sequence;
+* independently designing a batch-retrieval availability algorithm, including the non-obvious case of two positions in the same estimate consuming each other's stock;
+* independently designing an operator-facing response contract and an endpoint path based on how the client would actually be used;
+* repeatedly identifying defects in the mentor's proposed solutions.
+
+Not demonstrated:
+
+* authoring a non-trivial migration independently — the three-step migration was written by the mentor, and the student explicitly noted this as a loss;
+* reading a framework validation traceback without guidance;
+* verifying rollback behavior through an induced failure;
+* reasoning about concurrent execution — the race between availability check and reservation insert was noted and deferred, not resolved;
+* transferring any of this to an unfamiliar codebase.
+
+First-draft error rate remained high. Most slices required correction after review, and several corrections were repeats of errors already seen earlier in the module. The correct description is **reviewed implementation**, not independent implementation.
 
 ---
 
@@ -514,6 +593,76 @@ The student's commercial vision is an asset. It must not become a source of prem
 
 ---
 
+## Additional evidence — Module 12
+
+Mapped to the existing characteristics rather than replacing them.
+
+**3.1 Strong Conceptual Curiosity**
+
+* asked why an action endpoint uses `POST` rather than `PATCH`, given that a status field is being updated;
+* asked what question the `reservation`, `picking_task`, and `item_allocation` tables each answer, and refused to proceed until the responsibilities were clear;
+* asked whether `item_allocation` needs its own `asset_code`, which surfaced a normalization question rather than a schema defect.
+
+**3.2 Architectural Intuition**
+
+* decomposed the picking workflow into discrete operations before writing any code, and did so by drawing the state transitions on a refrigerator door when no whiteboard was available;
+* independently reasoned that returning a whole `PickingTask` after each scan would transmit redundant data, that returning only an `ItemAllocation` would transmit too little, and arrived at a purpose-built response contract containing per-line and per-task progress;
+* independently challenged the proposed endpoint path containing `estimate_item_id`, on the grounds that a scanner client cannot know that identifier in advance.
+
+**3.3 Analytical Thinking**
+
+* the strongest single piece of evidence in the module: while checking availability, the student accounted not only for existing reservations but for other positions **in the same estimate** whose date ranges overlap. This case was not present in any mentor-supplied description;
+* motivated defensive success checks by reasoning about a storage failure part-way through a transaction. The instinct was correct; the remedy belonged at a different layer, and the student accepted removing the checks once that was explained.
+
+**3.5 Pragmatic Judgment**
+
+* deferred the cross-task uniqueness check for scanned units after correctly estimating that it would not be a small change;
+* declined scheduled reminders for stalled tasks as unnecessary for the current scope;
+* chose strict completion validation now, with a separate confirmation-driven path deferred rather than bolted on;
+* kept two input paths for bulk equipment (repeated scanning, or one scan plus an edited quantity) instead of forcing a single interaction model;
+* chose `.returning()` with a row count over `rowcount` when the type checker objected, accepting slightly more work for a clearer contract.
+
+**3.6 Intellectual Humility**
+
+* stated plainly, before submitting a large slice, that they were not confident any of it would work;
+* explicitly recorded that the migration file had been written by the mentor rather than by themselves, and named that as a gap;
+* asked directly where in a long traceback the actual failure is described.
+
+**3.10 Willingness to Question the Method Itself**
+
+This characteristic strengthened considerably. The student rejected three successive mentor proposals for the availability check:
+
+> the first required one query per estimate line;
+
+> the second placed business decisions inside the repository;
+
+> the third reintroduced the per-line query loop after the objection had already been made.
+
+Each objection was correct. The student then stopped the exchange and asked to restart from the problem rather than from the proposed code.
+
+---
+
+## 3.12 Sustained Complexity — Tolerance and Limits
+
+**Confidence:** High, first clearly recorded in Module 12.
+
+The availability-checking problem required simultaneous reasoning over three collections — estimate lines, existing reservations, and physical stock — under a variable condition (date overlap) and two tracking modes.
+
+The student reported approximately two days on this single use case, working late into the night, with reported frustration and disrupted sleep, and afterwards described the transition from linear operations to multi-entity coordination as the hardest thing they had encountered.
+
+The outcome was correct and largely self-authored. The process was not sustainable.
+
+Two contributing factors should be separated:
+
+* the problem itself is genuinely a step change in difficulty, and this is expected;
+* the mentor supplied three flawed approaches before the student restarted, which added avoidable cost.
+
+### Educational implication
+
+Multi-entity coordination work should be decomposed into independently verifiable steps before implementation begins, with explicit stopping points. Abstraction-heavy work should not be scheduled at night. When a student reports that an approach is confusing, treat that as a defect signal in the approach before treating it as a comprehension gap in the student.
+
+---
+
 # 4. Learning Preferences
 
 | Aspect                       | Current Observation                                     |
@@ -558,6 +707,21 @@ The student responds particularly well to questions such as:
 > What would you check first?
 
 > Where does this file physically live?
+
+### Additional preferences observed in Module 12
+
+| Aspect                     | Current Observation                                                          |
+| -------------------------- | ---------------------------------------------------------------------------- |
+| **Responsibility Boundaries** | Will stop implementation to settle which layer owns a decision            |
+| **Data Retrieval**         | Rejects per-item query loops once the pattern is visible                     |
+| **API Design**             | Reasons from what the operator sees on screen backwards to the contract      |
+| **Migration Work**         | Prefers generating on the server against the real database, out of familiarity rather than efficiency |
+| **Error Explanation**      | Wants to know where in a long traceback the failure is actually stated       |
+| **Pace**                   | Wants a written plan of steps, checks, and inputs without complete code      |
+
+The last item is a direct restatement of Adjustment 014 by the student:
+
+> "Не пиши код за меня, просто опиши текстом, что и как я должен сделать."
 
 ---
 
@@ -975,6 +1139,91 @@ It should:
 
 ---
 
+## Module 12
+
+### PostgreSQL, Async Persistence, Schema Migrations, Multi-Entity Workflows
+
+The student replaced SQLite with PostgreSQL and, in the same effort, replaced the application's data model.
+
+### Context caveat
+
+The retained record begins part-way through the repository migration. The audit, PostgreSQL fundamentals, interface decision, isolated async experiment, and test/CI phases are reported as completed and are presupposed by later work, but are not directly observable here. They are recorded as reported, not as observed.
+
+### Persistence and interface
+
+* PostgreSQL running as a separate Compose service with a named volume;
+* SQLAlchemy Core over an async PostgreSQL driver, with SQL and driver-specific records confined to Infrastructure;
+* an async call chain traced from endpoint through use case to repository;
+* a session-per-request dependency, with a single commit performed at the presentation boundary;
+* repositories split by aggregate: equipment, estimate, reservation, picking task.
+
+### Domain model introduced by the student
+
+* equipment types with individual and bulk tracking modes;
+* estimates and estimate items carrying price and name snapshots;
+* reservations representing committed quantity over a date range;
+* picking tasks representing the warehouse's assembly job;
+* item allocations binding an estimate line to specific physical units, or to a quantity for bulk stock.
+
+### Workflows implemented
+
+* create estimate, add and remove lines;
+* submit for confirmation, with a non-empty check;
+* confirm, which verifies availability, creates reservations, creates a picking task, and advances the estimate status;
+* cancel, which releases reservations and cancels the picking task;
+* accept a picking task, scan individual units or bulk quantities, complete the task;
+* issue equipment, which fulfils reservations and marks allocations issued.
+
+### Schema migrations
+
+* Alembic revisions generated inside the running container, inspected, applied, then copied out and committed;
+* a `NOT NULL` column added to a populated table, which failed and required a three-step revision;
+* a `CHECK` constraint replaced to admit a new status value, which autogenerate does not emit;
+* nullable timestamp columns added for issue and return events.
+
+### Failures encountered and diagnosed
+
+* a migration failed with a not-null violation on existing rows; the student correctly proposed making the column nullable, backfilling, then constraining;
+* a framework validation error at startup was traced to a response model that did not inherit `BaseModel`;
+* a response validation error at request time was traced to a dictionary key that did not match the declared field name;
+* a type-checker objection to `rowcount` was resolved by choosing an explicit returning-based count.
+
+### Design decisions made by the student
+
+* availability computed from batched retrieval with the decision made in the use case;
+* picking reads live catalog data rather than snapshots, on the grounds that the interval between estimate creation and assembly is short. This is defensible, but it rests on an assumption about catalog stability that should be recorded as an assumption rather than a fact;
+* scanning endpoint takes the task identifier plus a scanned code, and the server determines which estimate line it belongs to;
+* completion is an explicit operator action, not an automatic consequence of the progress flag, so that additional items can still be added;
+* strict completion validation for now, with a forced path deferred behind a confirmation dialog.
+
+### Deliberately deferred
+
+* checking whether a scanned unit is already committed to another active task;
+* adding estimate lines after assembly has started, described by the student as a real rental-counter scenario;
+* forced completion of partial assembly;
+* reminders for stalled tasks;
+* the concurrency window between availability check and reservation insert.
+
+### Calibration: what was and was not demonstrated
+
+**Demonstrated:** implementing and correcting multi-table workflows under review; applying migrations to a live database; several genuinely independent design decisions; correctly rejecting flawed mentor proposals.
+
+**Not demonstrated:** authoring a non-trivial migration unaided; independent reading of framework tracebacks; induced-failure rollback verification; concurrency correctness; transfer to an unfamiliar system.
+
+The module's intended architectural test — replacing infrastructure while leaving business logic untouched — was not performed, because both changed together.
+
+### Methodology change
+
+The next stage should:
+
+* name and reuse the retrieval/decision split deliberately rather than rediscovering it under pressure;
+* bound multi-entity coordination work by session, not by feature;
+* require the student to author non-trivial migrations;
+* treat recurring mechanical error classes as a pre-submission checklist rather than a review finding;
+* complete the remaining lifecycle (return and close) with reduced guidance.
+
+---
+
 # 6. Current Strengths
 
 The strongest demonstrated areas are currently:
@@ -1074,6 +1323,28 @@ The student can now participate in decisions about:
 * which verification is sufficient for which claim.
 
 This is emerging judgment, still dependent on dialogue, but no longer purely receptive.
+
+### Persistence and database work
+
+**Added after Module 12.**
+
+The student can now work with:
+
+* PostgreSQL as a separate service reached by Compose service name;
+* SQLAlchemy Core query construction, including joins, aggregation, and `RETURNING`;
+* an async repository chain with a single transaction boundary at the presentation edge;
+* Alembic revision generation, inspection, and application against a live database;
+* coordinating writes across several repositories in one operation.
+
+This was demonstrated in a working application, but with review. First drafts consistently required correction, and several error classes recurred across slices. The competence is real and is not yet independent.
+
+### Contract and workflow design
+
+**Added after Module 12.**
+
+The student can reason from an operator's screen backwards to an API contract, and can decompose a multi-stage warehouse process into discrete operations with explicit state transitions before implementation.
+
+This is emerging design ability inside a domain the student authored themselves. It is not yet evidence of design ability in an unfamiliar domain.
 
 ---
 
@@ -1192,6 +1463,30 @@ This is a genuine conceptual shift. It has not yet produced a larger or deeper s
 * multi-container networking;
 * database migrations and schema versioning;
 * zero-downtime or controlled-update deployment.
+
+---
+
+## Revision after Module 12
+
+The Module 11 table above is retained as the historical assessment. The following records movement observed or reported during Module 12.
+
+| Area | Previous status | Current evidence | Remaining gap |
+| --- | --- | --- | --- |
+| PostgreSQL | Deliberately deferred | Running as a distinct service; application connects and operates against it | Roles and privileges, locking, isolation levels, `EXPLAIN`, administration |
+| Migrations | Unaddressed | Revisions generated, inspected, applied on a live server; a failed `NOT NULL` migration repaired; a `CHECK` constraint replaced | Authoring non-trivial revisions independently; downgrade rehearsal; migration testing |
+| Async programming | Conceptual only | Full async chain in production code; missing-`await` failures diagnosed | Cancellation, concurrent execution, connection lifecycle under load |
+| Transactions | Basic Unit of Work understanding | Multi-repository writes committed once at the presentation boundary | Induced-failure rollback verification; concurrent confirmation race |
+| SQL depth | Guided application | Multi-table joins, aggregation, `RETURNING`, batch retrieval | Query planning, indexes, aggregation semantics still error-prone |
+| Data modelling | Guided to independent | Designed a multi-table rental domain including snapshots, reservations, and allocations | Normalization judgement under change; constraint design for concurrency |
+| Testing | Shallow | No new evidence in the retained context | Suite depth, autonomy, rollback and migration tests |
+| Concurrency | Unaddressed | Race condition identified and named | Entirely open; deferred by decision |
+| Backup and restore | Conceptual only | Not attempted in the retained context | No dump, no restore drill |
+
+### Interpretation
+
+Several areas moved from unaddressed to operational-with-review. None moved to independent.
+
+Testing is the clearest unchanged gap. The module specification required PostgreSQL integration tests and an isolated CI database; the student reports these phases were covered earlier, but no test artifacts appear in the retained context. This must be verified against the repository before the module is assessed, and must not be assumed in either direction.
 
 ---
 
@@ -1432,6 +1727,123 @@ Each was resolved through explicit explanation rather than memorization.
 ### Action
 
 Continue Adjustment 002. Never introduce an unexplained flag into an instruction for this student.
+
+---
+
+## 8.10 Missing `await` on Asynchronous Repository Calls
+
+**Status:** Recurring, observed in Module 12
+
+The same omission appeared in several separate slices: an asynchronous repository method called without `await`, producing a coroutine object that was then handed to the response serializer.
+
+The reasoning about the workflow was correct in every case; the failure was mechanical.
+
+### Action
+
+Treat the async boundary as a checklist item rather than a review item:
+
+```text
+Is this method async?
+        ↓
+Is it awaited?
+        ↓
+Is its caller async?
+        ↓
+Is that caller awaited?
+```
+
+The student should be able to run this check without prompting before submitting a slice.
+
+---
+
+## 8.11 Enum and Database Value Boundary
+
+**Status:** Recurring, observed in Module 12
+
+Reads correctly converted a stored string into an enum; writes sometimes passed the enum object where the stored string was required.
+
+### Action
+
+Name the boundary explicitly and keep it symmetric:
+
+```text
+database string  →  Enum(value)   on read
+Enum member      →  .value        on write
+```
+
+---
+
+## 8.12 Identifier Confusion Across Related Tables
+
+**Status:** New, observed in Module 12, and the most consequential error class in the module
+
+Several distinct failures share one cause — an identifier belonging to one entity used where another was required:
+
+* a primary key column filtered against a list of foreign keys, in two separate repositories;
+* an update addressed to the estimate-item table when the estimate table was intended;
+* a method named for a task identifier that accepted an estimate identifier;
+* a list built to hold item identifiers populated with estimate identifiers instead.
+
+This is the relational form of the difficulty already recorded in 8.5.
+
+### Action
+
+Before writing a `WHERE` clause, state in words which entity the column identifies and which entity the supplied value identifies. If those differ, the query is wrong regardless of whether it executes.
+
+---
+
+## 8.13 `RETURNING` Omitted Before Row Fetch
+
+**Status:** Recurring, observed in Module 12
+
+An `UPDATE` was executed without `.returning()`, after which a row fetch returned nothing and the use case reported a failure that had not occurred.
+
+### Action
+
+Bind the two together as a single habit: if a row will be read back from a write statement, the statement must return it.
+
+---
+
+## 8.14 Response Contract Mismatches
+
+**Status:** New, observed in Module 12
+
+Startup and request-time failures traced to:
+
+* a response model that did not inherit the framework base model, twice;
+* a configuration attribute name misspelled, so it was silently ignored;
+* a single-object response model declared for a list;
+* a returned dictionary key that did not match the declared field name.
+
+The student also asked where in a long validation traceback the actual defect is described, which indicates that framework error output is not yet read independently.
+
+### Action
+
+Teach a fixed reading order for validation errors, mirroring 8.8:
+
+```text
+What kind of error is this — request, response, or startup?
+        ↓
+Which field or model is named?
+        ↓
+What was expected?
+        ↓
+What was actually supplied?
+        ↓
+Which of my two declarations disagrees with the other?
+```
+
+---
+
+## 8.15 Aggregation Semantics
+
+**Status:** New, observed in Module 12
+
+Progress calculations were sometimes taken from a single row, or from the length of a collection, where a sum over rows was required. A completeness check inspected record status instead of comparing accumulated quantity against requested quantity.
+
+### Action
+
+Before computing a total, ask explicitly: is the answer one row, a count of rows, or a sum across rows? For bulk equipment in particular, several partial allocations may exist for one estimate line.
 
 ---
 
@@ -1770,6 +2182,94 @@ Extended Socratic sequences remain valuable for genuinely difficult concepts, bu
 
 ---
 
+## Adjustment 025 — Validate the Mentor's Proposal Against Stated Constraints Before Presenting It
+
+**Status:** Active, added after Module 12
+
+Three successive approaches to the availability check were supplied and three were correctly rejected by the student: a per-line query loop, business logic placed inside the repository, and then the per-line loop again after the objection had already been raised.
+
+The cost was approximately two days and visible distress.
+
+Before proposing an approach, verify it against the constraints already established in the conversation — query count, layer responsibility, and the student's stated objections. A rejected constraint must not reappear in the next proposal.
+
+---
+
+## Adjustment 026 — Name the Retrieval / Decision Split Explicitly
+
+**Status:** Active, added after Module 12
+
+The student arrived at the correct structure under pressure:
+
+```text
+Repository  →  delivers sets of data, batched
+Use Case    →  decides what the data means
+```
+
+This should now be named, written down, and reused deliberately rather than rediscovered. It is the concrete form of the repository boundary the student already understands in the abstract.
+
+---
+
+## Adjustment 027 — Bound Complexity by Session, Not by Feature
+
+**Status:** Active, added after Module 12
+
+A use case that coordinates several collections under variable conditions is not one working session. It is a plan with independently verifiable steps and stopping points.
+
+Before implementation of such a slice, agree:
+
+* what data must be retrieved, and in how many queries;
+* what will be decided in memory;
+* what will be written, and in what order;
+* how each step will be checked before the next begins.
+
+Abstraction-heavy work should not be scheduled at night.
+
+---
+
+## Adjustment 028 — Migration Files Are Code, and the Student Should Write Them
+
+**Status:** Active, added after Module 12
+
+Autogenerate produces a draft, not a finished revision. It does not emit constraint replacements, and it does not handle adding a non-null column to a populated table.
+
+When a generated revision is insufficient, the mentor should guide the student to author the upgrade path rather than supply it. In Module 12 the mentor wrote the three-step revision, and the student explicitly recorded this as a missed learning opportunity:
+
+> "Жалко, конечно, что файл миграции я написал не сам, но я зато понял, что файл миграции нужно писать самостоятельно."
+
+The insight landed. The practice did not.
+
+---
+
+## Adjustment 029 — Record Scope Deviations at the Moment They Occur
+
+**Status:** Active, added after Module 12
+
+Adjustment 021 already required explicit scope negotiation. It was not applied when the data model was replaced during a module specified as an adapter swap.
+
+The deviation was reasonable. The absence of a record was not: it removed the module's central architectural test without noting that the test would no longer be run.
+
+When scope changes mid-module, record immediately what evidence is lost and where it will be recovered.
+
+---
+
+## Adjustment 030 — Design the Response Contract Before the Endpoint
+
+**Status:** Active, added after Module 12
+
+The student's strongest API reasoning came from asking what the warehouse operator needs to see after a scan. Make that an explicit step:
+
+```text
+What does the operator do next?
+        ↓
+What must be on screen for them to do it?
+        ↓
+What is the smallest contract that carries it?
+```
+
+This produced a better result than returning either a whole aggregate or a bare record, and it should be applied before writing the endpoint rather than after.
+
+---
+
 # 10. Mentor Notes — Current State
 
 The student has now moved beyond introductory Python and OOP into practical application development.
@@ -1878,6 +2378,66 @@ Independent operational design
 
 ---
 
+## Revision after Module 12
+
+The persistence node in the student's mental model is no longer a file.
+
+The student has now operated a database server, changed its schema while it held data, coordinated writes across several tables in one transaction, and reasoned about what a warehouse operator needs from an API in order to do their job.
+
+Architectural questions can now be grounded in data consequences as well as operational ones:
+
+> Which entity does this identifier actually identify?
+
+> How many queries will this decision cost?
+
+> What must be atomic here, and what happens if it is not?
+
+> Who owns this decision — the thing that fetches the data, or the thing that interprets it?
+
+### Observations about the mentor's own practice
+
+Module 12 produced uncomfortable but useful evidence about the teaching process.
+
+**1. The mentor's proposals were wrong three times in a row, and the student was right three times.**
+
+The availability check was proposed with a per-line query loop, then with business logic inside the repository, then with the loop again. Each objection came from the student. Future proposals must be checked against constraints already stated in the conversation before being presented.
+
+**2. Supplying the migration removed the learning.**
+
+The three-step revision was written by the mentor. The student noticed and said so. Adjustment 014 was not honoured at the moment it mattered most.
+
+**3. Assessment was generated from retained context instead of from artifacts.**
+
+The mentor reported several module phases as incomplete when they had been completed earlier and the context had been lost. The student had to correct this. An assessment of module completion must begin from repository artifacts and the student's own records, not from what happens to remain in the conversation window.
+
+**4. Complete implementations were supplied repeatedly despite an explicit request not to.**
+
+The student asked for plans, checks, and inputs without code. Several responses still contained full use-case and repository implementations. Where the educational objective is implementation ability, the default should be specification plus review.
+
+**5. Recurring error classes were treated as individual review findings.**
+
+Missing `await`, enum value conversion, omitted `RETURNING`, and identifier confusion each appeared multiple times across separate slices. Reviewing each instance did not stop the next one. These should have been consolidated into a short pre-submission checklist the student applies themselves.
+
+### Current positioning
+
+The student is an application developer who has completed a real database migration and substantially redesigned the application on top of it.
+
+They are not yet an independent implementer. Most slices required correction, several corrections were repeats, and the module's intended test of architectural isolation was not run.
+
+The next meaningful progression is not another technology. It is:
+
+```text
+Guided implementation
+        ↓
+Reviewed implementation
+        ↓
+Independent implementation in a familiar domain
+        ↓
+Independent implementation in an unfamiliar domain
+```
+
+---
+
 # 11. Emerging Learning Pattern
 
 The student learns most effectively when:
@@ -1974,6 +2534,58 @@ Both are signs of progressing from component-level reasoning to system-level and
 
 ---
 
+## Additional patterns observed in Module 12
+
+The student learns particularly well when:
+
+* the responsibility boundary is settled before implementation begins;
+* a proposed approach can be challenged on stated grounds rather than accepted on authority;
+* the shape of the data flow is drawn before it is coded;
+* a contract is derived from what a real operator needs to see;
+* a failure is attributable to a specific layer rather than to the system as a whole.
+
+A fourth recursive deepening sequence is now available:
+
+```text
+Table
+   ↓
+What question does this table answer
+   ↓
+Which entity owns which decision
+   ↓
+Where retrieval ends and interpretation begins
+   ↓
+What must change together
+   ↓
+What the operator needs to see
+```
+
+### A further characteristic of the student's questions
+
+Module 09 produced questions of the form:
+
+> Where should this responsibility live?
+
+Module 11 added:
+
+> What happens to this when the thing that owns it disappears?
+
+Module 12 added:
+
+> Does this belong in the repository or in the use case?
+
+> Why does this endpoint need this identifier at all?
+
+> How many queries will this actually make?
+
+And, directed at the mentor:
+
+> Your proposed solution does not satisfy the constraint I just gave you.
+
+The last form is new. It is the student exercising technical authority over the teaching material rather than only over the learning process. It should be treated as a correctness signal, not as resistance.
+
+---
+
 # 12. Future Development Areas
 
 The next major development areas should include:
@@ -2038,6 +2650,31 @@ Still open within area 4:
 
 Area 2 remains the next major focused effort.
 
+### Status of these areas after Module 12
+
+Area 2 has been substantially addressed, but not closed.
+
+Now demonstrated: PostgreSQL as a service, async persistence through SQLAlchemy Core, multi-repository transactions, Alembic schema evolution against populated tables.
+
+Still open within area 2:
+
+* indexes and query planning;
+* locking, isolation levels, and correctness under concurrent requests;
+* PostgreSQL roles, privileges, and administration;
+* backup and a verified restore drill;
+* authoring non-trivial migrations without mentor-supplied code.
+
+Area 1 remains the largest open gap. No new testing evidence appears in the retained context. The module required PostgreSQL integration tests and an isolated CI database; these are reported as completed earlier and must be verified against the repository rather than assumed.
+
+A new area has surfaced and should be tracked explicitly:
+
+**Correctness under concurrency.** The window between checking availability and inserting a reservation is known and was deliberately deferred. It is a real defect at multi-user scale and should not be forgotten as an omission.
+
+Two product-lifecycle items also remain open and were deferred by decision:
+
+* returning issued equipment and closing the estimate;
+* adding estimate lines after assembly has begun.
+
 ---
 
 ## 7. Database migration — next agreed module
@@ -2058,6 +2695,10 @@ Planned scope:
 * replacement of the SQLite infrastructure adapter without rewriting the domain layer.
 
 The last item is a deliberate architectural test: the boundaries established in Modules 07–09 should make this migration possible without touching business logic.
+
+### Status after Module 12
+
+This module was executed, with a recorded scope deviation: the student replaced the data model rather than preserving the domain layer, so the architectural test above was not run as designed. PostgreSQL, Compose networking, environment-based connection configuration, async persistence, pooling, and Alembic migrations were all put into practice. Transaction behavior was demonstrated through multi-step write workflows; concurrency remains open. Indexes, query planning, and backup/restore were not addressed in the retained context.
 
 ---
 
@@ -2152,4 +2793,32 @@ Module 11 moved the student from having never performed these actions to perform
 
 ---
 
-*End of Development Log v3.0*
+## Position update after Module 12
+
+Module 12 strengthens the evidence for:
+
+> "I can modify it safely."
+
+The student changed the persistence mechanism, evolved the schema of a live database, and coordinated multi-table writes without losing data.
+
+It also produces the first partial evidence for:
+
+> "I can design a solution myself."
+
+The workflow decomposition, the operator-facing response contract, the endpoint path decision, and the availability algorithm were the student's own. Each was reached by reasoning about the problem rather than by adapting a supplied example.
+
+That evidence is bounded in three ways, and the bounds matter more than the achievement:
+
+* it was produced inside a domain the student authored themselves;
+* it was produced with review, and first drafts contained significant defects;
+* the module's designed test of architectural isolation — infrastructure replaced without touching business logic — was not run, because both changed together.
+
+The following stage therefore remains open, and its first concrete test is now available:
+
+> Complete the remaining lifecycle — return and close — without mentor-supplied implementations, and verify rollback behavior with an induced failure rather than by inspection.
+
+Module 12 moved the student from never having changed a database to changing one deliberately. The next module should move them from changing it correctly under review to changing it correctly on their own.
+
+---
+
+*End of Development Log v3.1*

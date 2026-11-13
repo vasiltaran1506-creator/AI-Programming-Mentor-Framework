@@ -1,6 +1,6 @@
 # Learning Journal
 
-**Version:** 1.2
+**Version:** 1.3
 **Status:** Active
 **Owner:** Student
 **Maintained by:** AI Programming Mentor
@@ -883,6 +883,88 @@ In both cases the student's reasoning was correct; the state assumption was wron
 * Scope decisions are engineering decisions.
 * A reboot test that shows a running service does not automatically prove data survival.
 * Do not assume the target machine; declare it.
+
+---
+
+### Module 12 — PostgreSQL, Async Persistence and a Redesigned Data Model
+
+**Date:** 2026-11-14
+
+**Note on the record**
+
+The mentor's retained context begins part-way through this module. The audit, PostgreSQL fundamentals, interface decision, isolated async experiment, and test/CI phases are reported as completed and are presupposed by the later work described here, but they are not part of this entry's direct evidence. This entry therefore describes the portion of the module that is documented in the retained dialogue.
+
+**Major Insight**
+
+A database migration is not only a matter of replacing an adapter.
+When the old schema does not reflect the real domain, the migration can become the moment when the data model itself is redesigned.
+
+The student faced exactly this choice: swap SQLite for PostgreSQL while keeping a simple learning schema, or take the opportunity to model the rental domain properly. The student chose the second path and replaced the data model, accepting that the module's original architectural test — replacing infrastructure without touching business logic — would no longer be run as designed.
+
+A second major insight concerned the difference between **retrieving data and deciding what the data means**. The repository's job is to deliver sets of records; the use case's job is to interpret them. This boundary became concrete and operational rather than abstract.
+
+**What Became Clear**
+
+Several conceptual boundaries became practical rather than theoretical:
+
+* reservation and physical issue are different entities with different lifecycles;
+* snapshots protect the financial record of an estimate, while picking reads live catalog data;
+* a schema migration is executable code with a written upgrade path, not documentation;
+* an identifier always refers to one specific entity, and using the wrong one produces silent corruption;
+* an asynchronous call chain is fragile: one missing `await` produces a runtime failure rather than a compile-time error;
+* availability of equipment must account for date overlap, including overlap between positions in the same estimate.
+
+**Personal Breakthrough**
+
+The strongest moment of the module was the availability algorithm.
+
+While checking whether equipment is free for the requested dates, the student independently accounted not only for existing reservations but for other positions **in the same estimate** whose date ranges overlap — a case present in no mentor-supplied description.
+
+Other independent contributions:
+
+* decomposing the picking workflow into discrete operations and drawing the state transitions before writing code;
+* designing a response contract from the warehouse operator's screen backwards, rather than returning a whole aggregate or a bare record;
+* challenging the proposed endpoint path on the grounds that a scanner client cannot know an internal identifier in advance;
+* correctly rejecting three successive flawed mentor proposals for the availability check.
+
+**Difficulties**
+
+The transition from linear operations to multi-entity coordination was the hardest part of the module.
+
+The availability use case required approximately two days, including work late at night, and produced visible frustration. The outcome was correct and largely self-authored, but the process was not sustainable. Part of the difficulty was intrinsic to the problem; part was added by the mentor's flawed proposals.
+
+Recurring mechanical errors appeared across several slices:
+
+* missing `await` on asynchronous repository calls;
+* passing an enum object where its stored string value was required;
+* omitting `.returning()` before fetching a row;
+* filtering by the wrong identifier or updating the wrong table;
+* reading a single row or counting rows where a sum across rows was required.
+
+Reading framework validation tracebacks still required guidance.
+
+The one migration that could not be auto-generated — adding a non-null column to a populated table — was written by the mentor rather than the student. The student explicitly noted this as a missed opportunity.
+
+**Open Questions**
+
+* returning issued equipment and closing the estimate;
+* checking that a scanned unit is not already committed to another active task;
+* adding estimate lines after assembly has begun;
+* the concurrency window between checking availability and inserting a reservation;
+* independent authorship of non-trivial migrations;
+* induced-failure verification of rollback behavior.
+
+**Lessons Learned**
+
+* A migration can be the right moment to redesign a data model that never fit the domain.
+* The repository delivers data; the use case decides what it means.
+* Retrieve in batches, decide in memory.
+* A schema migration is code: it has an upgrade path, a downgrade path, and must handle existing rows.
+* Identifiers must be read as "which entity does this identify?" before being used in a query.
+* Async boundaries should be checked deliberately, not discovered at runtime.
+* A response contract should be designed from what the operator needs to see next.
+* Complex multi-entity work should be planned in verifiable steps, not attempted in one sitting.
+* Rejecting a flawed proposal with reasons is itself an engineering skill.
 
 ---
 
